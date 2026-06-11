@@ -1,0 +1,5950 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daily Rep Counter</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #eeeeec;
+      --panel: #ffffff;
+      --panel-soft: #f1f1ee;
+      --ink: #111111;
+      --muted: #757575;
+      --line: #e7e5df;
+      --accent: #fc4c02;
+      --accent-2: #111111;
+      --accent-3: #7c3aed;
+      --accent-4: #2374ff;
+      --gold: #f5b301;
+      --good: #16a06d;
+      --shadow: 0 26px 60px rgba(17, 17, 17, 0.12);
+      --shadow-soft: 0 14px 34px rgba(17, 17, 17, 0.08);
+      --radius: 8px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: none;
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(17, 17, 17, 0.03), transparent 30%, transparent 70%, rgba(17, 17, 17, 0.03));
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease, background 120ms ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:active {
+      transform: scale(0.96);
+      filter: brightness(0.96);
+    }
+
+    .app {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 30px 20px 112px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 0 8px 18px;
+      min-height: 88px;
+      margin-bottom: 8px;
+      color: var(--ink);
+      background: transparent;
+      border-radius: var(--radius);
+      box-shadow: none;
+      overflow: visible;
+      position: relative;
+      border: 0;
+    }
+
+    .topbar::after {
+      content: none;
+    }
+
+    .topbar::before {
+      content: none;
+    }
+
+    .brand {
+      min-width: 0;
+    }
+
+    .brand h1 {
+      display: none;
+    }
+
+    .brand p {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(25px, 4.6vw, 38px);
+      line-height: 1.12;
+      font-weight: 900;
+      letter-spacing: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .date-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 0;
+      border: 0;
+      border-radius: var(--radius);
+      background: transparent;
+      color: #343840;
+      font-size: 14px;
+      font-weight: 800;
+      box-shadow: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    .score-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      min-height: 34px;
+      padding: 0 13px;
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink);
+      box-shadow: 0 12px 26px rgba(17, 17, 17, 0.08);
+      font-size: 14px;
+      font-weight: 900;
+      position: relative;
+      z-index: 1;
+    }
+
+    .score-line span {
+      color: var(--accent);
+    }
+
+    .score-note {
+      margin-top: 7px;
+      color: #777;
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 750;
+      position: relative;
+      z-index: 1;
+    }
+
+    .score-chart {
+      grid-column: 1 / -1;
+      height: 54px;
+      margin-top: -2px;
+      padding: 0 14px 10px;
+      border-radius: 0 0 28px 28px;
+      background: #1c1c1a;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .mini-line {
+      width: 100%;
+      height: 100%;
+      display: block;
+      overflow: visible;
+    }
+
+    .mini-line .area {
+      fill: rgba(112, 227, 160, 0.08);
+    }
+
+    .mini-line .line {
+      fill: none;
+      stroke: var(--good);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .mini-line .dot {
+      fill: var(--good);
+      stroke: #1c1c1a;
+      stroke-width: 2;
+    }
+
+    .profile-button {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1px solid #e9e8e3;
+      color: var(--ink);
+      outline: 5px solid rgba(255, 255, 255, 0.82);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      box-shadow: 0 16px 32px rgba(17, 17, 17, 0.12);
+      flex: 0 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-nav {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 20;
+      width: min(560px, calc(100vw - 28px));
+      transform: translateX(-50%);
+      margin-bottom: 0;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid #e8e6df;
+      border-radius: var(--radius);
+      padding: 6px;
+      box-shadow: 0 18px 44px rgba(17, 17, 17, 0.14);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav-button {
+      height: 44px;
+      border-radius: 6px;
+      background: transparent;
+      color: #525760;
+      font-weight: 850;
+    }
+
+    .nav-button.active {
+      background: var(--ink);
+      color: #fff;
+      box-shadow: 0 12px 26px rgba(24, 25, 29, 0.2);
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: grid;
+      gap: 16px;
+    }
+
+    .surface,
+    .sheet {
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .surface {
+      padding: 0;
+      position: relative;
+      overflow: visible;
+    }
+
+    .surface::before,
+    .sheet::before {
+      content: none;
+    }
+
+    .surface > *,
+    .sheet > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-surface {
+      max-width: 620px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .toolbar h2,
+    .sheet h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .date-input,
+    .text-input,
+    .number-input,
+    .select-input {
+      height: 40px;
+      border: 1px solid #ece9e3;
+      background: rgba(255, 255, 255, 0.86);
+      color: var(--ink);
+      border-radius: var(--radius);
+      padding: 0 11px;
+      min-width: 0;
+    }
+
+    .date-input {
+      width: 150px;
+    }
+
+    .icon-button,
+    .primary-button,
+    .quiet-button,
+    .danger-button,
+    .chip-button {
+      height: 38px;
+      border-radius: var(--radius);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-width: 40px;
+      padding: 0 12px;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .primary-button,
+    .quiet-button,
+    .danger-button,
+    .chip-button,
+    .icon-button,
+    .nav-button,
+    .profile-button {
+      will-change: transform;
+    }
+
+    .primary-button:hover,
+    .quiet-button:hover,
+    .danger-button:hover,
+    .chip-button:hover,
+    .icon-button:hover {
+      box-shadow: 0 8px 18px rgba(22, 26, 32, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .icon-button {
+      width: 40px;
+      padding: 0;
+      background: #fff;
+      color: var(--ink);
+      border: 1px solid #efeee9;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .primary-button {
+      background: var(--ink);
+      color: #fff;
+      box-shadow: 0 14px 26px rgba(17, 17, 17, 0.18);
+    }
+
+    .quiet-button,
+    .chip-button {
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--ink);
+      border: 1px solid #efeee9;
+    }
+
+    .danger-button {
+      background: #fff0ee;
+      color: #9a2d23;
+      border: 1px solid #efc0b9;
+    }
+
+    .workout-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    #page-today .toolbar {
+      display: none;
+    }
+
+    .exercise-group-card {
+      grid-column: 1 / -1;
+      display: grid;
+      gap: 16px;
+      padding: 18px;
+      border-radius: 30px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 42%),
+        #191918;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .exercise-group-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .exercise-group-head h3 {
+      margin: 0;
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .exercise-group-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .exercise-group-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .counter-card {
+      background:
+        linear-gradient(180deg, #fff, #fbfbf8);
+      border: 1px solid #ebe9e2;
+      border-radius: var(--radius);
+      padding: 13px;
+      min-height: 214px;
+      display: grid;
+      gap: 9px;
+      box-shadow: 0 14px 30px rgba(17, 17, 17, 0.07);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .counter-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 4px;
+      background: var(--accent);
+      box-shadow: none;
+    }
+
+    .counter-card::after {
+      content: none;
+    }
+
+    .counter-card.bump .count {
+      animation: count-pop 260ms ease;
+    }
+
+    .card-head {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .card-title {
+      min-width: 0;
+    }
+
+    .card-title h3 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .card-title p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .count-row {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 14px;
+      padding-top: 2px;
+    }
+
+    .count {
+      font-size: clamp(34px, 8vw, 48px);
+      line-height: 1;
+      font-weight: 900;
+      color: #20242b;
+      letter-spacing: 0;
+      text-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .target-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 48px;
+      height: 25px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: #f5f5f2;
+      color: var(--accent);
+      box-shadow: none;
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .progress-track {
+      height: 7px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #edeae5;
+    }
+
+    .progress-fill {
+      width: min(100%, var(--progress, 0%));
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width 220ms ease;
+      box-shadow: none;
+    }
+
+    .sparkline-panel {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3px;
+      align-items: center;
+      min-height: 52px;
+      padding: 0;
+    }
+
+    .sparkline {
+      width: 100%;
+      height: 42px;
+      overflow: visible;
+    }
+
+    .sparkline path.area {
+      fill: rgba(245, 179, 1, 0.14);
+    }
+
+    .sparkline path.line {
+      fill: none;
+      stroke: var(--gold);
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 7px 10px rgba(240, 182, 29, 0.18));
+    }
+
+    .sparkline circle {
+      fill: #18191d;
+      stroke: #fff;
+      stroke-width: 3;
+      filter: drop-shadow(0 8px 10px rgba(24, 25, 29, 0.16));
+    }
+
+    .sparkline-days {
+      display: none;
+      justify-content: space-between;
+      margin-top: -5px;
+      color: #9a958d;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .sparkline-total {
+      display: none;
+    }
+
+    @keyframes count-pop {
+      0% {
+        transform: scale(1);
+      }
+      45% {
+        transform: scale(1.15);
+        color: var(--accent-2);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .quick-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .quick-row button {
+      height: 36px;
+      border-radius: var(--radius);
+      color: #fff;
+      font-weight: 900;
+      letter-spacing: 0;
+      font-size: 13px;
+    }
+
+    .quick-row button:nth-child(1) {
+      background: var(--accent);
+    }
+
+    .quick-row button:nth-child(2) {
+      background: var(--accent-3);
+    }
+
+    .quick-row button:nth-child(3) {
+      background: var(--ink);
+    }
+
+    .card-tools {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .chip-button {
+      height: 32px;
+      min-width: 0;
+      padding: 0 9px;
+      font-size: 12px;
+    }
+
+    .sheet {
+      padding: 0;
+      display: grid;
+      gap: 18px;
+      position: relative;
+      overflow: visible;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .stats-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .stats-top p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .period-toggle {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding: 6px;
+      border-radius: 24px;
+      background: #fff;
+      border: 1px solid #e8e6df;
+      box-shadow: 0 12px 28px rgba(17, 17, 17, 0.08);
+      min-width: 260px;
+    }
+
+    .period-toggle button {
+      height: 36px;
+      border-radius: 18px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .period-toggle button.active {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .month-switcher {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 52px;
+      padding: 6px;
+      border-radius: 26px;
+      background: #fff;
+      border: 1px solid #e8e6df;
+      box-shadow: 0 12px 28px rgba(17, 17, 17, 0.08);
+    }
+
+    .month-switcher.show {
+      display: flex;
+    }
+
+    .month-switcher button {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #f4f4f2;
+      color: var(--ink);
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .month-switcher strong {
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .stat {
+      background:
+        linear-gradient(180deg, #fff, #fbfbf8);
+      border: 1px solid #ebe9e2;
+      border-radius: var(--radius);
+      padding: 15px;
+      min-height: 96px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 31px;
+      line-height: 1;
+    }
+
+    .stats-workout-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .exercise-stat-card {
+      padding: 18px;
+      border-radius: 26px;
+      background: #fff;
+      box-shadow: 0 18px 42px rgba(17, 17, 17, 0.08);
+      border: 1px solid rgba(17, 17, 17, 0.04);
+      display: grid;
+      gap: 16px;
+    }
+
+    .exercise-stat-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .exercise-stat-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .exercise-stat-title .icon-bubble {
+      width: 52px;
+      height: 52px;
+      flex: 0 0 auto;
+    }
+
+    .exercise-stat-title .icon-bubble svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .exercise-stat-title h3 {
+      margin: 0;
+      font-size: 21px;
+      font-weight: 900;
+      line-height: 1.08;
+    }
+
+    .exercise-stat-title p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .exercise-stat-total {
+      text-align: right;
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 900;
+      color: var(--card-accent, var(--accent));
+    }
+
+    .exercise-stat-total span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .stat-bars {
+      height: 128px;
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      gap: 5px;
+      align-items: end;
+      padding-top: 12px;
+      position: relative;
+      touch-action: pan-y;
+      user-select: none;
+    }
+
+    .stat-bar {
+      min-width: 0;
+      min-height: 5px;
+      border-radius: 999px 999px 4px 4px;
+      background: color-mix(in srgb, var(--card-accent, var(--accent)) 78%, #fff);
+      opacity: 0.92;
+      position: relative;
+    }
+
+    .stat-bar.is-selected {
+      opacity: 1;
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
+
+    .stat-bar.today {
+      background: var(--ink);
+    }
+
+    .stat-axis {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      gap: 5px;
+      color: #8a8780;
+      font-size: 10px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .stat-axis span {
+      min-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .stat-card-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .stat-guide {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 0;
+      border-left: 2px dashed rgba(17, 17, 17, 0.42);
+      pointer-events: none;
+      opacity: 0;
+      transform: translateX(-1px);
+    }
+
+    .stat-bars.active .stat-guide {
+      opacity: 1;
+    }
+
+    .stat-tooltip {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translate(-50%, -100%);
+      min-width: 112px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: var(--ink);
+      color: #fff;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.25;
+      font-weight: 850;
+      box-shadow: 0 12px 24px rgba(17, 17, 17, 0.22);
+      pointer-events: none;
+      opacity: 0;
+      white-space: nowrap;
+      z-index: 2;
+    }
+
+    .stat-bars.active .stat-tooltip {
+      opacity: 1;
+    }
+
+    .stat-tooltip span {
+      display: block;
+      margin-top: 3px;
+      color: #ffd9cc;
+      font-weight: 900;
+    }
+
+    .chart {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      align-items: end;
+      height: 180px;
+      padding-top: 8px;
+      padding-inline: 2px;
+    }
+
+    .bar-wrap {
+      display: grid;
+      grid-template-rows: 1fr auto;
+      height: 100%;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .bar {
+      align-self: end;
+      border-radius: 6px 6px 2px 2px;
+      background: linear-gradient(180deg, var(--accent), #ff8e63);
+      min-height: 4px;
+      position: relative;
+      box-shadow: inset 0 -8px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .bar.today {
+      background: linear-gradient(180deg, var(--ink), var(--accent));
+    }
+
+    .bar-label {
+      text-align: center;
+      color: var(--muted);
+      font-size: 11px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .history {
+      display: grid;
+      gap: 8px;
+      max-height: 320px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .history-row {
+      display: grid;
+      grid-template-columns: 92px 1fr auto;
+      gap: 8px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid #ebe9e2;
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .history-date {
+      font-weight: 850;
+      font-size: 13px;
+    }
+
+    .history-items {
+      color: var(--muted);
+      font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .history-total {
+      font-weight: 900;
+      color: var(--accent);
+    }
+
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      padding: 26px 12px;
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    dialog {
+      width: min(480px, calc(100vw - 28px));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 0;
+    }
+
+    dialog::backdrop {
+      background: rgba(20, 24, 29, 0.36);
+    }
+
+    .modal {
+      padding: 20px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .modal h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .exercise-settings {
+      display: none !important;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .inline-add-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .inline-add-row .quiet-button {
+      height: 40px;
+      border-radius: 20px;
+      padding: 0 16px;
+      font-weight: 900;
+    }
+
+    .textarea-input {
+      min-height: 132px;
+      padding: 13px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    .add-section {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 18px;
+      background: #242421;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .add-section h3 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .manage-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .manage-item {
+      display: grid;
+      gap: 9px;
+      padding: 12px;
+      border-radius: 18px;
+      background: #242421;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .manage-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .manage-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--card-accent, var(--accent));
+    }
+
+    .manage-name {
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .manage-unit {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .manage-delete {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #2a1815;
+      color: #ff9b88;
+      font-weight: 900;
+    }
+
+    .goal-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .goal-row input {
+      height: 34px;
+      min-width: 0;
+    }
+
+    .check-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .check-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 38px;
+      padding: 8px 10px;
+      border-radius: var(--radius);
+      background: #f7f7f5;
+      border: 1px solid #efeee9;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .widget-manager {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 18px;
+      background: #f4f4f2;
+    }
+
+    .widget-manager h3 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .widget-order-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .widget-order-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      min-height: 48px;
+      padding: 9px 10px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid #ecebe6;
+    }
+
+    .widget-order-name {
+      min-width: 0;
+    }
+
+    .widget-order-name strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.1;
+      font-weight: 900;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .widget-order-name span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .widget-order-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .order-button {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #f4f4f2;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .order-button:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+
+    .widget-meta {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      color: #666;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 23px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: #f4f4f2;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .mini-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%) translateY(30px);
+      opacity: 0;
+      pointer-events: none;
+      background: var(--ink);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 10px 13px;
+      font-weight: 750;
+      transition: 180ms ease;
+      max-width: min(480px, calc(100vw - 28px));
+      text-align: center;
+      z-index: 10;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .statusbar {
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 18px 28px;
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .status-icons {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 15px;
+    }
+
+    .app {
+      max-width: 860px;
+      padding-top: 28px;
+    }
+
+    .topbar {
+      min-height: 112px;
+      padding: 0 18px 18px;
+      align-items: start;
+    }
+
+    .brand p {
+      font-size: clamp(21px, 4.1vw, 34px);
+      line-height: 1.08;
+    }
+
+    .date-line {
+      margin-top: 8px;
+      color: #6a6a6a;
+      font-size: clamp(10px, 1.8vw, 14px);
+      font-weight: 700;
+    }
+
+    .profile-button {
+      width: 76px;
+      height: 76px;
+      font-size: 17px;
+      outline: 9px solid rgba(255, 255, 255, 0.72);
+      box-shadow: 0 18px 38px rgba(17, 17, 17, 0.12);
+    }
+
+    .toolbar {
+      margin-bottom: 22px;
+    }
+
+    .toolbar h2,
+    .sheet h2 {
+      font-size: 34px;
+      font-weight: 900;
+    }
+
+    .primary-button {
+      height: 72px;
+      padding: 0 26px;
+      border-radius: 26px;
+      background: #fff;
+      color: var(--ink);
+      border: 1px solid #efeee9;
+      box-shadow: 0 16px 34px rgba(17, 17, 17, 0.08);
+      font-size: 21px;
+      font-weight: 850;
+    }
+
+    .workout-grid {
+      gap: 26px;
+    }
+
+    .counter-card {
+      min-height: 402px;
+      padding: 24px 22px 22px;
+      gap: 18px;
+      border-radius: 30px;
+      box-shadow: 0 24px 50px rgba(17, 17, 17, 0.08);
+    }
+
+    .counter-card::before {
+      content: none;
+    }
+
+    .card-head {
+      align-items: start;
+      gap: 12px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+    }
+
+    .card-title {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .card-title h3 {
+      font-size: clamp(22px, 3.3vw, 29px);
+      line-height: 1.05;
+    }
+
+    .card-title p {
+      margin-top: 8px;
+      font-size: 20px;
+    }
+
+    .icon-bubble {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--bubble, #ffe7df);
+      color: var(--card-accent, var(--accent));
+    }
+
+    .icon-bubble svg {
+      width: 34px;
+      height: 34px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .icon-button {
+      display: none;
+    }
+
+    .count-row {
+      align-items: center;
+      padding-top: 0;
+    }
+
+    .count {
+      color: var(--card-accent, var(--accent));
+      font-size: clamp(29px, 5.2vw, 40px);
+      text-shadow: none;
+    }
+
+    .count small {
+      color: #666;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .target-pill {
+      width: 72px;
+      height: 72px;
+      min-width: 72px;
+      padding: 0;
+      border-radius: 50%;
+      background: conic-gradient(var(--card-accent, var(--accent)) var(--progress), #eee9e3 0);
+      color: var(--ink);
+      position: relative;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .target-pill::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .target-pill span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .progress-track {
+      display: none;
+    }
+
+    .sparkline-panel {
+      min-height: 104px;
+      align-content: center;
+    }
+
+    .sparkline {
+      height: 88px;
+    }
+
+    .sparkline path.area {
+      fill: color-mix(in srgb, var(--card-accent, var(--gold)) 12%, transparent);
+    }
+
+    .sparkline path.line {
+      stroke: var(--card-accent, var(--gold));
+      stroke-width: 4.5;
+    }
+
+    .sparkline circle {
+      fill: var(--card-accent, var(--gold));
+      stroke-width: 3.5;
+    }
+
+    .sparkline-days {
+      display: flex;
+      justify-content: space-between;
+      margin-top: -8px;
+      color: #777;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .sparkline-days span:last-child {
+      width: 28px;
+      height: 28px;
+      margin-top: -6px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--bubble, #ffe7df);
+      color: var(--card-accent, var(--accent));
+    }
+
+    .quick-row {
+      gap: 16px;
+    }
+
+    .quick-row button {
+      height: 56px;
+      border-radius: 28px;
+      background: #f4f4f2;
+      color: var(--ink);
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .quick-row button:nth-child(1),
+    .quick-row button:nth-child(2) {
+      background: #f4f4f2;
+      color: var(--ink);
+    }
+
+    .quick-row button:nth-child(3) {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .card-tools {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 12px;
+      margin-top: -4px;
+    }
+
+    .run-button {
+      background: var(--ink);
+      color: #fff;
+      border-color: var(--ink);
+    }
+
+    .chip-button {
+      height: 42px;
+      border-radius: 22px;
+      background: #f7f7f5;
+      color: var(--ink);
+      border: 1px solid #efeee9;
+      font-size: 15px;
+      font-weight: 850;
+    }
+
+    .run-dialog {
+      width: min(520px, calc(100vw - 28px));
+    }
+
+    .run-modal {
+      gap: 18px;
+    }
+
+    .run-display {
+      min-height: 210px;
+      border-radius: 28px;
+      background: #f3f3f1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      text-align: center;
+      padding: 18px;
+    }
+
+    .run-metric {
+      min-height: 174px;
+      border-radius: 22px;
+      background: #fff;
+      display: grid;
+      place-items: center;
+      padding: 18px 10px;
+    }
+
+    .run-number {
+      font-size: clamp(58px, 15vw, 92px);
+      line-height: 0.9;
+      font-weight: 900;
+      letter-spacing: 0;
+      color: var(--ink);
+    }
+
+    .run-label {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 850;
+    }
+
+    .run-progress {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 850;
+    }
+
+    .run-progress span {
+      color: var(--muted);
+    }
+
+    .run-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .log-card {
+      min-height: 260px;
+      padding: 24px 22px;
+      border-radius: 30px;
+      background: #fff;
+      box-shadow: 0 24px 50px rgba(17, 17, 17, 0.08);
+      display: grid;
+      gap: 16px;
+      align-content: space-between;
+      border: 1px solid rgba(17, 17, 17, 0.04);
+    }
+
+    .log-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .log-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .log-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 20px;
+      display: grid;
+      place-items: center;
+      background: var(--bubble, #e8f3ff);
+      color: var(--card-accent, #2374ff);
+      flex: 0 0 auto;
+    }
+
+    .log-icon svg {
+      width: 30px;
+      height: 30px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .log-title h3 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.08;
+      font-weight: 900;
+    }
+
+    .log-title p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .log-record {
+      height: 42px;
+      padding: 0 16px;
+      border-radius: 22px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .log-value {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      color: var(--card-accent, var(--accent));
+      font-size: clamp(42px, 8vw, 62px);
+      line-height: 0.95;
+      font-weight: 900;
+    }
+
+    .log-value small {
+      color: #555;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .log-sub {
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .log-line-panel {
+      display: grid;
+      gap: 4px;
+    }
+
+    .log-line-chart {
+      height: 58px;
+    }
+
+    .log-line-dates {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .log-tools {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .log-quick-row {
+      grid-column: 1 / -1;
+      gap: 10px;
+    }
+
+    .log-quick-row button {
+      height: 42px;
+      font-size: 14px;
+    }
+
+    .record-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      min-height: 26px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .record-status.done {
+      color: var(--good);
+      background: rgba(112, 227, 160, 0.12);
+    }
+
+    .record-status.missing {
+      color: #ff8f75;
+      background: rgba(255, 143, 117, 0.12);
+    }
+
+    .nutrition-group-card {
+      grid-column: 1 / -1;
+      padding: 18px 20px;
+      border-radius: 30px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 42%),
+        #191918;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      box-shadow: var(--shadow-soft);
+      display: grid;
+      gap: 4px;
+    }
+
+    .nutrition-group-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 10px;
+    }
+
+    .section-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .section-actions .text-btn {
+      height: 34px;
+      padding: 0 12px;
+      border-radius: 17px;
+      background: #242421;
+      color: var(--ink);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .nutrition-group-head h3 {
+      margin: 0;
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .nutrition-group-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .nutrition-group-list {
+      display: grid;
+    }
+
+    .nutrition-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(160px, 0.8fr) auto;
+      gap: 14px;
+      align-items: center;
+      padding: 14px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .nutrition-row-main {
+      min-width: 0;
+    }
+
+    .nutrition-name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .nutrition-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--card-accent, var(--accent));
+      flex: 0 0 auto;
+    }
+
+    .nutrition-name {
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .nutrition-values {
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .nutrition-num {
+      color: var(--card-accent, var(--accent));
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .nutrition-goal {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .nutrition-progress {
+      height: 5px;
+      margin-top: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+    }
+
+    .nutrition-progress span {
+      display: block;
+      height: 100%;
+      width: var(--fill);
+      border-radius: inherit;
+      background: var(--card-accent, var(--accent));
+    }
+
+    .nutrition-percent {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: conic-gradient(var(--card-accent, var(--accent)) var(--progress), rgba(255, 255, 255, 0.12) 0);
+      position: relative;
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 650;
+    }
+
+    .nutrition-percent::before {
+      content: "";
+      position: absolute;
+      inset: 7px;
+      border-radius: 50%;
+      background: #191918;
+    }
+
+    .nutrition-percent span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .nutrition-row .log-line-panel {
+      padding: 0;
+      background: transparent;
+      border: 0;
+    }
+
+    .nutrition-row .log-line-chart {
+      height: 42px;
+    }
+
+    .nutrition-row .mini-line .area {
+      display: none;
+    }
+
+    .nutrition-row .mini-line .line {
+      stroke-width: 2.8;
+    }
+
+    .nutrition-row .mini-line .dot {
+      r: 3;
+    }
+
+    .nutrition-row .log-line-dates {
+      display: none;
+    }
+
+    .nutrition-row .log-record {
+      width: 52px;
+      height: 38px;
+      padding: 0;
+      border-radius: 19px;
+    }
+
+    /* Fitnessku-inspired dark fitness theme */
+    :root {
+      color-scheme: dark;
+      --bg: #10100f;
+      --panel: #191918;
+      --panel-soft: #252522;
+      --ink: #f7f4ed;
+      --muted: #aaa59b;
+      --line: rgba(255, 255, 255, 0.1);
+      --accent: #ff9867;
+      --accent-2: #70e3a0;
+      --accent-3: #353532;
+      --accent-4: #87a7ff;
+      --gold: #ffb260;
+      --good: #70e3a0;
+      --shadow: 0 28px 70px rgba(0, 0, 0, 0.42);
+      --shadow-soft: 0 18px 42px rgba(0, 0, 0, 0.28);
+    }
+
+    body {
+      background: #10100f;
+      color: var(--ink);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.75), transparent 62%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .statusbar,
+    .brand p,
+    .toolbar h2,
+    .sheet h2 {
+      color: var(--ink);
+    }
+
+    .brand {
+      display: contents;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+    }
+
+    .brand p,
+    .date-line {
+      grid-column: 1;
+    }
+
+    .profile-button {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      justify-self: end;
+    }
+
+    .score-line,
+    .score-note {
+      grid-column: 1 / -1;
+      width: 100%;
+    }
+
+    .date-line,
+    .score-note,
+    .stats-top p,
+    .card-title p,
+    .log-title p,
+    .exercise-stat-title p,
+    .run-label,
+    .run-progress span {
+      color: var(--muted);
+    }
+
+    .score-line {
+      background: #1c1c1a;
+      color: var(--ink);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom-color: transparent;
+      box-shadow: var(--shadow-soft);
+      width: min(100%, 560px);
+      min-height: 48px;
+      justify-content: space-between;
+      padding: 0 18px;
+      border-radius: 28px 28px 0 0;
+      font-size: clamp(13px, 2.4vw, 17px);
+    }
+
+    .score-line span {
+      color: var(--good);
+      font-size: clamp(18px, 3.6vw, 26px);
+      line-height: 1;
+    }
+
+    .profile-button,
+    .primary-button,
+    .page-nav,
+    .period-toggle,
+    .month-switcher,
+    .counter-card,
+    .log-card,
+    .exercise-stat-card,
+    .stat,
+    dialog,
+    .modal,
+    .run-metric,
+    .widget-order-item {
+      background: #191918;
+      border-color: rgba(255, 255, 255, 0.09);
+      color: var(--ink);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .counter-card,
+    .log-card,
+    .exercise-stat-card {
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 42%),
+        #191918;
+    }
+
+    .profile-button {
+      outline-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .primary-button,
+    .run-button,
+    .log-record,
+    .nav-button.active,
+    .period-toggle button.active {
+      background: var(--good);
+      color: #0f1711;
+      border-color: transparent;
+      box-shadow: 0 16px 34px rgba(112, 227, 160, 0.2);
+    }
+
+    .quiet-button,
+    .chip-button,
+    .icon-button,
+    .quick-row button,
+    .month-switcher button,
+    .order-button,
+    .nav-button,
+    .period-toggle button {
+      background: #242421;
+      color: var(--ink);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .quick-row button:nth-child(3) {
+      background: var(--accent);
+      color: #1b100b;
+      box-shadow: 0 14px 28px rgba(255, 152, 103, 0.22);
+    }
+
+    .chip-button.run-button {
+      background: var(--good);
+      color: #0f1711;
+      border-color: transparent;
+      box-shadow: 0 16px 34px rgba(112, 227, 160, 0.2);
+    }
+
+    .counter-card .quick-row button,
+    .water-card .log-quick-row button {
+      background: #f4f4f2;
+      color: #111110;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      text-shadow: none;
+    }
+
+    .counter-card .quick-row button:nth-child(3),
+    .water-card .log-quick-row button:nth-child(3) {
+      background: var(--accent);
+      color: #1b100b;
+      border-color: transparent;
+    }
+
+    .danger-button {
+      background: #2a1815;
+      color: #ff9b88;
+      border-color: rgba(255, 155, 136, 0.2);
+    }
+
+    .target-pill {
+      background: conic-gradient(var(--card-accent, var(--accent)) var(--progress), #343430 0);
+      color: var(--ink);
+    }
+
+    .target-pill::before {
+      background: #191918;
+    }
+
+    .icon-bubble,
+    .sparkline-days span:last-child {
+      background: color-mix(in srgb, var(--card-accent, var(--accent)) 18%, #191918);
+    }
+
+    .count,
+    .log-value,
+    .exercise-stat-total,
+    .history-total {
+      color: var(--card-accent, var(--accent));
+    }
+
+    .count small,
+    .log-value small {
+      color: var(--muted);
+    }
+
+    .log-card {
+      grid-column: 1 / -1;
+      min-height: 150px;
+      grid-template-columns: minmax(0, 0.92fr) minmax(220px, 1.08fr);
+      grid-template-areas:
+        "head bars"
+        "value bars";
+      align-items: center;
+      gap: 16px 22px;
+    }
+
+    .log-head {
+      grid-area: head;
+    }
+
+    .log-card > div:nth-of-type(2) {
+      grid-area: value;
+    }
+
+    .log-line-panel {
+      grid-area: bars;
+      align-self: stretch;
+      padding: 12px;
+      border-radius: 22px;
+      background: #111110;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .nutrition-card {
+      grid-template-columns: minmax(0, 0.9fr) minmax(220px, 1fr);
+      grid-template-areas:
+        "head bars"
+        "value bars";
+    }
+
+    .widget-meta,
+    .meta-pill,
+    .stat-axis,
+    .sparkline-days {
+      color: #bdb8ad;
+    }
+
+    .meta-pill {
+      background: #242421;
+    }
+
+    .sparkline path.line {
+      stroke: var(--accent);
+    }
+
+    .sparkline circle,
+    .stat-bar {
+      background: var(--accent);
+      fill: var(--accent);
+    }
+
+    .sparkline path.area {
+      fill: rgba(255, 152, 103, 0.14);
+    }
+
+    .stat-bar {
+      background: var(--accent);
+    }
+
+    .stat-bar.today {
+      background: var(--good);
+    }
+
+    .stat-guide {
+      border-left-color: rgba(112, 227, 160, 0.72);
+    }
+
+    .stat-tooltip,
+    .toast {
+      background: #242421;
+      color: var(--ink);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stat-tooltip span {
+      color: var(--good);
+    }
+
+    .run-display,
+    .widget-manager,
+    .check-pill,
+    .text-input,
+    .number-input,
+    .select-input,
+    .empty {
+      background: #242421;
+      color: var(--ink);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    input::placeholder {
+      color: #79746d;
+    }
+
+    @media (max-width: 760px) {
+      .score-line {
+        width: 100%;
+      }
+
+      .log-card,
+      .nutrition-card {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "head"
+          "value"
+          "bars";
+        min-height: 0;
+      }
+
+      .log-line-panel {
+        height: 82px;
+      }
+
+      .nutrition-row {
+        grid-template-columns: 1fr auto auto;
+        grid-template-areas:
+          "main percent action"
+          "chart chart chart";
+      }
+
+      .nutrition-row-main {
+        grid-area: main;
+      }
+
+      .nutrition-percent {
+        grid-area: percent;
+      }
+
+      .nutrition-row .log-line-panel {
+        grid-area: chart;
+      }
+
+      .nutrition-row .log-record {
+        grid-area: action;
+      }
+    }
+
+    .page-nav {
+      border-radius: 40px;
+      padding: 12px;
+      width: min(760px, calc(100vw - 48px));
+    }
+
+    .nav-button {
+      height: 72px;
+      border-radius: 36px;
+      font-size: 18px;
+    }
+
+    @media (max-width: 900px) {
+      .sheet {
+        position: static;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .app {
+        padding: 18px 12px 104px;
+      }
+
+      .topbar {
+        align-items: start;
+        padding: 0 4px 12px;
+        min-height: 116px;
+      }
+
+      .page-nav {
+        bottom: 12px;
+      }
+
+      .workout-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .toolbar {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .toolbar-actions {
+        justify-content: stretch;
+      }
+
+      .toolbar-actions .primary-button {
+        flex: 1 1 145px;
+      }
+
+      .history-row {
+        grid-template-columns: 80px 1fr 44px;
+      }
+
+      .toolbar-actions .primary-button {
+        flex: 1 1 auto;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .counter-card {
+        padding: 11px;
+      }
+
+      .quick-row button {
+        font-size: 12px;
+      }
+
+      .chip-button {
+        font-size: 11px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .app {
+        padding: 24px 36px 132px;
+      }
+
+      .statusbar {
+        padding: 0 16px 28px;
+      }
+
+      .topbar {
+        min-height: 112px;
+        padding: 0 0 18px;
+      }
+
+      .brand p {
+        font-size: clamp(21px, 4.5vw, 30px);
+      }
+
+      .date-line {
+        font-size: clamp(10px, 2vw, 13px);
+      }
+
+      .profile-button {
+        width: 72px;
+        height: 72px;
+      }
+
+      .toolbar {
+        align-items: center;
+        flex-direction: row;
+      }
+
+      .stats-top {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .period-toggle {
+        min-width: 0;
+        width: 100%;
+      }
+
+      .toolbar h2,
+      .sheet h2 {
+        font-size: 30px;
+      }
+
+      .primary-button {
+        height: 58px;
+        flex: 0 0 auto;
+        font-size: 18px;
+      }
+
+      .workout-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+      }
+
+      .counter-card {
+        min-height: 352px;
+        padding: 20px 18px 18px;
+        gap: 14px;
+        border-radius: 28px;
+      }
+
+      .card-title {
+        grid-template-columns: 56px 1fr;
+        gap: 12px;
+      }
+
+      .icon-bubble {
+        width: 56px;
+        height: 56px;
+      }
+
+      .icon-bubble svg {
+        width: 29px;
+        height: 29px;
+      }
+
+      .card-title h3 {
+        font-size: 22px;
+      }
+
+      .card-title p {
+        font-size: 17px;
+      }
+
+      .target-pill {
+        width: 62px;
+        height: 62px;
+        min-width: 62px;
+        font-size: 12px;
+      }
+
+      .count {
+        font-size: 32px;
+      }
+
+      .sparkline-panel {
+        min-height: 90px;
+      }
+
+      .sparkline {
+        height: 76px;
+      }
+
+      .sparkline-days {
+        font-size: 14px;
+      }
+
+      .quick-row {
+        gap: 10px;
+      }
+
+      .quick-row button {
+        height: 48px;
+        font-size: 19px;
+      }
+
+      .card-tools {
+        gap: 8px;
+      }
+
+      .chip-button {
+        height: 38px;
+        font-size: 13px;
+      }
+
+      .page-nav {
+        width: min(760px, calc(100vw - 48px));
+        bottom: 18px;
+      }
+    }
+
+    /* Premium iOS home redesign */
+    :root {
+      color-scheme: light;
+      --bg: #f7f7f5;
+      --panel: #ffffff;
+      --panel-soft: #f3f3f1;
+      --ink: #111111;
+      --muted: #7b7d86;
+      --line: #eeeef0;
+      --accent: #ff6a3d;
+      --accent-2: #ff6a3d;
+      --accent-3: #f1f1ef;
+      --accent-4: #111111;
+      --gold: #ff6a3d;
+      --good: #22c55e;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
+      --radius: 28px;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Inter, system-ui, sans-serif;
+    }
+
+    body {
+      background: #f7f7f5;
+      color: #111111;
+    }
+
+    body::before {
+      content: none;
+    }
+
+    .app {
+      max-width: 920px;
+      padding: 34px 22px 118px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: start;
+      min-height: 0;
+      padding: 0 0 18px;
+      margin: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+
+    .brand {
+      display: contents;
+      min-width: 0;
+    }
+
+    .brand p {
+      grid-column: 1;
+      color: #111111;
+      font-size: clamp(34px, 6vw, 54px);
+      line-height: 1.02;
+      font-weight: 850;
+      letter-spacing: 0;
+      max-width: 760px;
+    }
+
+    .profile-button {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.86);
+      border: 0;
+      color: #111111;
+      outline: 0;
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.08);
+      backdrop-filter: blur(18px);
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .score-card,
+    .log-card,
+    .nutrition-group-card,
+    .exercise-group-card,
+    .counter-card,
+    .exercise-stat-card,
+    .stat,
+    .modal,
+    dialog {
+      background: #ffffff;
+      border: 0;
+      border-radius: 28px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      color: #111111;
+    }
+
+    .score-card {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(260px, 1fr);
+      grid-template-areas:
+        "top top"
+        "score chart";
+      align-items: end;
+      gap: 20px 28px;
+      min-height: 205px;
+      padding: 28px 32px;
+    }
+
+    .score-card-top {
+      grid-area: top;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .date-line {
+      margin: 0;
+      color: #111111;
+      font-size: 19px;
+      font-weight: 750;
+    }
+
+    .score-label {
+      min-height: 38px;
+      padding: 0 18px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #f5f5f4;
+      color: #111111;
+      font-size: 16px;
+      font-weight: 650;
+    }
+
+    .score-line {
+      grid-area: score;
+      display: block;
+      min-height: 0;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      color: #7b7d86;
+      font-size: 17px;
+      font-weight: 650;
+      line-height: 1.2;
+    }
+
+    .score-line span {
+      display: block;
+      margin-top: 10px;
+      color: #111111;
+      font-size: clamp(58px, 10vw, 86px);
+      line-height: 0.9;
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+
+    .score-chart {
+      grid-area: chart;
+      height: 106px;
+      margin: 0;
+      padding: 4px 0 0;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .mini-line .area {
+      fill: rgba(255, 106, 61, 0.13);
+    }
+
+    .mini-line .line {
+      stroke: #ff6a3d;
+      stroke-width: 4;
+      filter: none;
+    }
+
+    .mini-line .dot {
+      fill: #ff6a3d;
+      stroke: #ffffff;
+      stroke-width: 4;
+    }
+
+    .workout-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .log-card,
+    .nutrition-group-card,
+    .exercise-group-card {
+      grid-column: 1 / -1;
+      padding: 28px 32px;
+      gap: 24px;
+    }
+
+    .log-card {
+      min-height: 190px;
+      grid-template-columns: minmax(0, 0.75fr) minmax(240px, 1fr);
+      grid-template-areas:
+        "head bars"
+        "value bars"
+        "quick quick";
+      align-items: center;
+    }
+
+    .log-title h3,
+    .nutrition-group-head h3,
+    .exercise-group-head h3 {
+      color: #111111;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .log-title p,
+    .nutrition-group-head p,
+    .exercise-group-head p,
+    .log-sub,
+    .nutrition-goal,
+    .card-title p,
+    .widget-meta,
+    .meta-pill {
+      color: #7b7d86;
+    }
+
+    .log-icon,
+    .icon-bubble {
+      background: #f4f4f3;
+      color: #7b7d86;
+      border-radius: 20px;
+    }
+
+    .log-value {
+      color: #111111;
+      font-size: clamp(50px, 8vw, 68px);
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+
+    .log-value small,
+    .count small {
+      color: #7b7d86;
+      font-weight: 500;
+    }
+
+    .log-line-panel {
+      background: transparent;
+      border: 0;
+      padding: 0;
+      align-self: center;
+    }
+
+    .log-line-chart {
+      height: 92px;
+    }
+
+    .log-line-dates {
+      color: #9ca0aa;
+    }
+
+    .nutrition-group-head,
+    .exercise-group-head,
+    .log-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+    }
+
+    .section-actions .text-btn,
+    .text-btn {
+      min-height: 38px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: #f5f5f4;
+      color: #7b7d86;
+      border: 0;
+      font-size: 15px;
+      font-weight: 650;
+      box-shadow: none;
+    }
+
+    .log-record,
+    .primary-button,
+    .chip-button.run-button,
+    .run-button {
+      background: #111111;
+      color: #ffffff;
+      border: 0;
+      box-shadow: none;
+    }
+
+    .record-status.done {
+      color: #22c55e;
+      background: rgba(34, 197, 94, 0.1);
+    }
+
+    .record-status.missing {
+      color: #ff6a3d;
+      background: rgba(255, 106, 61, 0.1);
+    }
+
+    .nutrition-group-list {
+      display: grid;
+      gap: 18px;
+    }
+
+    .nutrition-row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px 22px;
+      padding: 0;
+      border-top: 0;
+      align-items: center;
+    }
+
+    .nutrition-name-row {
+      margin: 0 0 10px;
+    }
+
+    .nutrition-name {
+      color: #111111;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .nutrition-num {
+      color: #111111;
+      font-size: 18px;
+      font-weight: 760;
+    }
+
+    .nutrition-progress {
+      height: 9px;
+      margin-top: 10px;
+      background: #ededed;
+    }
+
+    .nutrition-progress span {
+      background: #ff6a3d;
+    }
+
+    .nutrition-dot,
+    .nutrition-percent,
+    .nutrition-row .log-line-panel {
+      display: none;
+    }
+
+    .nutrition-row .log-record {
+      width: auto;
+      height: 38px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: #f5f5f4;
+      color: #111111;
+    }
+
+    .exercise-group-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .counter-card {
+      min-height: 330px;
+      padding: 22px;
+      gap: 16px;
+      border-radius: 28px;
+      background: #ffffff;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      border: 0;
+    }
+
+    .counter-card::before,
+    .counter-card::after {
+      content: none;
+    }
+
+    .card-head {
+      grid-template-columns: 1fr auto;
+      align-items: start;
+    }
+
+    .card-title {
+      grid-template-columns: 58px 1fr;
+      gap: 16px;
+    }
+
+    .card-title h3 {
+      color: #111111;
+      font-size: clamp(22px, 3vw, 28px);
+      font-weight: 800;
+    }
+
+    .target-pill {
+      width: 58px;
+      height: 58px;
+      min-width: 58px;
+      background: #f5f5f4;
+      color: #ff6a3d;
+      font-size: 14px;
+      font-weight: 760;
+    }
+
+    .target-pill::before {
+      content: none;
+    }
+
+    .count {
+      color: #111111;
+      font-size: clamp(48px, 7vw, 68px);
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+
+    .widget-meta {
+      gap: 8px;
+    }
+
+    .meta-pill {
+      min-height: 26px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #f5f5f4;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .sparkline-panel {
+      min-height: 78px;
+    }
+
+    .sparkline {
+      height: 62px;
+    }
+
+    .sparkline path.area {
+      fill: rgba(255, 106, 61, 0.08);
+    }
+
+    .sparkline path.line {
+      stroke: #ff6a3d;
+      stroke-width: 3.2;
+      filter: none;
+    }
+
+    .sparkline circle {
+      fill: #ff6a3d;
+      stroke: #ffffff;
+      stroke-width: 3;
+      filter: none;
+    }
+
+    .sparkline-days {
+      color: #9ca0aa;
+      font-size: 12px;
+    }
+
+    .quick-row,
+    .card-tools {
+      gap: 12px;
+    }
+
+    .quick-row button,
+    .counter-card .quick-row button,
+    .water-card .log-quick-row button,
+    .chip-button {
+      height: 50px;
+      border-radius: 18px;
+      background: #f5f5f4;
+      color: #111111;
+      border: 0;
+      box-shadow: none;
+      font-size: 17px;
+      font-weight: 760;
+    }
+
+    .quick-row button:nth-child(3),
+    .counter-card .quick-row button:nth-child(3),
+    .water-card .log-quick-row button:nth-child(3) {
+      background: #ff6a3d;
+      color: #ffffff;
+    }
+
+    .card-tools {
+      grid-template-columns: 1.2fr 1fr 1fr;
+    }
+
+    .chip-button.run-button {
+      border-radius: 18px;
+      color: #ffffff;
+    }
+
+    .page-nav {
+      width: min(760px, calc(100vw - 36px));
+      bottom: 18px;
+      gap: 6px;
+      padding: 10px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+    }
+
+    .nav-button {
+      height: 58px;
+      border-radius: 22px;
+      background: transparent;
+      color: #8a8d95;
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .nav-button.active {
+      background: #111111;
+      color: #ffffff;
+      box-shadow: none;
+    }
+
+    .run-display,
+    .widget-manager,
+    .check-pill,
+    .text-input,
+    .number-input,
+    .select-input,
+    .empty,
+    .quiet-button,
+    .order-button,
+    .month-switcher button,
+    .period-toggle button {
+      background: #f5f5f4;
+      color: #111111;
+      border-color: transparent;
+    }
+
+    .danger-button {
+      background: rgba(255, 106, 61, 0.1);
+      color: #ff6a3d;
+      border: 0;
+    }
+
+    @media (max-width: 760px) {
+      .app {
+        padding: 28px 16px 112px;
+      }
+
+      .topbar {
+        grid-template-columns: 1fr auto;
+      }
+
+      .brand p {
+        font-size: clamp(34px, 10vw, 48px);
+      }
+
+      .profile-button {
+        width: 58px;
+        height: 58px;
+      }
+
+      .score-card {
+        grid-column: 1 / -1;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "top"
+          "score"
+          "chart";
+        min-height: 0;
+        padding: 24px;
+        gap: 18px;
+      }
+
+      .score-line span {
+        font-size: clamp(54px, 18vw, 82px);
+      }
+
+      .score-chart {
+        height: 90px;
+      }
+
+      .workout-grid,
+      .exercise-group-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .log-card {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "head"
+          "value"
+          "bars"
+          "quick";
+        padding: 24px;
+      }
+
+      .nutrition-row {
+        grid-template-columns: 1fr auto;
+        grid-template-areas: "main action";
+      }
+
+      .counter-card {
+        min-height: 0;
+      }
+
+      .page-nav {
+        width: min(720px, calc(100vw - 24px));
+        bottom: 12px;
+      }
+
+      .nav-button {
+        height: 54px;
+      }
+    }
+
+    /* Compact section pass inspired by the reference */
+    .app {
+      max-width: 860px;
+      padding-top: 28px;
+    }
+
+    .topbar {
+      gap: 14px;
+      padding-bottom: 14px;
+    }
+
+    .brand p {
+      font-size: clamp(31px, 5.4vw, 48px);
+      margin-bottom: 2px;
+    }
+
+    .profile-button {
+      width: 62px;
+      height: 62px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+    }
+
+    .score-card {
+      min-height: 184px;
+      padding: 24px 28px;
+      gap: 14px 24px;
+    }
+
+    .date-line {
+      font-size: 17px;
+    }
+
+    .score-label {
+      min-height: 34px;
+      padding: 0 15px;
+      font-size: 14px;
+    }
+
+    .score-line {
+      font-size: 15px;
+    }
+
+    .score-line span {
+      margin-top: 8px;
+      font-size: clamp(50px, 8vw, 72px);
+    }
+
+    .score-chart {
+      height: 86px;
+    }
+
+    .workout-grid {
+      gap: 18px;
+    }
+
+    .log-card,
+    .nutrition-group-card,
+    .exercise-group-card {
+      padding: 22px 26px;
+      gap: 16px;
+      border-radius: 28px;
+    }
+
+    .log-card {
+      min-height: 154px;
+      grid-template-columns: minmax(0, 0.78fr) minmax(220px, 1fr);
+      gap: 10px 22px;
+    }
+
+    .log-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+    }
+
+    .log-icon svg {
+      width: 25px;
+      height: 25px;
+    }
+
+    .log-title {
+      gap: 10px;
+    }
+
+    .log-title h3,
+    .nutrition-group-head h3,
+    .exercise-group-head h3 {
+      font-size: 21px;
+    }
+
+    .log-title p,
+    .nutrition-group-head p,
+    .exercise-group-head p {
+      margin-top: 3px;
+      font-size: 12px;
+    }
+
+    .record-status {
+      margin-top: 6px;
+      min-height: 22px;
+      padding: 0 8px;
+      font-size: 11px;
+    }
+
+    .log-value {
+      font-size: clamp(40px, 6vw, 56px);
+    }
+
+    .log-sub {
+      font-size: 13px;
+    }
+
+    .log-line-chart {
+      height: 62px;
+    }
+
+    .log-line-dates {
+      font-size: 9px;
+    }
+
+    .log-quick-row {
+      margin-top: -2px;
+    }
+
+    .log-quick-row button {
+      height: 42px;
+      border-radius: 15px;
+      font-size: 15px;
+    }
+
+    .section-actions .text-btn,
+    .text-btn {
+      min-height: 34px;
+      padding: 0 13px;
+      font-size: 13px;
+    }
+
+    .nutrition-group-list {
+      gap: 14px;
+    }
+
+    .nutrition-row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px 16px;
+    }
+
+    .nutrition-name {
+      font-size: 15px;
+    }
+
+    .nutrition-num {
+      font-size: 16px;
+    }
+
+    .nutrition-goal {
+      font-size: 12px;
+    }
+
+    .nutrition-name-row {
+      margin-bottom: 7px;
+    }
+
+    .nutrition-progress {
+      height: 7px;
+      margin-top: 8px;
+    }
+
+    .nutrition-row .log-record {
+      height: 34px;
+      padding: 0 13px;
+      font-size: 13px;
+    }
+
+    .exercise-group-grid {
+      gap: 14px;
+    }
+
+    .counter-card {
+      min-height: 272px;
+      padding: 18px;
+      gap: 11px;
+    }
+
+    .card-title {
+      grid-template-columns: 48px 1fr;
+      gap: 12px;
+    }
+
+    .icon-bubble {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+    }
+
+    .icon-bubble svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .card-title h3 {
+      font-size: clamp(18px, 2.4vw, 23px);
+    }
+
+    .card-title p {
+      margin-top: 4px;
+      font-size: 13px;
+    }
+
+    .target-pill {
+      width: 50px;
+      height: 50px;
+      min-width: 50px;
+      font-size: 12px;
+    }
+
+    .count {
+      font-size: clamp(36px, 5vw, 48px);
+    }
+
+    .meta-pill {
+      min-height: 23px;
+      padding: 0 8px;
+      font-size: 11px;
+    }
+
+    .sparkline-panel {
+      min-height: 58px;
+    }
+
+    .sparkline {
+      height: 46px;
+    }
+
+    .sparkline-days {
+      margin-top: -5px;
+      font-size: 10px;
+    }
+
+    .quick-row,
+    .card-tools {
+      gap: 9px;
+    }
+
+    .quick-row button,
+    .counter-card .quick-row button,
+    .chip-button {
+      height: 42px;
+      border-radius: 15px;
+      font-size: 15px;
+    }
+
+    .card-tools {
+      grid-template-columns: 1.1fr 1fr 1fr;
+    }
+
+    .page-nav {
+      width: min(720px, calc(100vw - 32px));
+      padding: 8px;
+      border-radius: 28px;
+    }
+
+    .nav-button {
+      height: 52px;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 760px) {
+      .app {
+        padding: 24px 14px 104px;
+      }
+
+      .topbar {
+        gap: 12px;
+      }
+
+      .brand p {
+        font-size: clamp(30px, 9vw, 42px);
+      }
+
+      .profile-button {
+        width: 54px;
+        height: 54px;
+        font-size: 14px;
+      }
+
+      .score-card {
+        grid-template-columns: minmax(0, 0.82fr) minmax(118px, 1fr);
+        grid-template-areas:
+          "top top"
+          "score chart";
+        min-height: 182px;
+        padding: 22px;
+        gap: 12px 14px;
+      }
+
+      .date-line {
+        font-size: 15px;
+      }
+
+      .score-line {
+        font-size: 14px;
+      }
+
+      .score-line span {
+        font-size: clamp(44px, 13vw, 62px);
+      }
+
+      .score-chart {
+        height: 76px;
+      }
+
+      .workout-grid {
+        gap: 16px;
+      }
+
+      .log-card,
+      .nutrition-group-card,
+      .exercise-group-card {
+        padding: 20px;
+      }
+
+      .log-card {
+        min-height: 0;
+        gap: 12px;
+      }
+
+      .log-line-chart {
+        height: 58px;
+      }
+
+      .nutrition-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+
+      .exercise-group-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .counter-card {
+        min-height: 246px;
+        padding: 14px;
+        gap: 9px;
+      }
+
+      .card-title {
+        grid-template-columns: 40px 1fr;
+        gap: 9px;
+      }
+
+      .icon-bubble {
+        width: 40px;
+        height: 40px;
+        border-radius: 13px;
+      }
+
+      .icon-bubble svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      .card-title h3 {
+        font-size: 16px;
+      }
+
+      .card-title p,
+      .widget-meta {
+        font-size: 11px;
+      }
+
+      .target-pill {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        font-size: 11px;
+      }
+
+      .count {
+        font-size: 34px;
+      }
+
+      .sparkline-panel {
+        min-height: 48px;
+      }
+
+      .sparkline {
+        height: 40px;
+      }
+
+      .quick-row button,
+      .counter-card .quick-row button,
+      .chip-button {
+        height: 38px;
+        border-radius: 13px;
+        font-size: 13px;
+      }
+
+      .card-tools {
+        grid-template-columns: 1fr;
+      }
+
+      .page-nav {
+        width: min(720px, calc(100vw - 24px));
+        bottom: 10px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .log-card {
+        grid-template-columns: minmax(0, 0.78fr) minmax(128px, 1fr);
+        grid-template-areas:
+          "head head"
+          "value bars"
+          "quick quick";
+        align-items: center;
+        gap: 10px 14px;
+      }
+
+      .log-title h3,
+      .nutrition-group-head h3,
+      .exercise-group-head h3 {
+        font-size: 19px;
+      }
+
+      .log-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+      }
+
+      .log-icon svg {
+        width: 21px;
+        height: 21px;
+      }
+
+      .log-value {
+        font-size: 38px;
+      }
+
+      .log-sub {
+        font-size: 12px;
+      }
+
+      .log-line-panel {
+        align-self: center;
+      }
+
+      .log-line-chart {
+        height: 46px;
+      }
+
+      .log-line-dates {
+        font-size: 8px;
+      }
+
+      .log-quick-row button {
+        height: 36px;
+        font-size: 13px;
+      }
+
+      .nutrition-group-card {
+        gap: 12px;
+      }
+
+      .nutrition-group-list {
+        gap: 11px;
+      }
+
+      .nutrition-name-row {
+        margin-bottom: 5px;
+      }
+
+      .nutrition-progress {
+        height: 6px;
+        margin-top: 6px;
+      }
+
+      .nutrition-row .log-record {
+        height: 32px;
+        padding: 0 11px;
+        font-size: 12px;
+      }
+
+      .exercise-group-card {
+        gap: 12px;
+      }
+
+      .counter-card {
+        min-height: 0;
+        align-content: start;
+      }
+
+      .counter-card .sparkline-panel {
+        display: none;
+      }
+
+      .counter-card .widget-meta {
+        display: none;
+      }
+
+      .counter-card .card-head {
+        gap: 8px;
+      }
+
+      .counter-card .count-row {
+        min-height: 40px;
+      }
+
+      .counter-card .quick-row {
+        gap: 7px;
+      }
+
+      .counter-card .quick-row button {
+        height: 34px;
+        font-size: 12px;
+        border-radius: 12px;
+      }
+
+      .counter-card .card-tools {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 7px;
+      }
+
+      .counter-card .chip-button {
+        height: 34px;
+        min-width: 0;
+        padding: 0 6px;
+        border-radius: 12px;
+        font-size: 11px;
+      }
+    }
+
+    .nutrition-group-card .nutrition-row {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr) auto;
+      grid-template-areas: "percent main action";
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nutrition-head-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .nutrition-head-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: #f4f4f3;
+      color: #7b7d86;
+      flex: 0 0 auto;
+    }
+
+    .nutrition-head-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nutrition-group-card .nutrition-percent {
+      grid-area: percent;
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: conic-gradient(#ff6a3d var(--progress), #eeeeec 0);
+      position: relative;
+      color: #111111;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .nutrition-group-card .nutrition-percent::before {
+      content: "";
+      position: absolute;
+      inset: 7px;
+      border-radius: 50%;
+      background: #ffffff;
+    }
+
+    .nutrition-group-card .nutrition-percent span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .nutrition-group-card .nutrition-row-main {
+      grid-area: main;
+    }
+
+    .nutrition-group-card .nutrition-row .log-record {
+      grid-area: action;
+    }
+
+    .nutrition-group-card .nutrition-row .log-line-panel {
+      display: grid;
+      margin-top: 8px;
+      width: min(180px, 100%);
+      padding: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+
+    .nutrition-group-card .nutrition-row .log-line-chart {
+      height: 34px;
+    }
+
+    .nutrition-group-card .nutrition-row .mini-line {
+      width: 180px;
+      max-width: 100%;
+    }
+
+    .nutrition-group-card .nutrition-row .mini-line .area {
+      display: none;
+    }
+
+    .nutrition-group-card .nutrition-row .mini-line .line {
+      stroke: #ff6a3d;
+      stroke-width: 2.4;
+    }
+
+    .nutrition-group-card .nutrition-row .mini-line .dot {
+      fill: #ff6a3d;
+      stroke: #ffffff;
+      stroke-width: 2;
+    }
+
+    .nutrition-group-card .nutrition-row .log-line-dates,
+    .nutrition-group-card .nutrition-dot {
+      display: none;
+    }
+
+    @media (max-width: 760px) {
+      .log-card {
+        grid-template-columns: minmax(0, 0.9fr) minmax(118px, 0.82fr);
+        gap: 8px 10px;
+      }
+
+      .log-card > div:nth-of-type(2) {
+        align-self: center;
+      }
+
+      .log-line-panel {
+        justify-self: stretch;
+      }
+
+      .nutrition-group-card .nutrition-row {
+        grid-template-columns: 46px minmax(0, 1fr) auto;
+        grid-template-areas: "percent main action";
+        gap: 10px;
+      }
+
+      .nutrition-group-card .nutrition-percent {
+        width: 42px;
+        height: 42px;
+        font-size: 10px;
+      }
+
+      .nutrition-group-card .nutrition-row .log-line-chart {
+        height: 30px;
+      }
+
+      .nutrition-group-card .nutrition-row .mini-line {
+        width: 132px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <h1 data-i18n="appTitle">Daily Rep Counter</h1>
+        <p id="subtitle"></p>
+        <section class="score-card" aria-label="Today score">
+          <div class="score-card-top">
+            <div class="date-line" id="todayLine"></div>
+            <div class="score-label">Score</div>
+          </div>
+          <div class="score-line" id="todayScoreLine"></div>
+          <div class="score-chart" id="todayCalorieChart"></div>
+        </section>
+      </div>
+      <button class="profile-button" id="profileButton" type="button" title="Profile">ME</button>
+    </header>
+
+    <nav class="page-nav" aria-label="App pages">
+      <button class="nav-button active" type="button" data-page-target="today" data-i18n="todayPage">Today</button>
+      <button class="nav-button" type="button" data-page-target="stats" data-i18n="statsPage">Stats</button>
+      <button class="nav-button" type="button" data-page-target="me" data-i18n="myPage">My page</button>
+    </nav>
+
+    <section class="page active" id="page-today">
+      <section class="surface" aria-labelledby="todayTitle">
+        <div class="toolbar">
+          <h2 id="todayTitle" data-i18n="todayTraining">Today</h2>
+          <div class="toolbar-actions">
+            <button class="primary-button" id="addWorkoutButton" type="button" data-i18n="addWorkout">Widget +</button>
+          </div>
+        </div>
+        <div class="workout-grid" id="workoutGrid"></div>
+      </section>
+    </section>
+
+    <section class="page" id="page-stats">
+      <aside class="sheet" aria-labelledby="statsTitle">
+        <h2 id="statsTitle" data-i18n="stats">Stats</h2>
+        <div class="stats-top">
+          <div>
+            <p id="statsRangeLabel"></p>
+          </div>
+          <div class="period-toggle" aria-label="Stats period">
+            <button class="active" type="button" data-stats-mode="recent7" data-i18n="recent7Mode">7 days</button>
+            <button type="button" data-stats-mode="recent30" data-i18n="recent30Mode">30 days</button>
+            <button type="button" data-stats-mode="calendarMonth" data-i18n="monthlyMode">Monthly</button>
+          </div>
+        </div>
+        <div class="month-switcher" id="monthSwitcher">
+          <button type="button" id="prevStatsMonth" aria-label="Previous month">‹</button>
+          <strong id="statsMonthLabel"></strong>
+          <button type="button" id="nextStatsMonth" aria-label="Next month">›</button>
+        </div>
+        <div class="stats-workout-list" id="statsWorkoutList"></div>
+      </aside>
+    </section>
+
+    <section class="page" id="page-me">
+      <section class="surface profile-surface" aria-labelledby="profileTitle">
+        <form class="modal" id="profileForm">
+          <h2 id="profileTitle" data-i18n="profile">My page</h2>
+          <div class="field">
+            <label for="nickname" data-i18n="nickname">Nickname</label>
+            <input class="text-input" id="nickname" maxlength="24" autocomplete="nickname">
+          </div>
+          <div class="field">
+            <label for="language" data-i18n="language">Language</label>
+            <select class="select-input" id="language">
+              <option value="en">English</option>
+              <option value="zh">中文</option>
+              <option value="ko">한국어</option>
+            </select>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="age">나이</label>
+              <input class="number-input" id="age" type="number" min="1" max="120" step="1" placeholder="36">
+            </div>
+            <div class="field">
+              <label for="sex">성별</label>
+              <select class="select-input" id="sex">
+                <option value="">선택</option>
+                <option value="female">여성</option>
+                <option value="male">남성</option>
+                <option value="other">기타</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="heightCm">키 cm</label>
+              <input class="number-input" id="heightCm" type="number" min="80" max="240" step="1" placeholder="175">
+            </div>
+            <div class="field">
+              <label for="weightKg">체중 kg</label>
+              <input class="number-input" id="weightKg" type="number" min="20" max="250" step="0.1" placeholder="70">
+            </div>
+          </div>
+          <p class="mini-note" data-i18n="profileHint">Your data is saved in this browser.</p>
+          <div class="modal-actions">
+            <button class="primary-button" type="submit" data-i18n="save">Save</button>
+          </div>
+        </form>
+      </section>
+    </section>
+  </main>
+
+  <dialog id="workoutDialog">
+    <form class="modal" method="dialog" id="workoutForm">
+      <h2 id="workoutDialogTitle" data-i18n="addWorkout">Add item</h2>
+      <input type="hidden" id="editingWorkoutId">
+      <div class="field">
+        <label for="widgetKind">위젯 종류</label>
+        <select class="select-input" id="widgetKind">
+          <option value="exercise">개별 운동</option>
+          <option value="combo">조합 운동</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="workoutName" data-i18n="itemName">Item name</label>
+        <input class="text-input" id="workoutName" maxlength="28" required>
+      </div>
+      <div class="field">
+        <label for="workoutTarget" data-i18n="dailyTarget">Daily target</label>
+        <input class="number-input" id="workoutTarget" type="number" min="0" step="1" value="50">
+      </div>
+      <div class="field exercise-settings">
+        <label for="workoutMet">기본 칼로리 기준</label>
+        <input class="number-input" id="workoutMet" type="number" min="1" max="15" step="0.1" value="5">
+      </div>
+      <div class="field exercise-settings">
+        <label for="secondsPerRep">기본 템포 초</label>
+        <input class="number-input" id="secondsPerRep" type="number" min="1" max="600" step="1" value="3">
+      </div>
+      <div class="field" id="comboField">
+        <label>조합할 운동</label>
+        <div class="check-list" id="comboList"></div>
+      </div>
+      <section class="widget-manager" id="widgetManager">
+        <h3>현재 위젯</h3>
+        <div class="widget-order-list" id="widgetOrderList"></div>
+      </section>
+      <div class="modal-actions">
+        <button class="danger-button" type="button" id="deleteWorkoutButton" data-i18n="delete">Delete</button>
+        <button class="quiet-button" type="button" id="closeWorkout" data-i18n="cancel">Cancel</button>
+        <button class="primary-button" type="submit" data-i18n="save">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="nutritionManageDialog">
+    <form class="modal" method="dialog" id="nutritionManageForm">
+      <h2>영양소 항목 관리</h2>
+      <div class="manage-list" id="nutritionManageList"></div>
+      <section class="add-section">
+        <h3>새 항목 추가</h3>
+        <div class="field-grid">
+          <div class="field">
+            <label for="newNutritionName">항목명</label>
+            <input class="text-input" id="newNutritionName" maxlength="18" placeholder="비타민C">
+          </div>
+          <div class="field">
+            <label for="newNutritionUnit">단위</label>
+            <input class="text-input" id="newNutritionUnit" maxlength="8" placeholder="mg">
+          </div>
+        </div>
+        <button class="quiet-button" type="button" id="addNutritionType">추가</button>
+      </section>
+      <div class="modal-actions">
+        <button class="primary-button" type="button" id="closeNutritionManage">완료</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="nutritionImportDialog">
+    <form class="modal" method="dialog" id="nutritionImportForm">
+      <h2>영양소 가져오기</h2>
+      <div class="field">
+        <label for="nutritionImportText">복사한 영양소 텍스트</label>
+        <textarea class="text-input textarea-input" id="nutritionImportText" placeholder="칼로리: 350&#10;탄수화물: 45&#10;지방: 12&#10;나트륨: 380"></textarea>
+      </div>
+      <p class="mini-note" id="nutritionImportResult"></p>
+      <div class="modal-actions">
+        <button class="quiet-button" type="button" id="closeNutritionImport">취소</button>
+        <button class="primary-button" type="submit">가져오기</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="weightManageDialog">
+    <form class="modal" method="dialog" id="weightManageForm">
+      <h2>체중 관리</h2>
+      <div class="field">
+        <label for="weightGoalInput">목표 체중 kg</label>
+        <input class="number-input" id="weightGoalInput" type="number" min="20" max="300" step="0.1" placeholder="70.0">
+      </div>
+      <div class="modal-actions">
+        <button class="quiet-button" type="button" id="closeWeightManage">취소</button>
+        <button class="primary-button" type="submit">저장</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="waterManageDialog">
+    <form class="modal" method="dialog" id="waterManageForm">
+      <h2>수분 섭취 관리</h2>
+      <div class="field" id="waterModeField" hidden>
+        <label for="waterMode">기록 방식</label>
+        <select class="select-input" id="waterMode">
+          <option value="count">횟수로 기록</option>
+        </select>
+      </div>
+      <div class="field" id="waterUnitField" hidden>
+        <label for="waterUnit">용량 단위</label>
+        <select class="select-input" id="waterUnit">
+          <option value="회">회</option>
+        </select>
+      </div>
+      <div class="field-grid">
+        <div class="field">
+          <label for="waterGoalInput" id="waterGoalLabel">목표 횟수</label>
+          <input class="number-input" id="waterGoalInput" type="number" min="0" step="1" placeholder="8">
+        </div>
+        <div class="field" id="waterCupField" hidden>
+          <label for="waterCupInput">1회 기준 ml</label>
+          <input class="number-input" id="waterCupInput" type="number" min="1" step="1" placeholder="250">
+        </div>
+      </div>
+      <p class="mini-note" id="waterManageNote">수분은 마신 횟수만 기록합니다. 1회 기록하면 1점이 올라갑니다.</p>
+      <div class="modal-actions">
+        <button class="quiet-button" type="button" id="closeWaterManage">취소</button>
+        <button class="primary-button" type="submit">저장</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="countDialog">
+    <form class="modal" method="dialog" id="countForm">
+      <h2 id="countDialogTitle" data-i18n="editCount">Edit count</h2>
+      <input type="hidden" id="countWorkoutId">
+      <div class="field">
+        <label for="countValue" data-i18n="count">Count</label>
+        <input class="number-input" id="countValue" type="number" min="0" step="1" required>
+      </div>
+      <div class="field" id="countAddField">
+        <label for="countAddValue">추가 입력</label>
+        <div class="inline-add-row">
+          <input class="number-input" id="countAddValue" type="number" min="0" step="0.1" placeholder="0">
+          <button class="quiet-button" type="button" id="addCountValue">추가</button>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="quiet-button" type="button" id="closeCount" data-i18n="cancel">Cancel</button>
+        <button class="primary-button" type="submit" data-i18n="save">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="run-dialog" id="runDialog">
+    <form class="modal run-modal" method="dialog" id="runForm">
+      <h2 id="runDialogTitle">실행</h2>
+      <input type="hidden" id="runWorkoutId">
+      <div class="field-grid">
+        <div class="field">
+          <label for="runReps">횟수</label>
+          <input class="number-input" id="runReps" type="number" min="1" max="300" step="1" value="10">
+        </div>
+        <div class="field">
+          <label for="runTempo">1회 템포 초</label>
+          <input class="number-input" id="runTempo" type="number" min="1" max="30" step="1" value="3">
+        </div>
+      </div>
+      <div class="run-display" aria-live="polite">
+        <div class="run-metric">
+          <div>
+            <div class="run-number" id="runCountNumber">0/10</div>
+            <div class="run-label">완료 횟수</div>
+          </div>
+        </div>
+        <div class="run-metric">
+          <div>
+            <div class="run-number" id="runSecondNumber">3</div>
+            <div class="run-label" id="runLabel">준비</div>
+          </div>
+        </div>
+      </div>
+      <div class="run-progress">
+        <strong id="runProgressText">0 / 10</strong>
+        <span id="runTempoText">3초 템포</span>
+      </div>
+      <div class="modal-actions run-actions">
+        <button class="quiet-button" type="button" id="closeRun">닫기</button>
+        <button class="primary-button" type="button" id="startRun">시작</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const STORAGE_KEY = "daily-rep-counter-v1";
+
+    const i18n = {
+      en: {
+        appTitle: "Daily Rep Counter",
+        hello: "Hello , {name} ~",
+        todayPage: "Today",
+        statsPage: "Stats",
+        myPage: "My",
+        todayLine: "today is {date}",
+        scoreLine: "Today's health score <span>{score} pts</span>",
+        scoreNote: "Score: weight 5 pts once, water 1 pt each, nutrition 3 pts per item, workouts by reps and difficulty.",
+        todayTraining: "Counters",
+        totalReps: "Today",
+        activeItems: "Items",
+        weeklyMode: "Weekly",
+        recent7Mode: "7 days",
+        recent30Mode: "30 days",
+        monthlyMode: "Monthly",
+        periodReps: "Reps",
+        periodCalories: "Calories",
+        statsRangeRecent7: "Last 7 days by workout",
+        statsRangeRecent30: "Last 30 days by workout",
+        statsRangeCalendarMonth: "{month} by workout",
+        addWorkout: "Widget +",
+        stats: "Stats",
+        todayTotal: "Today",
+        last7Days: "Last 7 days",
+        streak: "Streak",
+        allTime: "All time",
+        weeklyView: "Weekly view",
+        dailyHistory: "Daily history",
+        export: "Export",
+        profile: "My page",
+        nickname: "Nickname",
+        language: "Language",
+        profileHint: "Your data is saved in this browser.",
+        cancel: "Cancel",
+        save: "Save",
+        itemName: "Item name",
+        dailyTarget: "Daily target",
+        delete: "Delete",
+        editCount: "Edit count",
+        count: "Count",
+        target: "Target {target}",
+        noTarget: "No target",
+        edit: "Edit",
+        undo: "Undo",
+        direct: "Set",
+        noItems: "Add your first counter. Squats, push-ups, planks, anything repeatable.",
+        noHistory: "No daily records yet.",
+        exported: "Copied export data to clipboard.",
+        saved: "Saved.",
+        deleted: "Deleted.",
+        undoDone: "Last addition removed.",
+        nothingUndo: "Nothing to undo.",
+        day: "day",
+        days: "days",
+        defaultName: "You",
+        squat: "Squats",
+        pushup: "Push-ups",
+        plank: "Plank",
+        situp: "Sit-up"
+      },
+      zh: {
+        appTitle: "每日运动计数",
+        hello: "Hello , {name} ~",
+        todayPage: "今天",
+        statsPage: "统计",
+        myPage: "我的",
+        todayLine: "today is {date}",
+        scoreLine: "今日健康分数 <span>{score} 分</span>",
+        scoreNote: "分数：体重记录5分，饮水每次1分，营养每项3分，运动按次数和难度计算。",
+        todayTraining: "计数器",
+        totalReps: "今天",
+        activeItems: "项目",
+        weeklyMode: "周",
+        recent7Mode: "7天",
+        recent30Mode: "30天",
+        monthlyMode: "月",
+        periodReps: "次数",
+        periodCalories: "热量",
+        statsRangeRecent7: "最近7天按运动统计",
+        statsRangeRecent30: "最近30天按运动统计",
+        statsRangeCalendarMonth: "{month} 按运动统计",
+        addWorkout: "组件 +",
+        stats: "统计",
+        todayTotal: "今天",
+        last7Days: "最近7天",
+        streak: "连续天数",
+        allTime: "总计",
+        weeklyView: "周视图",
+        dailyHistory: "每日记录",
+        export: "导出",
+        profile: "我的页面",
+        nickname: "昵称",
+        language: "语言",
+        profileHint: "数据会保存在当前浏览器中。",
+        cancel: "取消",
+        save: "保存",
+        itemName: "项目名称",
+        dailyTarget: "每日目标",
+        delete: "删除",
+        editCount: "编辑数量",
+        count: "数量",
+        target: "目标 {target}",
+        noTarget: "无目标",
+        edit: "编辑",
+        undo: "撤销",
+        direct: "设置",
+        noItems: "添加第一个计数器。深蹲、俯卧撑、平板支撑都可以。",
+        noHistory: "还没有每日记录。",
+        exported: "导出数据已复制到剪贴板。",
+        saved: "已保存。",
+        deleted: "已删除。",
+        undoDone: "已移除上一次添加。",
+        nothingUndo: "没有可撤销的记录。",
+        day: "天",
+        days: "天",
+        defaultName: "你",
+        squat: "深蹲",
+        pushup: "俯卧撑",
+        plank: "平板支撑",
+        situp: "仰卧起坐"
+      },
+      ko: {
+        appTitle: "운동 카운트",
+        hello: "Hello , {name}님 ~",
+        todayPage: "오늘",
+        statsPage: "통계",
+        myPage: "나",
+        todayLine: "today is {date}",
+        scoreLine: "오늘 건강 점수 <span>{score}점</span>",
+        scoreNote: "점수: 체중 기록 5점, 수분 1회당 1점, 영양소 항목당 3점, 운동은 횟수와 난이도 기준으로 계산합니다.",
+        todayTraining: "카운터",
+        totalReps: "오늘",
+        activeItems: "항목",
+        weeklyMode: "주별",
+        recent7Mode: "최근 7일",
+        recent30Mode: "최근 30일",
+        monthlyMode: "월별",
+        periodReps: "횟수",
+        periodCalories: "칼로리",
+        statsRangeRecent7: "최근 7일 운동 항목별 통계",
+        statsRangeRecent30: "최근 30일 운동 항목별 통계",
+        statsRangeCalendarMonth: "{month} 운동 항목별 통계",
+        addWorkout: "위젯 +",
+        stats: "통계",
+        todayTotal: "오늘",
+        last7Days: "최근 7일",
+        streak: "연속 기록",
+        allTime: "전체 누적",
+        weeklyView: "주간 보기",
+        dailyHistory: "일자별 기록",
+        export: "내보내기",
+        profile: "나의 페이지",
+        nickname: "닉네임",
+        language: "언어",
+        profileHint: "데이터는 이 브라우저에 저장됩니다.",
+        cancel: "취소",
+        save: "저장",
+        itemName: "항목 이름",
+        dailyTarget: "하루 목표",
+        delete: "삭제",
+        editCount: "숫자 편집",
+        count: "개수",
+        target: "목표 {target}",
+        noTarget: "목표 없음",
+        edit: "편집",
+        undo: "되돌리기",
+        direct: "입력",
+        noItems: "첫 카운터를 추가하세요. 스쿼트, 푸시업, 플랭크처럼 반복 가능한 항목이면 좋아요.",
+        noHistory: "아직 일자별 기록이 없습니다.",
+        exported: "내보내기 데이터가 클립보드에 복사되었습니다.",
+        saved: "저장했습니다.",
+        deleted: "삭제했습니다.",
+        undoDone: "마지막 추가를 되돌렸습니다.",
+        nothingUndo: "되돌릴 기록이 없습니다.",
+        day: "일",
+        days: "일",
+        defaultName: "나",
+        squat: "스쿼트",
+        pushup: "푸시업",
+        plank: "플랭크",
+        situp: "싯업"
+      }
+    };
+
+    const defaultState = {
+      profile: { nickname: "", language: "ko", age: "", sex: "", heightCm: "", weightKg: "" },
+      workouts: [
+        { id: "squat", kind: "exercise", nameKey: "squat", target: 50, met: 5, secondsPerRep: 3 },
+        { id: "pushup", kind: "exercise", nameKey: "pushup", target: 30, met: 8, secondsPerRep: 2 },
+        { id: "plank", kind: "exercise", nameKey: "plank", target: 120, met: 3.3, secondsPerRep: 1 },
+        { id: "situp", kind: "exercise", nameKey: "situp", target: 100, met: 4, secondsPerRep: 3 },
+        { id: "combo-squat-pushup", kind: "combo", name: "스쿼트+푸시업", target: 30, components: ["squat", "pushup"] },
+        { id: "protein", kind: "nutrition", name: "단백질", target: 120, unit: "g" },
+        { id: "nutrition-calories", kind: "nutrition", name: "칼로리", target: 2200, unit: "kcal" },
+        { id: "carbs", kind: "nutrition", name: "탄수화물", target: 260, unit: "g" },
+        { id: "fat", kind: "nutrition", name: "지방", target: 60, unit: "g" },
+        { id: "body-weight", kind: "body", name: "체중", target: 70, unit: "kg" },
+        { id: "water-intake", kind: "water", name: "수분 섭취", target: 8, unit: "회", mode: "count", cupMl: 250 }
+      ],
+      records: {},
+      lastActions: []
+    };
+
+    let state = loadState();
+
+    const els = {
+      subtitle: document.querySelector("#subtitle"),
+      todayLine: document.querySelector("#todayLine"),
+      todayScoreLine: document.querySelector("#todayScoreLine"),
+      todayCalorieChart: document.querySelector("#todayCalorieChart"),
+      profileButton: document.querySelector("#profileButton"),
+      pageButtons: document.querySelectorAll("[data-page-target]"),
+      pages: document.querySelectorAll(".page"),
+      addWorkoutButton: document.querySelector("#addWorkoutButton"),
+      workoutGrid: document.querySelector("#workoutGrid"),
+      statsModeButtons: document.querySelectorAll("[data-stats-mode]"),
+      statsRangeLabel: document.querySelector("#statsRangeLabel"),
+      monthSwitcher: document.querySelector("#monthSwitcher"),
+      statsMonthLabel: document.querySelector("#statsMonthLabel"),
+      prevStatsMonth: document.querySelector("#prevStatsMonth"),
+      nextStatsMonth: document.querySelector("#nextStatsMonth"),
+      statsWorkoutList: document.querySelector("#statsWorkoutList"),
+      exportButton: document.querySelector("#exportButton"),
+      toast: document.querySelector("#toast"),
+      profileForm: document.querySelector("#profileForm"),
+      nickname: document.querySelector("#nickname"),
+      language: document.querySelector("#language"),
+      age: document.querySelector("#age"),
+      sex: document.querySelector("#sex"),
+      heightCm: document.querySelector("#heightCm"),
+      weightKg: document.querySelector("#weightKg"),
+      workoutDialog: document.querySelector("#workoutDialog"),
+      workoutForm: document.querySelector("#workoutForm"),
+      workoutDialogTitle: document.querySelector("#workoutDialogTitle"),
+      editingWorkoutId: document.querySelector("#editingWorkoutId"),
+      widgetKind: document.querySelector("#widgetKind"),
+      workoutName: document.querySelector("#workoutName"),
+      workoutTarget: document.querySelector("#workoutTarget"),
+      workoutMet: document.querySelector("#workoutMet"),
+      secondsPerRep: document.querySelector("#secondsPerRep"),
+      comboField: document.querySelector("#comboField"),
+      comboList: document.querySelector("#comboList"),
+      widgetOrderList: document.querySelector("#widgetOrderList"),
+      deleteWorkoutButton: document.querySelector("#deleteWorkoutButton"),
+      closeWorkout: document.querySelector("#closeWorkout"),
+      nutritionManageDialog: document.querySelector("#nutritionManageDialog"),
+      nutritionManageList: document.querySelector("#nutritionManageList"),
+      newNutritionName: document.querySelector("#newNutritionName"),
+      newNutritionUnit: document.querySelector("#newNutritionUnit"),
+      addNutritionType: document.querySelector("#addNutritionType"),
+      closeNutritionManage: document.querySelector("#closeNutritionManage"),
+      nutritionImportDialog: document.querySelector("#nutritionImportDialog"),
+      nutritionImportForm: document.querySelector("#nutritionImportForm"),
+      nutritionImportText: document.querySelector("#nutritionImportText"),
+      nutritionImportResult: document.querySelector("#nutritionImportResult"),
+      closeNutritionImport: document.querySelector("#closeNutritionImport"),
+      weightManageDialog: document.querySelector("#weightManageDialog"),
+      weightManageForm: document.querySelector("#weightManageForm"),
+      weightGoalInput: document.querySelector("#weightGoalInput"),
+      closeWeightManage: document.querySelector("#closeWeightManage"),
+      waterManageDialog: document.querySelector("#waterManageDialog"),
+      waterManageForm: document.querySelector("#waterManageForm"),
+      waterMode: document.querySelector("#waterMode"),
+      waterUnitField: document.querySelector("#waterUnitField"),
+      waterUnit: document.querySelector("#waterUnit"),
+      waterGoalLabel: document.querySelector("#waterGoalLabel"),
+      waterGoalInput: document.querySelector("#waterGoalInput"),
+      waterCupField: document.querySelector("#waterCupField"),
+      waterCupInput: document.querySelector("#waterCupInput"),
+      waterManageNote: document.querySelector("#waterManageNote"),
+      closeWaterManage: document.querySelector("#closeWaterManage"),
+      countDialog: document.querySelector("#countDialog"),
+      countForm: document.querySelector("#countForm"),
+      countDialogTitle: document.querySelector("#countDialogTitle"),
+      countWorkoutId: document.querySelector("#countWorkoutId"),
+      countValue: document.querySelector("#countValue"),
+      countAddField: document.querySelector("#countAddField"),
+      countAddValue: document.querySelector("#countAddValue"),
+      addCountValue: document.querySelector("#addCountValue"),
+      closeCount: document.querySelector("#closeCount"),
+      runDialog: document.querySelector("#runDialog"),
+      runForm: document.querySelector("#runForm"),
+      runDialogTitle: document.querySelector("#runDialogTitle"),
+      runWorkoutId: document.querySelector("#runWorkoutId"),
+      runReps: document.querySelector("#runReps"),
+      runTempo: document.querySelector("#runTempo"),
+      runCountNumber: document.querySelector("#runCountNumber"),
+      runSecondNumber: document.querySelector("#runSecondNumber"),
+      runLabel: document.querySelector("#runLabel"),
+      runProgressText: document.querySelector("#runProgressText"),
+      runTempoText: document.querySelector("#runTempoText"),
+      startRun: document.querySelector("#startRun"),
+      closeRun: document.querySelector("#closeRun")
+    };
+
+    const runSession = {
+      timer: null,
+      audio: null,
+      workout: null,
+      reps: 10,
+      tempo: 3,
+      completed: 0,
+      tick: 3,
+      phase: "ready",
+      running: false
+    };
+
+    let statsMode = "recent7";
+    let statsMonthKey = todayKey().slice(0, 7);
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (!saved) return structuredClone(defaultState);
+        let workouts = Array.isArray(saved.workouts) ? saved.workouts : defaultState.workouts;
+        const removedWorkoutIds = [];
+        workouts.forEach((workout) => {
+          if (workout.id === "protein" || /^(단백질|protein|단백질 섭취|protein intake)$/i.test(workout.name || "")) {
+            workout.kind = "nutrition";
+            workout.name = workout.name || "단백질";
+            workout.target = Number(workout.target || 120);
+            workout.unit = "g";
+          }
+        });
+        const seenNutritionNames = new Set();
+        workouts = workouts.filter((workout) => {
+          if (workout.kind !== "nutrition") return true;
+          const key = String(workout.name || workout.id || "").trim().toLowerCase();
+          if (!key || !seenNutritionNames.has(key)) {
+            if (key) seenNutritionNames.add(key);
+            return true;
+          }
+          removedWorkoutIds.push(workout.id);
+          return false;
+        });
+        Object.keys(saved.records || {}).forEach((dateKey) => {
+          removedWorkoutIds.forEach((workoutId) => delete saved.records[dateKey][workoutId]);
+          if (Object.keys(saved.records[dateKey]).length === 0) delete saved.records[dateKey];
+        });
+        saved.lastActions = Array.isArray(saved.lastActions)
+          ? saved.lastActions.filter((item) => !removedWorkoutIds.includes(item.workoutId))
+          : [];
+        defaultState.workouts.forEach((defaultWorkout) => {
+          if (!workouts.some((workout) => workout.id === defaultWorkout.id)) {
+            workouts.push(structuredClone(defaultWorkout));
+          }
+        });
+        const hasCustomCalories = workouts.some((workout) => {
+          return workout.kind === "nutrition"
+            && workout.id !== "nutrition-calories"
+            && (workout.unit === "kcal" || /칼로리|열량|calorie/i.test(workout.name || ""));
+        });
+        if (hasCustomCalories) {
+          const hasDefaultCalorieRecords = Object.values(saved.records || {}).some((record) => {
+            return Number(record?.["nutrition-calories"] || 0) > 0;
+          });
+          if (!hasDefaultCalorieRecords) {
+            const defaultCalorieIndex = workouts.findIndex((workout) => workout.id === "nutrition-calories");
+            if (defaultCalorieIndex !== -1) workouts.splice(defaultCalorieIndex, 1);
+          }
+        }
+        workouts.forEach((workout) => {
+          const defaults = defaultState.workouts.find((item) => item.id === workout.id);
+          workout.kind ||= defaults?.kind || "exercise";
+          workout.met = Number(workout.met || defaults?.met || 4);
+          workout.secondsPerRep = Number(workout.secondsPerRep || defaults?.secondsPerRep || 3);
+          workout.unit ||= defaults?.unit || "";
+          if (workout.kind === "water") {
+            workout.mode = "count";
+            workout.cupMl = Number(workout.cupMl || defaults?.cupMl || 250);
+            workout.unit = "회";
+            if (!workout.target || Number(workout.target) > 100) workout.target = defaults?.target || 8;
+          }
+          if (workout.kind === "nutrition") {
+            const nutritionLabel = workout.name || defaults?.name || i18n.ko[workout.nameKey] || "";
+            const inferredUnit = inferNutritionUnit(nutritionLabel);
+            if (!workout.unit || shouldReplaceNutritionUnit(workout.unit, inferredUnit, nutritionLabel)) {
+              workout.unit = inferredUnit;
+            }
+          }
+          if (workout.kind === "combo") workout.components ||= defaults?.components || [];
+        });
+        return {
+          ...structuredClone(defaultState),
+          ...saved,
+          profile: { ...defaultState.profile, ...saved.profile },
+          workouts,
+          records: saved.records || {},
+          lastActions: Array.isArray(saved.lastActions) ? saved.lastActions : []
+        };
+      } catch {
+        return structuredClone(defaultState);
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function t(key, params = {}) {
+      const lang = state.profile.language || "ko";
+      const template = (i18n[lang] && i18n[lang][key]) || i18n.en[key] || key;
+      return Object.entries(params).reduce((text, [name, value]) => {
+        return text.replaceAll(`{${name}}`, value);
+      }, template);
+    }
+
+    function todayKey() {
+      const parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Bangkok",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).formatToParts(new Date());
+      const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+      return `${values.year}-${values.month}-${values.day}`;
+    }
+
+    function addDays(dateKey, amount) {
+      const [year, month, day] = dateKey.split("-").map(Number);
+      const date = new Date(Date.UTC(year, month - 1, day));
+      date.setUTCDate(date.getUTCDate() + amount);
+      return date.toISOString().slice(0, 10);
+    }
+
+    function addMonths(monthKey, amount) {
+      const [year, month] = monthKey.split("-").map(Number);
+      const date = new Date(Date.UTC(year, month - 1 + amount, 1));
+      return date.toISOString().slice(0, 7);
+    }
+
+    function daysInMonth(monthKey) {
+      const [year, month] = monthKey.split("-").map(Number);
+      return new Date(Date.UTC(year, month, 0)).getUTCDate();
+    }
+
+    function formatMonthLabel(monthKey) {
+      const [year, month] = monthKey.split("-").map(Number);
+      if ((state.profile.language || "ko") === "en") {
+        return new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(new Date(Date.UTC(year, month - 1, 1)));
+      }
+      return `${year}년 ${month}월`;
+    }
+
+    function formatThaiDate(dateKey) {
+      const [year, month, day] = dateKey.split("-").map(Number);
+      const date = new Date(Date.UTC(year, month - 1, day, 12));
+      const weekday = new Intl.DateTimeFormat("ko-KR", {
+        timeZone: "Asia/Bangkok",
+        weekday: "short"
+      }).format(date);
+      return `${year}년${month}월${day}일(${weekday})`;
+    }
+
+    function getCount(dateKey, workoutId) {
+      return Number(state.records[dateKey]?.[workoutId] || 0);
+    }
+
+    function setCount(dateKey, workoutId, value, options = {}) {
+      const nextValue = Math.max(0, Number(value) || 0);
+      state.records[dateKey] ||= {};
+      if (nextValue === 0) {
+        delete state.records[dateKey][workoutId];
+      } else {
+        state.records[dateKey][workoutId] = nextValue;
+      }
+      if (Object.keys(state.records[dateKey]).length === 0) {
+        delete state.records[dateKey];
+      }
+      saveState();
+      if (options.silent) return;
+      render();
+      if (options.bump) bumpWorkout(options.bump);
+    }
+
+    function workoutName(workout) {
+      return workout.nameKey ? t(workout.nameKey) : workout.name;
+    }
+
+    function getWorkout(workoutId) {
+      return state.workouts.find((workout) => workout.id === workoutId);
+    }
+
+    function baseExercises() {
+      return state.workouts.filter((workout) => !workout.kind || workout.kind === "exercise");
+    }
+
+    function weightKg() {
+      return Number(state.profile.weightKg) || 70;
+    }
+
+    function kcalForWorkout(workout, count) {
+      if (workout.kind === "combo") {
+        return (workout.components || []).reduce((sum, componentId) => {
+          const component = getWorkout(componentId);
+          return sum + (component ? kcalForWorkout(component, count) : 0);
+        }, 0);
+      }
+      if (workout.kind && workout.kind !== "exercise") return 0;
+      const minutes = (Number(workout.secondsPerRep) || 3) * count / 60;
+      return 0.0175 * (Number(workout.met) || 4) * weightKg() * minutes;
+    }
+
+    function exerciseKcalForDate(dateKey) {
+      return state.workouts.reduce((sum, workout) => {
+        const count = getCount(dateKey, workout.id);
+        if (!count) return sum;
+        if (!workout.kind || workout.kind === "exercise") {
+          return sum + kcalForWorkout(workout, count);
+        }
+        if (workout.kind === "combo") {
+          const hasLinkedCounts = (workout.components || []).some((componentId) => getCount(dateKey, componentId) > 0);
+          return hasLinkedCounts ? sum : sum + kcalForWorkout(workout, count);
+        }
+        return sum;
+      }, 0);
+    }
+
+    function todayCalories() {
+      return Math.round(exerciseKcalForDate(todayKey()));
+    }
+
+    function difficultyPoint(workout) {
+      const met = Number(workout.met || 4);
+      if (met >= 8) return 2;
+      if (met >= 5) return 1.5;
+      if (met >= 3) return 1;
+      return 0.5;
+    }
+
+    function workoutPointForCount(workout, count) {
+      if (!count) return 0;
+      if (workout.kind === "combo") {
+        const components = (workout.components || []).map((id) => getWorkout(id)).filter(Boolean);
+        const average = components.length
+          ? components.reduce((sum, item) => sum + difficultyPoint(item), 0) / components.length
+          : 1;
+        return count * average;
+      }
+      if (!workout.kind || workout.kind === "exercise") return count * difficultyPoint(workout);
+      return 0;
+    }
+
+    function scoreForDate(dateKey) {
+      return Math.round(state.workouts.reduce((sum, workout) => {
+        const count = getCount(dateKey, workout.id);
+        if (!count) return sum;
+        if (workout.kind === "body") return sum + 5;
+        if (workout.kind === "water") return sum + count;
+        if (workout.kind === "nutrition") return sum + 3;
+        return sum + workoutPointForCount(workout, count);
+      }, 0));
+    }
+
+    function displayKind(workout) {
+      if (workout.kind === "combo") return "조합 운동";
+      if (workout.kind === "nutrition") return "영양소 섭취 기록";
+      if (workout.kind === "body") return "체중 기록";
+      if (workout.kind === "water") return "수분 섭취 횟수";
+      return "개별 운동";
+    }
+
+    function scoreRuleLabel(workout) {
+      if (workout.kind === "body") return "기록 1회 완료 시 5점";
+      if (workout.kind === "water") return "기록 1회 완료 시 1점";
+      if (workout.kind === "nutrition") return "항목별 기록 1회 완료 시 3점";
+      if (workout.kind === "combo") return "횟수와 난이도 기준 점수";
+      return "횟수와 난이도 기준 점수";
+    }
+
+    function linkedNames(workout) {
+      if (workout.kind !== "combo") return "";
+      return (workout.components || []).map((id) => {
+        const component = getWorkout(id);
+        return component ? workoutName(component) : "";
+      }).filter(Boolean).join(" + ");
+    }
+
+    function unitForWorkout(workout) {
+      if (workout.unit) return workout.unit;
+      if (workout.kind === "nutrition") return inferNutritionUnit(workoutName(workout));
+      if (workout.kind === "body") return "kg";
+      if (workout.kind === "water") return "회";
+      return "회";
+    }
+
+    function inferNutritionUnit(name = "") {
+      const label = String(name).toLowerCase();
+      if (/칼로리|열량|kcal|calorie|energy/.test(label)) return "kcal";
+      if (/나트륨|소듐|sodium|콜레스테롤|cholesterol|칼슘|calcium|철분|iron|마그네슘|magnesium|아연|zinc|비타민|vitamin|오메가|omega/.test(label)) return "mg";
+      if (label === "물" || /수분|water/.test(label)) return "ml";
+      return "g";
+    }
+
+    function shouldReplaceNutritionUnit(unit, inferredUnit, name = "") {
+      if (!unit || unit === inferredUnit) return !unit;
+      const label = String(name).toLowerCase();
+      const isEnergy = /칼로리|열량|kcal|calorie|energy/.test(label);
+      const isMicro = /나트륨|소듐|sodium|콜레스테롤|cholesterol|칼슘|calcium|철분|iron|마그네슘|magnesium|아연|zinc|비타민|vitamin|오메가|omega/.test(label);
+      const isWater = label === "물" || /수분|water/.test(label);
+      if (unit === "ml" && /탄수화물|carb/.test(label)) return true;
+      return unit === "g" && (isEnergy || isMicro || isWater);
+    }
+
+    function formatMetric(value, workout) {
+      if (!value) return "—";
+      if (workout.kind === "body") return Number(value).toFixed(1).replace(/\.0$/, "");
+      return Number(value).toLocaleString();
+    }
+
+    function displayUnit(workout, value = 0) {
+      return unitForWorkout(workout);
+    }
+
+    function logIcon(kind) {
+      if (kind === "body") {
+        return `<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M8 9.5h16a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3v-10a3 3 0 0 1 3-3Z"/><path d="M11 15.5a5 5 0 0 1 10 0"/><path d="M16 15.5l3-3"/><path d="M11 21h10"/></svg>`;
+      }
+      if (kind === "water") {
+        return `<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M9 8h14l-1.4 16.2a3 3 0 0 1-3 2.8h-5.2a3 3 0 0 1-3-2.8L9 8Z"/><path d="M8 8h16"/><path d="M11 17c2.4-1.6 4.4 1.6 6.8 0 1.3-.9 2.5-.9 3.7-.2"/><path d="M16 3.8c-1.8 2-3 3.7-3 5.2a3 3 0 0 0 6 0c0-1.5-1.2-3.2-3-5.2Z"/></svg>`;
+      }
+      if (kind === "nutrition") {
+        return `<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M10 4v10"/><path d="M6.5 4v5.5a3.5 3.5 0 0 0 7 0V4"/><path d="M10 14v14"/><path d="M22 4v24"/><path d="M22 4c-3.2 2-4.8 5-4.8 8.7V15H22"/></svg>`;
+      }
+      return `<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M11 5h10"/><path d="M13 5v6l-4.5 5.5A6 6 0 0 0 13.2 26h5.6a6 6 0 0 0 4.7-9.5L19 11V5"/><path d="M10.5 18.5h11"/><path d="M13 22h6"/></svg>`;
+    }
+
+    function workoutTheme(index) {
+      const themes = [
+        { accent: "#ff9867", bubble: "#2b211b", icon: "squat" },
+        { accent: "#70e3a0", bubble: "#1d2b22", icon: "pushup" },
+        { accent: "#f0c47d", bubble: "#2b261d", icon: "plank" },
+        { accent: "#8fb0ff", bubble: "#1d2330", icon: "situp" }
+      ];
+      return themes[index % themes.length];
+    }
+
+    function workoutIcon(type) {
+      const icons = {
+        squat: `
+          <svg viewBox="0 0 32 32" aria-hidden="true">
+            <circle cx="17" cy="5.8" r="2.7"/>
+            <path d="M15.8 9.2l-3.6 4.9 4.9 3.3 4.9-1.9"/>
+            <path d="M12.2 14.1l-4.7 5.4 8.2.2"/>
+            <path d="M17.1 17.4l3.6 5.7 6.1.1"/>
+            <path d="M11.2 10.9l-4.5 1.9"/>
+            <path d="M20.1 11.4l4.8 1.5"/>
+            <path d="M5.5 24.8h21.5"/>
+          </svg>`,
+        pushup: `
+          <svg viewBox="0 0 32 32" aria-hidden="true">
+            <circle cx="22.8" cy="10.1" r="2.45"/>
+            <path d="M7.6 15.5l7.3-2.2 6.1 1.1"/>
+            <path d="M21 14.4l4.2 4.6"/>
+            <path d="M15 13.3l-3.1 5.2"/>
+            <path d="M8.1 15.4l-3.9 4.2"/>
+            <path d="M12 18.5h-3.8"/>
+            <path d="M25.1 19h3.2"/>
+            <path d="M4.2 22.7h24.5"/>
+          </svg>`,
+        plank: `
+          <svg viewBox="0 0 32 32" aria-hidden="true">
+            <circle cx="21.8" cy="10.6" r="2.45"/>
+            <path d="M7.4 15.8l7.8-2.1 6.2 1.4"/>
+            <path d="M15.2 13.7l4.4 5.7"/>
+            <path d="M19.6 19.4h-3.2"/>
+            <path d="M7.4 15.8l-3.7 5.4"/>
+            <path d="M3.8 21.2h4.4"/>
+            <path d="M24.8 15.8l3.3 5.4"/>
+            <path d="M27 21.2h2.8"/>
+            <path d="M3.5 24h25.5"/>
+          </svg>`,
+        situp: `
+          <svg viewBox="0 0 32 32" aria-hidden="true">
+            <circle cx="14.6" cy="7" r="2.55"/>
+            <path d="M13 10.2l-4.4 5.1 4.5 4.8"/>
+            <path d="M8.6 15.3l-4.2 4.3"/>
+            <path d="M13.1 20.1h7.2"/>
+            <path d="M20.3 20.1l6.1 3.2"/>
+            <path d="M15 13.1l5.5 2.4"/>
+            <path d="M12.3 12.7l-2.9-3"/>
+            <path d="M4 24.8h23.7"/>
+          </svg>`
+      };
+      return icons[type] || icons.squat;
+    }
+
+    function totalForDate(dateKey) {
+      return Object.values(state.records[dateKey] || {}).reduce((sum, value) => sum + Number(value || 0), 0);
+    }
+
+    function weeklyWorkoutValues(endDate, workoutId) {
+      return Array.from({ length: 7 }, (_, index) => {
+        const dateKey = addDays(endDate, index - 6);
+        return {
+          dateKey,
+          label: dateKey.slice(8),
+          value: getCount(dateKey, workoutId)
+        };
+      });
+    }
+
+    function buildSparkline(values) {
+      const width = 230;
+      const height = 58;
+      const pad = 8;
+      const max = Math.max(1, ...values.map((item) => item.value));
+      const points = values.map((item, index) => {
+        const x = pad + (index / Math.max(1, values.length - 1)) * (width - pad * 2);
+        const y = height - pad - (item.value / max) * (height - pad * 2);
+        return { x, y };
+      });
+      const line = points.reduce((path, point, index) => {
+        if (index === 0) return `M ${point.x.toFixed(1)} ${point.y.toFixed(1)}`;
+        const prev = points[index - 1];
+        const midX = (prev.x + point.x) / 2;
+        return `${path} C ${midX.toFixed(1)} ${prev.y.toFixed(1)}, ${midX.toFixed(1)} ${point.y.toFixed(1)}, ${point.x.toFixed(1)} ${point.y.toFixed(1)}`;
+      }, "");
+      const area = `${line} L ${points[points.length - 1].x.toFixed(1)} ${height - pad} L ${points[0].x.toFixed(1)} ${height - pad} Z`;
+      const last = points[points.length - 1];
+      const dayLabels = ["M", "T", "W", "T", "F", "S", "S"];
+      const labels = values.map((item, index) => `<span>${dayLabels[index]}</span>`).join("");
+      return `
+        <div>
+          <svg class="sparkline" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">
+            <path class="area" d="${area}"></path>
+            <path class="line" d="${line}"></path>
+            <circle cx="${last.x.toFixed(1)}" cy="${last.y.toFixed(1)}" r="5"></circle>
+          </svg>
+          <div class="sparkline-days">${labels}</div>
+        </div>
+      `;
+    }
+
+    function buildMiniLine(values, options = {}) {
+      const width = options.width || 230;
+      const height = options.height || 58;
+      const pad = options.pad || 8;
+      const max = Math.max(1, ...values.map((item) => Number(item.value) || 0));
+      const min = options.allowRange ? Math.min(...values.map((item) => Number(item.value) || 0).filter((value) => value > 0), max) : 0;
+      const range = Math.max(1, max - min);
+      const points = values.map((item, index) => {
+        const value = Number(item.value) || 0;
+        const x = pad + (index / Math.max(1, values.length - 1)) * (width - pad * 2);
+        const scaled = options.allowRange && value > 0 ? (value - min) / range : value / max;
+        const y = height - pad - scaled * (height - pad * 2);
+        return { x, y };
+      });
+      const line = points.reduce((path, point, index) => {
+        if (index === 0) return `M ${point.x.toFixed(1)} ${point.y.toFixed(1)}`;
+        const prev = points[index - 1];
+        const midX = (prev.x + point.x) / 2;
+        return `${path} C ${midX.toFixed(1)} ${prev.y.toFixed(1)}, ${midX.toFixed(1)} ${point.y.toFixed(1)}, ${point.x.toFixed(1)} ${point.y.toFixed(1)}`;
+      }, "");
+      const area = `${line} L ${points[points.length - 1].x.toFixed(1)} ${height - pad} L ${points[0].x.toFixed(1)} ${height - pad} Z`;
+      const last = points[points.length - 1];
+      const preserveAspectRatio = options.preserveAspectRatio || "none";
+      return `
+        <svg class="mini-line ${options.className || ""}" viewBox="0 0 ${width} ${height}" preserveAspectRatio="${preserveAspectRatio}" aria-hidden="true">
+          <path class="area" d="${area}"></path>
+          <path class="line" d="${line}"></path>
+          <circle class="dot" cx="${last.x.toFixed(1)}" cy="${last.y.toFixed(1)}" r="4"></circle>
+        </svg>
+      `;
+    }
+
+    function buildLogLinePanel(values, workout) {
+      const labels = values.map((item) => `<span>${item.dateKey.slice(5).replace("-", "/")}</span>`).join("");
+      const miniOptions = workout.kind === "nutrition"
+        ? { allowRange: false, className: "log-mini-line", width: 160, height: 40, preserveAspectRatio: "xMinYMid meet" }
+        : { allowRange: workout.kind === "body", className: "log-mini-line" };
+      return `
+        <div class="log-line-panel">
+          <div class="log-line-chart">${buildMiniLine(values, miniOptions)}</div>
+          <div class="log-line-dates">${labels}</div>
+        </div>
+      `;
+    }
+
+    function totalForRange(endDate, days) {
+      let total = 0;
+      for (let i = 0; i < days; i += 1) {
+        total += totalForDate(addDays(endDate, -i));
+      }
+      return total;
+    }
+
+    function allTimeTotal() {
+      return Object.keys(state.records).reduce((sum, dateKey) => sum + totalForDate(dateKey), 0);
+    }
+
+    function streak() {
+      let count = 0;
+      let cursor = todayKey();
+      while (totalForDate(cursor) > 0) {
+        count += 1;
+        cursor = addDays(cursor, -1);
+      }
+      return count;
+    }
+
+    function applyLanguage() {
+      document.documentElement.lang = state.profile.language || "ko";
+      document.querySelectorAll("[data-i18n]").forEach((node) => {
+        node.textContent = t(node.dataset.i18n);
+      });
+      const nickname = state.profile.nickname.trim() || t("defaultName");
+      els.subtitle.textContent = t("hello", { name: nickname });
+      els.todayLine.textContent = t("todayLine", { date: formatThaiDate(todayKey()) });
+      els.profileButton.textContent = nickname.slice(0, 2).toUpperCase();
+      els.profileButton.title = t("profile");
+      els.nickname.value = state.profile.nickname;
+      els.language.value = state.profile.language;
+      els.age.value = state.profile.age || "";
+      els.sex.value = state.profile.sex || "";
+      els.heightCm.value = state.profile.heightCm || "";
+      els.weightKg.value = state.profile.weightKg || "";
+    }
+
+    function renderTodayScore() {
+      const score = scoreForDate(todayKey());
+      els.todayScoreLine.innerHTML = t("scoreLine", { score });
+      const days = Array.from({ length: 7 }, (_, index) => addDays(todayKey(), index - 6));
+      els.todayCalorieChart.innerHTML = buildMiniLine(days.map((dateKey) => ({
+        dateKey,
+        value: scoreForDate(dateKey)
+      })), { className: "calorie-line" });
+      els.todayScoreLine.title = t("scoreNote");
+    }
+
+    function renderCounters() {
+      const dateKey = todayKey();
+      els.workoutGrid.innerHTML = "";
+
+      if (state.workouts.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = t("noItems");
+        els.workoutGrid.append(empty);
+        return;
+      }
+
+      const orderedWorkouts = [
+        ...state.workouts.filter((workout) => workout.kind === "body"),
+        ...state.workouts.filter((workout) => workout.kind === "water"),
+        ...state.workouts.filter((workout) => workout.kind === "nutrition"),
+        ...state.workouts.filter((workout) => !workout.kind || workout.kind === "exercise" || workout.kind === "combo")
+      ];
+      let nutritionRendered = false;
+      const exerciseSection = document.createElement("section");
+      exerciseSection.className = "exercise-group-card";
+      exerciseSection.innerHTML = `
+        <div class="exercise-group-head">
+          <div>
+            <h3>운동 기록</h3>
+            <p>운동 위젯은 두 항목씩 묶어서 빠르게 기록합니다.</p>
+          </div>
+          <div class="section-actions">
+            <button class="text-btn" type="button" id="openExerciseManage">운동 항목관리</button>
+          </div>
+        </div>
+        <div class="exercise-group-grid"></div>
+      `;
+      const exerciseGrid = exerciseSection.querySelector(".exercise-group-grid");
+      exerciseSection.querySelector("#openExerciseManage").addEventListener("click", () => openWorkoutDialog());
+      orderedWorkouts.forEach((workout, index) => {
+        if (workout.kind === "nutrition") {
+          if (!nutritionRendered) {
+            renderNutritionGroup();
+            nutritionRendered = true;
+          }
+          return;
+        }
+        const count = getCount(dateKey, workout.id);
+        const target = Number(workout.target || 0);
+        const progress = target > 0 ? Math.min(100, Math.round((count / target) * 100)) : 0;
+        const weeklyValues = weeklyWorkoutValues(dateKey, workout.id);
+        const weeklyTotal = weeklyValues.reduce((sum, item) => sum + item.value, 0);
+        const kcal = Math.round(kcalForWorkout(workout, count));
+        const points = Math.round(workoutPointForCount(workout, count));
+        const extraMeta = workout.kind === "combo"
+          ? linkedNames(workout)
+          : workout.kind === "nutrition" || workout.kind === "body" || workout.kind === "water"
+            ? "기록 위젯"
+            : `템포 ${Number(workout.secondsPerRep || 3)}초`;
+        const theme = workoutTheme(index);
+        const card = document.createElement("article");
+        if (workout.kind === "body" || workout.kind === "water") {
+          const unit = unitForWorkout(workout);
+          const remain = target > 0 ? Math.max(0, target - count) : 0;
+          const done = count > 0;
+          card.className = `log-card ${workout.kind}-card`;
+          card.dataset.workoutId = workout.id;
+          card.style.setProperty("--card-accent", workout.kind === "body" ? "#8fb0ff" : "#70e3d0");
+          card.style.setProperty("--bubble", workout.kind === "body" ? "#1d2330" : "#17302d");
+          const valueUnit = displayUnit(workout, count);
+          const targetUnit = displayUnit(workout, target);
+          const quickButtons = workout.kind === "water"
+            ? `<div class="quick-row log-quick-row"><button type="button" data-action="inc" data-value="1">+1회</button><button type="button" data-action="inc" data-value="2">+2회</button><button type="button" data-action="set">기록</button></div>`
+            : "";
+          card.innerHTML = `
+            <div class="log-head">
+              <div class="log-title">
+                <div class="log-icon">${logIcon(workout.kind)}</div>
+                <div>
+                  <h3></h3>
+                  <p>${scoreRuleLabel(workout)}</p>
+                  ${workout.kind === "body" ? `<div class="record-status ${done ? "done" : "missing"}">${done ? "✓ 오늘 기록 완료" : "✕ 오늘 기록 미완료"}</div>` : ""}
+                </div>
+              </div>
+              <div class="section-actions">
+                ${workout.kind === "body" ? `<button class="log-record" type="button" data-action="set">기록</button>` : ""}
+                <button class="text-btn" type="button" data-action="${workout.kind === "body" ? "weight-manage" : "water-manage"}">${workout.kind === "body" ? "체중 관리" : "수분 관리"}</button>
+              </div>
+            </div>
+            <div>
+              <div class="log-value">${formatMetric(count, workout)} <small>${valueUnit}</small></div>
+              <div class="log-sub">
+                ${workout.kind === "body"
+                  ? (target > 0 ? `목표 ${formatMetric(target, workout)}${unit}` : "오늘 체중을 기록하세요")
+                  : (target > 0 ? `목표 ${formatMetric(target, workout)}${targetUnit} · ${count}점` : "오늘 수분 섭취를 기록하세요")}
+              </div>
+            </div>
+            ${buildLogLinePanel(weeklyValues, workout)}
+            ${quickButtons}
+          `;
+          card.querySelector("h3").textContent = workoutName(workout);
+          card.querySelectorAll("button").forEach((button) => {
+            if (button.dataset.action === "weight-manage") {
+              button.addEventListener("click", openWeightManage);
+            } else if (button.dataset.action === "water-manage") {
+              button.addEventListener("click", openWaterManage);
+            } else {
+              button.addEventListener("click", () => handleCounterAction(workout, button.dataset.action, button.dataset.value));
+            }
+          });
+          els.workoutGrid.append(card);
+          return;
+        }
+        card.className = "counter-card";
+        card.dataset.workoutId = workout.id;
+        card.style.setProperty("--progress", `${progress}%`);
+        card.style.setProperty("--card-accent", theme.accent);
+        card.style.setProperty("--bubble", theme.bubble);
+        card.innerHTML = `
+          <div class="card-head">
+            <div class="card-title">
+              <div class="icon-bubble">${workoutIcon(theme.icon)}</div>
+              <div>
+                <h3></h3>
+                <p></p>
+              </div>
+            </div>
+            <div class="target-pill"><span>${target > 0 ? `${progress}%` : "-"}</span></div>
+          </div>
+          <div class="count-row">
+            <div class="count">${count} <small>/ ${target || "-"}</small></div>
+          </div>
+          <div class="widget-meta">
+            <span class="meta-pill">${displayKind(workout)}</span>
+            <span class="meta-pill">${extraMeta}</span>
+            ${workout.kind === "nutrition" || workout.kind === "body" || workout.kind === "water" ? "" : `<span class="meta-pill">${points}점</span><span class="meta-pill">~${kcal} kcal</span>`}
+          </div>
+          <div class="sparkline-panel">
+            ${buildSparkline(weeklyValues)}
+            <div class="sparkline-total">${weeklyTotal}</div>
+          </div>
+          <div class="quick-row">
+            <button type="button" data-action="inc" data-value="1">+1</button>
+            <button type="button" data-action="inc" data-value="5">+5</button>
+            <button type="button" data-action="inc" data-value="10">+10</button>
+          </div>
+          <div class="card-tools">
+            <button class="chip-button run-button" type="button" data-action="run">실행</button>
+            <button class="chip-button" type="button" data-action="undo">${t("undo")}</button>
+            <button class="chip-button" type="button" data-action="edit">${t("edit")}</button>
+          </div>
+        `;
+        card.querySelector("h3").textContent = workoutName(workout);
+        card.querySelector("p").textContent = workout.target > 0 ? t("target", { target: workout.target }) : t("noTarget");
+        card.querySelectorAll("button").forEach((button) => {
+          button.addEventListener("click", () => handleCounterAction(workout, button.dataset.action, button.dataset.value));
+        });
+        exerciseGrid.append(card);
+      });
+      if (exerciseGrid.children.length) {
+        els.workoutGrid.append(exerciseSection);
+      }
+    }
+
+    function renderNutritionGroup() {
+      const dateKey = todayKey();
+      const nutritionItems = state.workouts
+        .filter((workout) => workout.kind === "nutrition")
+        .sort((a, b) => {
+          const rank = (workout) => /단백질|protein/i.test(workoutName(workout)) ? -1 : 0;
+          return rank(a) - rank(b);
+        });
+      if (!nutritionItems.length) return;
+      const card = document.createElement("article");
+      card.className = "nutrition-group-card";
+      const rows = nutritionItems.map((workout, index) => {
+        const count = getCount(dateKey, workout.id);
+        const target = Number(workout.target || 0);
+        const unit = unitForWorkout(workout);
+        const progress = target > 0 ? Math.min(100, (count / target) * 100) : (count > 0 ? 28 : 0);
+        const theme = workoutTheme(index + 1);
+        const weeklyValues = weeklyWorkoutValues(dateKey, workout.id);
+        return `
+          <div class="nutrition-row" data-workout-id="${workout.id}" style="--card-accent:${theme.accent}">
+            <div class="nutrition-percent" style="--progress:${progress}%"><span>${target > 0 ? `${Math.round(progress)}%` : "-"}</span></div>
+            <div class="nutrition-row-main">
+              <div class="nutrition-name-row">
+                <span class="nutrition-dot"></span>
+                <span class="nutrition-name">${workoutName(workout)}</span>
+              </div>
+              <div class="nutrition-values">
+                <span class="nutrition-num">${formatMetric(count, workout)}</span>
+                <span class="nutrition-goal">${unit}${target > 0 ? ` / ${formatMetric(target, workout)} ${unit}` : ""} · ${count > 0 ? "3점" : "0점"}</span>
+              </div>
+              <div class="nutrition-progress" style="--fill:${progress}%"><span></span></div>
+              ${buildLogLinePanel(weeklyValues, workout)}
+            </div>
+            <button class="log-record" type="button" data-action="set" data-workout-id="${workout.id}">기록</button>
+          </div>
+        `;
+      }).join("");
+      card.innerHTML = `
+        <div class="nutrition-group-head">
+          <div class="nutrition-head-title">
+            <div class="nutrition-head-icon">${logIcon("nutrition")}</div>
+            <div>
+              <h3>영양소 섭취 기록</h3>
+              <p>항목별 기록 1회 완료 시 3점</p>
+            </div>
+          </div>
+          <div class="section-actions">
+            <button class="text-btn" type="button" id="openNutritionImport">가져오기</button>
+            <button class="text-btn" type="button" id="openNutritionManage">항목 관리</button>
+          </div>
+        </div>
+        <div class="nutrition-group-list">${rows}</div>
+      `;
+      card.querySelector("#openNutritionImport").addEventListener("click", openNutritionImport);
+      card.querySelector("#openNutritionManage").addEventListener("click", openNutritionManage);
+      card.querySelectorAll("button[data-action='set']").forEach((button) => {
+        const workout = getWorkout(button.dataset.workoutId);
+        button.addEventListener("click", () => handleCounterAction(workout, "set"));
+      });
+      els.workoutGrid.append(card);
+    }
+
+    function handleCounterAction(workout, action, value) {
+      if (!workout) return;
+      const dateKey = todayKey();
+      if (action === "inc") {
+        const amount = Number(value);
+        const before = getCount(dateKey, workout.id);
+        const linked = workout.kind === "combo" ? [...(workout.components || [])] : [];
+        linked.forEach((componentId) => {
+          setCount(dateKey, componentId, getCount(dateKey, componentId) + amount, { silent: true });
+        });
+        state.lastActions.push({ dateKey, workoutId: workout.id, amount, linked });
+        state.lastActions = state.lastActions.slice(-20);
+        setCount(dateKey, workout.id, before + amount, { bump: workout.id });
+      }
+      if (action === "set") {
+        els.countWorkoutId.value = workout.id;
+        els.countDialogTitle.textContent = workoutName(workout);
+        els.countValue.value = getCount(dateKey, workout.id);
+        els.countValue.step = workout.kind === "body" || (workout.kind === "water" && workout.unit === "L") ? "0.1" : "1";
+        els.countValue.placeholder = unitForWorkout(workout);
+        els.countAddField.style.display = workout.kind === "nutrition" || workout.kind === "water" ? "grid" : "none";
+        els.countAddValue.value = "";
+        els.countAddValue.step = workout.kind === "nutrition" || (workout.kind === "water" && workout.unit === "L") ? "0.1" : "1";
+        els.countAddValue.placeholder = unitForWorkout(workout);
+        els.countDialog.showModal();
+        setTimeout(() => els.countValue.select(), 50);
+      }
+      if (action === "undo") {
+        const index = [...state.lastActions].reverse().findIndex((item) => {
+          return item.dateKey === dateKey && item.workoutId === workout.id;
+        });
+        if (index === -1) {
+          showToast(t("nothingUndo"));
+          return;
+        }
+        const realIndex = state.lastActions.length - 1 - index;
+        const actionItem = state.lastActions.splice(realIndex, 1)[0];
+        (actionItem.linked || []).forEach((componentId) => {
+          setCount(dateKey, componentId, getCount(dateKey, componentId) - actionItem.amount, { silent: true });
+        });
+        setCount(dateKey, workout.id, getCount(dateKey, workout.id) - actionItem.amount, { bump: workout.id });
+        showToast(t("undoDone"));
+      }
+      if (action === "edit") {
+        openWorkoutDialog(workout);
+      }
+      if (action === "run") {
+        openRunDialog(workout);
+      }
+    }
+
+    function renderStats() {
+      const days = statsDays();
+      const statWorkouts = state.workouts.filter((workout) => !workout.kind || workout.kind === "exercise" || workout.kind === "combo");
+
+      els.statsModeButtons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.statsMode === statsMode);
+      });
+      const monthLabel = formatMonthLabel(statsMonthKey);
+      els.monthSwitcher.classList.toggle("show", statsMode === "calendarMonth");
+      els.statsMonthLabel.textContent = monthLabel;
+      const rangeKey = statsMode === "recent7"
+        ? "statsRangeRecent7"
+        : statsMode === "recent30"
+          ? "statsRangeRecent30"
+          : "statsRangeCalendarMonth";
+      els.statsRangeLabel.textContent = t(rangeKey, { month: monthLabel });
+
+      els.statsWorkoutList.innerHTML = "";
+      if (statWorkouts.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = t("noItems");
+        els.statsWorkoutList.append(empty);
+        return;
+      }
+
+      statWorkouts.forEach((workout, index) => {
+        const values = days.map((dateKey) => ({ dateKey, value: getCount(dateKey, workout.id) }));
+        const total = values.reduce((sum, item) => sum + item.value, 0);
+        const kcal = Math.round(kcalForWorkout(workout, total));
+        const theme = workoutTheme(index);
+        const card = document.createElement("article");
+        card.className = "exercise-stat-card";
+        card.style.setProperty("--card-accent", theme.accent);
+        card.style.setProperty("--bubble", theme.bubble);
+        card.innerHTML = `
+          <div class="exercise-stat-head">
+            <div class="exercise-stat-title">
+              <div class="icon-bubble">${workoutIcon(theme.icon)}</div>
+              <div>
+                <h3></h3>
+                <p>${displayKind(workout)}</p>
+              </div>
+            </div>
+            <div class="exercise-stat-total">${total.toLocaleString()}<span>total</span></div>
+          </div>
+          ${buildStatBars(values)}
+          <div class="stat-card-meta">
+            <span class="meta-pill">${statsMode === "recent7" ? t("recent7Mode") : statsMode === "recent30" ? t("recent30Mode") : t("monthlyMode")}</span>
+            <span class="meta-pill">~${kcal.toLocaleString()} kcal</span>
+            <span class="meta-pill">${workout.target ? `${Math.round((total / Math.max(1, workout.target * days.length)) * 100)}%` : "-"}</span>
+          </div>
+        `;
+        card.querySelector("h3").textContent = workoutName(workout);
+        els.statsWorkoutList.append(card);
+      });
+      bindStatInteractions();
+    }
+
+    function statsDays() {
+      if (statsMode === "calendarMonth") {
+        const length = daysInMonth(statsMonthKey);
+        return Array.from({ length }, (_, index) => `${statsMonthKey}-${String(index + 1).padStart(2, "0")}`);
+      }
+      const length = statsMode === "recent7" ? 7 : 30;
+      return Array.from({ length }, (_, index) => addDays(todayKey(), index - length + 1));
+    }
+
+    function buildStatBars(values) {
+      const max = Math.max(1, ...values.map((item) => item.value));
+      const axis = values.map((item, index) => {
+        if (statsMode !== "recent7" && index % 5 !== 0 && index !== values.length - 1) return "<span></span>";
+        return `<span>${item.dateKey.slice(5).replace("-", "/")}</span>`;
+      }).join("");
+      return `
+        <div class="stat-bars">
+          <div class="stat-guide"></div>
+          <div class="stat-tooltip"></div>
+          ${values.map((item, index) => `<div class="stat-bar${item.dateKey === todayKey() ? " today" : ""}" data-index="${index}" data-date="${item.dateKey}" data-value="${item.value}" style="height:${Math.max(5, (item.value / max) * 100)}%" title="${item.dateKey}: ${item.value}"></div>`).join("")}
+        </div>
+        <div class="stat-axis">${axis}</div>
+      `;
+    }
+
+    function bindStatInteractions() {
+      document.querySelectorAll(".stat-bars").forEach((chart) => {
+        const bars = [...chart.querySelectorAll(".stat-bar")];
+        const guide = chart.querySelector(".stat-guide");
+        const tooltip = chart.querySelector(".stat-tooltip");
+        const selectBar = (bar) => {
+          if (!bar) return;
+          bars.forEach((item) => item.classList.toggle("is-selected", item === bar));
+          const chartRect = chart.getBoundingClientRect();
+          const barRect = bar.getBoundingClientRect();
+          const x = barRect.left + barRect.width / 2 - chartRect.left;
+          guide.style.left = `${x}px`;
+          tooltip.style.left = `${Math.max(58, Math.min(chartRect.width - 58, x))}px`;
+          tooltip.innerHTML = `${bar.dataset.date}<span>${Number(bar.dataset.value).toLocaleString()}점</span>`;
+          chart.classList.add("active");
+        };
+        bars.forEach((bar) => {
+          bar.addEventListener("pointerenter", () => selectBar(bar));
+          bar.addEventListener("focus", () => selectBar(bar));
+        });
+        chart.addEventListener("pointermove", (event) => {
+          const chartRect = chart.getBoundingClientRect();
+          const ratio = Math.max(0, Math.min(1, (event.clientX - chartRect.left) / Math.max(1, chartRect.width)));
+          const index = Math.round(ratio * (bars.length - 1));
+          selectBar(bars[index]);
+        });
+        chart.addEventListener("pointerleave", () => {
+          chart.classList.remove("active");
+          bars.forEach((bar) => bar.classList.remove("is-selected"));
+        });
+      });
+    }
+
+    function render() {
+      applyLanguage();
+      renderTodayScore();
+      renderCounters();
+      renderStats();
+    }
+
+    function setPage(pageName) {
+      els.pageButtons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.pageTarget === pageName);
+      });
+      els.pages.forEach((page) => {
+        page.classList.toggle("active", page.id === `page-${pageName}`);
+      });
+    }
+
+    function bumpWorkout(workoutId) {
+      const card = document.querySelector(`[data-workout-id="${CSS.escape(workoutId)}"]`);
+      if (!card) return;
+      card.classList.remove("bump");
+      void card.offsetWidth;
+      card.classList.add("bump");
+    }
+
+    function openWorkoutDialog(workout = null) {
+      els.editingWorkoutId.value = workout ? workout.id : "";
+      els.workoutDialogTitle.textContent = workout ? t("edit") : t("addWorkout");
+      els.widgetKind.value = workout ? workout.kind || "exercise" : "exercise";
+      els.workoutName.value = workout ? workoutName(workout) : "";
+      els.workoutTarget.value = workout ? workout.target || 0 : 50;
+      els.workoutMet.value = workout ? Number(workout.met || 4) : 5;
+      els.secondsPerRep.value = workout ? Number(workout.secondsPerRep || 3) : 3;
+      renderComboList(workout);
+      renderWidgetOrderList();
+      updateWidgetKindFields();
+      els.deleteWorkoutButton.style.display = workout ? "inline-flex" : "none";
+      if (!els.workoutDialog.open) els.workoutDialog.showModal();
+      setTimeout(() => els.workoutName.focus(), 50);
+    }
+
+    function renderWidgetOrderList() {
+      const manageable = state.workouts.filter((workout) => !workout.kind || workout.kind === "exercise" || workout.kind === "combo");
+      els.widgetOrderList.innerHTML = manageable.map((workout, index) => `
+        <div class="widget-order-item" data-order-id="${workout.id}">
+          <div class="widget-order-name">
+            <strong>${workoutName(workout)}</strong>
+            <span>${displayKind(workout)}</span>
+          </div>
+          <div class="widget-order-actions">
+            <button class="order-button" type="button" data-order-action="up" data-order-id="${workout.id}" ${index === 0 ? "disabled" : ""}>↑</button>
+            <button class="order-button" type="button" data-order-action="down" data-order-id="${workout.id}" ${index === manageable.length - 1 ? "disabled" : ""}>↓</button>
+            <button class="order-button" type="button" data-order-action="edit" data-order-id="${workout.id}">편</button>
+          </div>
+        </div>
+      `).join("");
+      els.widgetOrderList.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => handleWidgetOrderAction(button.dataset.orderId, button.dataset.orderAction));
+      });
+    }
+
+    function handleWidgetOrderAction(workoutId, action) {
+      const index = state.workouts.findIndex((workout) => workout.id === workoutId);
+      if (index === -1) return;
+      const workout = state.workouts[index];
+      if (workout.kind && workout.kind !== "exercise" && workout.kind !== "combo") return;
+      if (action === "edit") {
+        openWorkoutDialog(workout);
+        return;
+      }
+      const direction = action === "up" ? -1 : 1;
+      let targetIndex = index + direction;
+      while (targetIndex >= 0 && targetIndex < state.workouts.length) {
+        const target = state.workouts[targetIndex];
+        if (!target.kind || target.kind === "exercise" || target.kind === "combo") break;
+        targetIndex += direction;
+      }
+      if (targetIndex < 0 || targetIndex >= state.workouts.length) return;
+      const [item] = state.workouts.splice(index, 1);
+      state.workouts.splice(targetIndex, 0, item);
+      saveState();
+      render();
+      renderWidgetOrderList();
+      showToast("위젯 순서를 바꿨습니다.");
+    }
+
+    function renderComboList(workout = null) {
+      const selected = new Set(workout?.components || []);
+      els.comboList.innerHTML = baseExercises().map((item) => {
+        if (workout && item.id === workout.id) return "";
+        return `
+          <label class="check-pill">
+            <input type="checkbox" value="${item.id}" ${selected.has(item.id) ? "checked" : ""}>
+            <span>${workoutName(item)}</span>
+          </label>
+        `;
+      }).join("");
+    }
+
+    function updateWidgetKindFields() {
+      const isCombo = els.widgetKind.value === "combo";
+      els.comboField.style.display = isCombo ? "grid" : "none";
+      document.querySelectorAll(".exercise-settings").forEach((field) => {
+        field.style.display = "none";
+      });
+    }
+
+    function openNutritionManage() {
+      renderNutritionManageList();
+      els.newNutritionName.value = "";
+      els.newNutritionUnit.value = "";
+      els.nutritionManageDialog.showModal();
+    }
+
+    function renderNutritionManageList() {
+      const items = state.workouts.filter((workout) => workout.kind === "nutrition");
+      els.nutritionManageList.innerHTML = items.length ? items.map((workout, index) => {
+        const theme = workoutTheme(index + 1);
+        return `
+          <div class="manage-item" data-workout-id="${workout.id}" style="--card-accent:${theme.accent}">
+            <div class="manage-row">
+              <span class="manage-dot"></span>
+              <span class="manage-name">${workoutName(workout)}</span>
+              <span class="manage-unit">${unitForWorkout(workout)}</span>
+              <button class="manage-delete" type="button" data-action="delete" data-workout-id="${workout.id}">×</button>
+            </div>
+            <div class="goal-row">
+              <span>일일 목표</span>
+              <input class="number-input" type="number" min="0" step="0.1" value="${workout.target || ""}" placeholder="미설정" data-action="goal" data-workout-id="${workout.id}">
+              <span>${unitForWorkout(workout)}</span>
+            </div>
+          </div>
+        `;
+      }).join("") : `<p class="empty">영양소 항목이 없습니다.</p>`;
+      els.nutritionManageList.querySelectorAll("[data-action='goal']").forEach((input) => {
+        input.addEventListener("change", () => {
+          const workout = getWorkout(input.dataset.workoutId);
+          if (!workout) return;
+          workout.target = input.value === "" ? 0 : Math.max(0, Number(input.value) || 0);
+          saveState();
+          render();
+        });
+      });
+      els.nutritionManageList.querySelectorAll("[data-action='delete']").forEach((button) => {
+        button.addEventListener("click", () => deleteNutritionType(button.dataset.workoutId));
+      });
+    }
+
+    function addNutritionType() {
+      const name = els.newNutritionName.value.trim();
+      if (!name) {
+        els.newNutritionName.focus();
+        return;
+      }
+      state.workouts.push({
+        id: crypto.randomUUID(),
+        kind: "nutrition",
+        name,
+        target: 0,
+        unit: els.newNutritionUnit.value.trim() || inferNutritionUnit(name)
+      });
+      saveState();
+      els.newNutritionName.value = "";
+      els.newNutritionUnit.value = "";
+      renderNutritionManageList();
+      render();
+    }
+
+    function deleteNutritionType(workoutId) {
+      state.workouts = state.workouts.filter((workout) => workout.id !== workoutId);
+      Object.keys(state.records).forEach((dateKey) => {
+        delete state.records[dateKey][workoutId];
+        if (Object.keys(state.records[dateKey]).length === 0) delete state.records[dateKey];
+      });
+      state.lastActions = state.lastActions.filter((item) => item.workoutId !== workoutId);
+      saveState();
+      renderNutritionManageList();
+      render();
+    }
+
+    function openNutritionImport() {
+      els.nutritionImportText.value = "";
+      els.nutritionImportResult.textContent = "";
+      els.nutritionImportDialog.showModal();
+      setTimeout(() => els.nutritionImportText.focus(), 50);
+    }
+
+    function importNutritionText(text) {
+      const lines = text.split("\n");
+      const matched = [];
+      lines.forEach((line) => {
+        const match = line.match(/^(.+?)[\s:：]+([0-9]+\.?[0-9]*)/);
+        if (!match) return;
+        const rawName = match[1].trim();
+        const value = Number(match[2]);
+        if (!Number.isFinite(value) || value < 0) return;
+        const workout = state.workouts.find((item) => {
+          if (item.kind !== "nutrition") return false;
+          const name = workoutName(item);
+          return name === rawName || name.includes(rawName) || rawName.includes(name);
+        });
+        if (!workout) return;
+        setCount(todayKey(), workout.id, value, { silent: true });
+        matched.push(`${workoutName(workout)} ${value}${unitForWorkout(workout)}`);
+      });
+      saveState();
+      render();
+      return matched;
+    }
+
+    function openWeightManage() {
+      const body = state.workouts.find((workout) => workout.kind === "body");
+      els.weightGoalInput.value = body?.target || "";
+      els.weightManageDialog.showModal();
+      setTimeout(() => els.weightGoalInput.select(), 50);
+    }
+
+    function openWaterManage() {
+      const water = state.workouts.find((workout) => workout.kind === "water");
+      if (!water) return;
+      els.waterMode.value = "count";
+      els.waterUnit.value = "회";
+      els.waterGoalInput.value = water.target || "";
+      els.waterCupInput.value = water.cupMl || 250;
+      updateWaterManageFields();
+      els.waterManageDialog.showModal();
+      setTimeout(() => els.waterGoalInput.select(), 50);
+    }
+
+    function updateWaterManageFields() {
+      els.waterUnitField.style.display = "none";
+      els.waterCupField.style.display = "none";
+      els.waterGoalLabel.textContent = "목표 횟수";
+      els.waterGoalInput.placeholder = "8";
+      els.waterGoalInput.step = "1";
+      els.waterManageNote.textContent = "수분은 마신 횟수만 기록합니다. 1회 기록하면 1점이 올라갑니다.";
+    }
+
+    function showToast(message) {
+      els.toast.textContent = message;
+      els.toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => els.toast.classList.remove("show"), 1800);
+    }
+
+    function openRunDialog(workout) {
+      if (workout.kind === "nutrition" || workout.kind === "body") {
+        showToast("운동 위젯에서 실행할 수 있어요.");
+        return;
+      }
+      stopRun(false);
+      runSession.workout = workout;
+      runSession.reps = 10;
+      runSession.tempo = Math.max(1, Number(workout.secondsPerRep) || 3);
+      runSession.completed = 0;
+      runSession.tick = runSession.tempo;
+      runSession.phase = "ready";
+      els.runWorkoutId.value = workout.id;
+      els.runDialogTitle.textContent = workoutName(workout);
+      els.runReps.value = runSession.reps;
+      els.runTempo.value = runSession.tempo;
+      updateRunDisplay("준비", runSession.tempo);
+      els.startRun.textContent = "시작";
+      els.startRun.disabled = false;
+      els.runReps.disabled = false;
+      els.runTempo.disabled = false;
+      els.runDialog.showModal();
+    }
+
+    function updateRunDisplay(label, number = runSession.tick) {
+      const reps = Math.max(1, Number(els.runReps.value) || runSession.reps);
+      const tempo = Math.max(1, Number(els.runTempo.value) || runSession.tempo);
+      els.runCountNumber.textContent = `${runSession.completed}/${reps}`;
+      els.runSecondNumber.textContent = number;
+      els.runLabel.textContent = label;
+      els.runProgressText.textContent = `${runSession.completed} / ${reps}`;
+      els.runTempoText.textContent = `${tempo}초 템포`;
+    }
+
+    function ensureAudio() {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return null;
+      if (!runSession.audio) runSession.audio = new AudioContext();
+      if (runSession.audio.state === "suspended") runSession.audio.resume();
+      return runSession.audio;
+    }
+
+    function playTone(type = "tick") {
+      const audio = ensureAudio();
+      if (!audio) return;
+      const oscillator = audio.createOscillator();
+      const gain = audio.createGain();
+      const settings = {
+        tick: { frequency: 520, peak: 0.12, duration: 0.14 },
+        rep: { frequency: 760, peak: 0.16, duration: 0.2 },
+        done: { frequency: 940, peak: 0.2, duration: 0.34 }
+      }[type] || { frequency: 520, peak: 0.12, duration: 0.14 };
+      oscillator.type = "sine";
+      oscillator.frequency.value = settings.frequency;
+      gain.gain.setValueAtTime(0.001, audio.currentTime);
+      gain.gain.exponentialRampToValueAtTime(settings.peak, audio.currentTime + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + settings.duration);
+      oscillator.connect(gain);
+      gain.connect(audio.destination);
+      oscillator.start();
+      oscillator.stop(audio.currentTime + settings.duration + 0.02);
+    }
+
+    function startRunCountdown() {
+      if (!runSession.workout || runSession.running) return;
+      runSession.reps = Math.max(1, Math.min(300, Number(els.runReps.value) || 10));
+      runSession.tempo = Math.max(1, Math.min(30, Number(els.runTempo.value) || 3));
+      runSession.completed = 0;
+      runSession.tick = runSession.tempo;
+      runSession.phase = "work";
+      runSession.running = true;
+      els.startRun.textContent = "진행중";
+      els.startRun.disabled = true;
+      els.runReps.disabled = true;
+      els.runTempo.disabled = true;
+      updateRunDisplay("호흡 맞추기", runSession.tick);
+      playTone("tick");
+      runSession.timer = setInterval(stepRunCountdown, 1000);
+    }
+
+    function stepRunCountdown() {
+      if (!runSession.running) return;
+      if (runSession.phase === "rest") {
+        if (runSession.completed >= runSession.reps) {
+          updateRunDisplay("완료", "OK");
+          playTone("done");
+          finishRunCountdown();
+          return;
+        }
+        runSession.phase = "work";
+        runSession.tick = runSession.tempo;
+        updateRunDisplay("다음 시작", runSession.tick);
+        playTone("tick");
+        return;
+      }
+      runSession.tick -= 1;
+      if (runSession.tick > 0) {
+        updateRunDisplay("호흡 맞추기", runSession.tick);
+        playTone("tick");
+        return;
+      }
+      runSession.completed += 1;
+      runSession.phase = "rest";
+      runSession.tick = 1;
+      updateRunDisplay(runSession.completed >= runSession.reps ? "완료 준비" : "1회 완료", 1);
+      playTone("rep");
+    }
+
+    function finishRunCountdown() {
+      const workout = runSession.workout;
+      const reps = runSession.reps;
+      stopRun(false);
+      if (workout && reps > 0) {
+        handleCounterAction(workout, "inc", reps);
+        showToast(`${workoutName(workout)} ${reps}회 추가했습니다.`);
+      }
+      els.startRun.disabled = false;
+      els.startRun.textContent = "시작";
+      els.runReps.disabled = false;
+      els.runTempo.disabled = false;
+      setTimeout(() => {
+        if (els.runDialog.open) els.runDialog.close();
+      }, 650);
+    }
+
+    function stopRun(resetButtons = true) {
+      if (runSession.timer) clearInterval(runSession.timer);
+      runSession.timer = null;
+      runSession.running = false;
+      runSession.phase = "ready";
+      if (resetButtons && els.startRun) {
+        els.startRun.disabled = false;
+        els.startRun.textContent = "시작";
+        els.runReps.disabled = false;
+        els.runTempo.disabled = false;
+      }
+    }
+
+    els.profileButton.addEventListener("click", () => setPage("me"));
+
+    els.pageButtons.forEach((button) => {
+      button.addEventListener("click", () => setPage(button.dataset.pageTarget));
+    });
+
+    els.statsModeButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        statsMode = button.dataset.statsMode;
+        renderStats();
+      });
+    });
+    els.prevStatsMonth.addEventListener("click", () => {
+      statsMonthKey = addMonths(statsMonthKey, -1);
+      renderStats();
+    });
+    els.nextStatsMonth.addEventListener("click", () => {
+      statsMonthKey = addMonths(statsMonthKey, 1);
+      renderStats();
+    });
+
+    els.profileForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      state.profile.nickname = els.nickname.value.trim();
+      state.profile.language = els.language.value;
+      state.profile.age = els.age.value;
+      state.profile.sex = els.sex.value;
+      state.profile.heightCm = els.heightCm.value;
+      state.profile.weightKg = els.weightKg.value;
+      saveState();
+      render();
+      showToast(t("saved"));
+    });
+
+    els.addWorkoutButton.addEventListener("click", () => openWorkoutDialog());
+    els.closeWorkout.addEventListener("click", () => els.workoutDialog.close());
+    els.widgetKind.addEventListener("change", updateWidgetKindFields);
+    els.closeNutritionManage.addEventListener("click", () => els.nutritionManageDialog.close());
+    els.addNutritionType.addEventListener("click", () => {
+      addNutritionType();
+      showToast(t("saved"));
+    });
+    els.closeNutritionImport.addEventListener("click", () => els.nutritionImportDialog.close());
+    els.nutritionImportForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const matched = importNutritionText(els.nutritionImportText.value);
+      if (!matched.length) {
+        els.nutritionImportResult.textContent = "가져올 수 있는 영양소를 찾지 못했습니다.";
+        return;
+      }
+      els.nutritionImportResult.textContent = `${matched.join(", ")} 기록 완료`;
+      showToast("영양소를 가져왔습니다.");
+      setTimeout(() => {
+        if (els.nutritionImportDialog.open) els.nutritionImportDialog.close();
+      }, 650);
+    });
+    els.closeWeightManage.addEventListener("click", () => els.weightManageDialog.close());
+    els.weightManageForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const body = state.workouts.find((workout) => workout.kind === "body");
+      if (!body) return;
+      body.target = els.weightGoalInput.value === "" ? 0 : Math.max(0, Number(els.weightGoalInput.value) || 0);
+      saveState();
+      els.weightManageDialog.close();
+      render();
+      showToast(t("saved"));
+    });
+    els.closeWaterManage.addEventListener("click", () => els.waterManageDialog.close());
+    els.waterMode.addEventListener("change", updateWaterManageFields);
+    els.waterUnit.addEventListener("change", updateWaterManageFields);
+    els.waterManageForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const water = state.workouts.find((workout) => workout.kind === "water");
+      if (!water) return;
+      water.mode = "count";
+      water.unit = "회";
+      water.target = els.waterGoalInput.value === "" ? 0 : Math.max(0, Number(els.waterGoalInput.value) || 0);
+      saveState();
+      els.waterManageDialog.close();
+      render();
+      showToast(t("saved"));
+    });
+    els.startRun.addEventListener("click", startRunCountdown);
+    els.closeRun.addEventListener("click", () => {
+      stopRun();
+      els.runDialog.close();
+    });
+    els.runDialog.addEventListener("close", () => stopRun());
+    [els.runReps, els.runTempo].forEach((input) => {
+      input.addEventListener("input", () => {
+        if (runSession.running) return;
+        runSession.reps = Math.max(1, Number(els.runReps.value) || 10);
+        runSession.tempo = Math.max(1, Number(els.runTempo.value) || 3);
+        runSession.tick = runSession.tempo;
+        runSession.phase = "ready";
+        updateRunDisplay("준비", runSession.tempo);
+      });
+    });
+
+    els.workoutForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const id = els.editingWorkoutId.value;
+      const name = els.workoutName.value.trim();
+      const target = Math.max(0, Number(els.workoutTarget.value) || 0);
+      const kind = els.widgetKind.value;
+      const components = [...els.comboList.querySelectorAll("input:checked")].map((input) => input.value);
+      if (!name) return;
+      if (kind === "combo" && components.length === 0) {
+        showToast("조합할 운동을 선택하세요.");
+        return;
+      }
+      if (id) {
+        const workout = state.workouts.find((item) => item.id === id);
+        if (workout) {
+          delete workout.nameKey;
+          workout.name = name;
+          workout.target = target;
+          workout.kind = kind;
+          workout.met = Math.max(1, Number(els.workoutMet.value) || 4);
+          workout.secondsPerRep = Math.max(1, Number(els.secondsPerRep.value) || 3);
+          workout.components = kind === "combo" ? components : [];
+        }
+      } else {
+        state.workouts.push({
+          id: crypto.randomUUID(),
+          kind,
+          name,
+          target,
+          met: Math.max(1, Number(els.workoutMet.value) || 4),
+          secondsPerRep: Math.max(1, Number(els.secondsPerRep.value) || 3),
+          components: kind === "combo" ? components : []
+        });
+      }
+      saveState();
+      els.workoutDialog.close();
+      render();
+      showToast(t("saved"));
+    });
+
+    els.deleteWorkoutButton.addEventListener("click", () => {
+      const id = els.editingWorkoutId.value;
+      state.workouts = state.workouts.filter((workout) => workout.id !== id);
+      Object.keys(state.records).forEach((dateKey) => {
+        delete state.records[dateKey][id];
+        if (Object.keys(state.records[dateKey]).length === 0) delete state.records[dateKey];
+      });
+      state.lastActions = state.lastActions.filter((item) => item.workoutId !== id);
+      saveState();
+      els.workoutDialog.close();
+      render();
+      showToast(t("deleted"));
+    });
+
+    els.closeCount.addEventListener("click", () => els.countDialog.close());
+
+    els.countForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      setCount(todayKey(), els.countWorkoutId.value, els.countValue.value, { bump: els.countWorkoutId.value });
+      els.countDialog.close();
+      showToast(t("saved"));
+    });
+
+    els.addCountValue.addEventListener("click", () => {
+      const workoutId = els.countWorkoutId.value;
+      const amount = Number(els.countAddValue.value) || 0;
+      if (amount <= 0) return;
+      const nextValue = getCount(todayKey(), workoutId) + amount;
+      setCount(todayKey(), workoutId, nextValue, { bump: workoutId });
+      els.countValue.value = nextValue;
+      els.countAddValue.value = "";
+      showToast(t("saved"));
+    });
+
+    if (els.exportButton) {
+      els.exportButton.addEventListener("click", async () => {
+        const payload = JSON.stringify({ exportedAt: new Date().toISOString(), ...state }, null, 2);
+        try {
+          await navigator.clipboard.writeText(payload);
+          showToast(t("exported"));
+        } catch {
+          const blob = new Blob([payload], { type: "application/json" });
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = "daily-rep-counter.json";
+          link.click();
+          URL.revokeObjectURL(link.href);
+        }
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>
