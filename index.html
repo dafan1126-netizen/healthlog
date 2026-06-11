@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Daily Rep Counter</title>
   <style>
     :root {
@@ -3845,6 +3845,288 @@
 
       .nutrition-group-card .nutrition-row .mini-line {
         width: 132px;
+      }
+    }
+
+    /* Phone density and safe-area polish */
+    @media (max-width: 760px) {
+      .app {
+        padding:
+          calc(env(safe-area-inset-top, 0px) + 18px)
+          14px
+          calc(env(safe-area-inset-bottom, 0px) + 132px);
+      }
+
+      .page.active {
+        gap: 14px;
+      }
+
+      .topbar {
+        padding-bottom: 12px;
+      }
+
+      .brand p {
+        font-size: clamp(28px, 8.6vw, 38px);
+        line-height: 1.04;
+      }
+
+      .profile-button {
+        width: 52px;
+        height: 52px;
+      }
+
+      .score-card {
+        min-height: 158px;
+        padding: 18px;
+        gap: 10px 12px;
+      }
+
+      .date-line {
+        font-size: 13px;
+      }
+
+      .score-label {
+        min-height: 32px;
+        padding: 0 13px;
+        font-size: 13px;
+      }
+
+      .score-line {
+        font-size: 13px;
+      }
+
+      .score-line span {
+        margin-top: 6px;
+        font-size: clamp(42px, 12vw, 56px);
+      }
+
+      .score-chart {
+        height: 62px;
+      }
+
+      .workout-grid {
+        gap: 14px;
+      }
+
+      .log-card,
+      .nutrition-group-card,
+      .exercise-group-card {
+        padding: 18px;
+        border-radius: 26px;
+      }
+
+      .log-card {
+        grid-template-columns: minmax(0, 0.72fr) minmax(148px, 1fr);
+        grid-template-areas:
+          "head head"
+          "value bars"
+          "quick quick";
+        gap: 8px 12px;
+      }
+
+      .log-title {
+        gap: 9px;
+      }
+
+      .log-title h3,
+      .nutrition-group-head h3,
+      .exercise-group-head h3 {
+        font-size: 18px;
+      }
+
+      .log-title p,
+      .nutrition-group-head p,
+      .exercise-group-head p {
+        font-size: 11px;
+      }
+
+      .log-value {
+        font-size: 36px;
+      }
+
+      .log-line-chart {
+        height: 42px;
+      }
+
+      .log-line-dates {
+        gap: 2px;
+        font-size: 7px;
+        letter-spacing: 0;
+      }
+
+      .nutrition-group-card {
+        gap: 10px;
+      }
+
+      .nutrition-group-head {
+        gap: 10px;
+      }
+
+      .nutrition-head-title {
+        gap: 9px;
+      }
+
+      .nutrition-head-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+      }
+
+      .section-actions {
+        gap: 6px;
+      }
+
+      .section-actions .text-btn,
+      .text-btn {
+        min-height: 32px;
+        padding: 0 11px;
+        font-size: 12px;
+      }
+
+      .nutrition-group-list {
+        gap: 4px;
+      }
+
+      .nutrition-group-card .nutrition-row {
+        grid-template-columns: 42px minmax(0, 1fr) 54px;
+        gap: 8px;
+        min-height: 76px;
+        padding: 7px 0;
+      }
+
+      .nutrition-group-card .nutrition-percent {
+        width: 40px;
+        height: 40px;
+        font-size: 9px;
+      }
+
+      .nutrition-group-card .nutrition-percent::before {
+        inset: 6px;
+      }
+
+      .nutrition-group-card .nutrition-row-main {
+        display: grid;
+        grid-template-columns: minmax(0, 0.92fr) minmax(92px, 0.72fr);
+        grid-template-areas:
+          "name values"
+          "bar chart";
+        gap: 4px 8px;
+        align-items: center;
+      }
+
+      .nutrition-name-row {
+        grid-area: name;
+        margin: 0;
+      }
+
+      .nutrition-values {
+        grid-area: values;
+        justify-self: end;
+        text-align: right;
+        min-width: 0;
+      }
+
+      .nutrition-name {
+        font-size: 14px;
+      }
+
+      .nutrition-num {
+        font-size: 15px;
+      }
+
+      .nutrition-goal {
+        font-size: 10px;
+        white-space: nowrap;
+      }
+
+      .nutrition-progress {
+        grid-area: bar;
+        height: 6px;
+        margin: 0;
+      }
+
+      .nutrition-group-card .nutrition-row .log-line-panel {
+        grid-area: chart;
+        justify-self: stretch;
+        margin: 0;
+        width: 100%;
+        height: 24px;
+        min-height: 0;
+        overflow: hidden;
+        grid-template-rows: 24px;
+        gap: 0;
+      }
+
+      .nutrition-group-card .nutrition-row .log-line-chart {
+        height: 24px;
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      .nutrition-group-card .nutrition-row .mini-line {
+        width: 100%;
+        height: 24px;
+      }
+
+      .nutrition-group-card .nutrition-row .mini-line .line {
+        stroke-width: 2;
+      }
+
+      .nutrition-group-card .nutrition-row .log-record {
+        width: 54px;
+        height: 32px;
+        padding: 0;
+        font-size: 12px;
+      }
+
+      .exercise-group-card {
+        gap: 10px;
+      }
+
+      .exercise-group-grid {
+        gap: 10px;
+      }
+
+      .counter-card {
+        padding: 12px;
+        border-radius: 22px;
+      }
+
+      .page-nav {
+        bottom: max(10px, env(safe-area-inset-bottom, 0px));
+        width: min(720px, calc(100vw - 24px));
+        padding: 7px;
+        border-radius: 26px;
+      }
+
+      .nav-button {
+        height: 46px;
+        border-radius: 18px;
+        font-size: 13px;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .nutrition-group-card .nutrition-row-main {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+          "name"
+          "values"
+          "bar"
+          "chart";
+      }
+
+      .nutrition-values {
+        justify-self: start;
+        text-align: left;
+      }
+
+      .nutrition-group-card .nutrition-row {
+        grid-template-columns: 40px minmax(0, 1fr) 50px;
+      }
+
+      .nutrition-group-card .nutrition-row .log-record {
+        width: 50px;
       }
     }
   </style>
