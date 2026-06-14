@@ -200,6 +200,13 @@
       stroke-width: 2;
     }
 
+    .mini-line .goal-line {
+      stroke: rgba(17, 17, 17, 0.32);
+      stroke-width: 2;
+      stroke-dasharray: 6 7;
+      stroke-linecap: round;
+    }
+
     .profile-button {
       width: 48px;
       height: 48px;
@@ -1742,6 +1749,10 @@
 
     .log-line-chart {
       height: 58px;
+    }
+
+    .body-card .mini-line .goal-line {
+      stroke: rgba(17, 17, 17, 0.28);
     }
 
     .log-line-dates {
@@ -4006,10 +4017,11 @@
 
       .nutrition-group-card .nutrition-row-main {
         display: grid;
-        grid-template-columns: minmax(0, 0.92fr) minmax(92px, 0.72fr);
+        grid-template-columns: minmax(0, 1fr) auto;
         grid-template-areas:
           "name values"
-          "bar chart";
+          "bar bar"
+          "chart chart";
         gap: 4px 8px;
         align-items: center;
       }
@@ -4058,14 +4070,14 @@
       }
 
       .nutrition-group-card .nutrition-row .log-line-chart {
-        height: 24px;
+        height: 26px;
         min-height: 0;
         overflow: hidden;
       }
 
       .nutrition-group-card .nutrition-row .mini-line {
         width: 100%;
-        height: 24px;
+        height: 26px;
       }
 
       .nutrition-group-card .nutrition-row .mini-line .line {
@@ -4127,6 +4139,47 @@
 
       .nutrition-group-card .nutrition-row .log-record {
         width: 50px;
+      }
+    }
+
+    /* Nutrition rows: keep the progress and line chart as one compact unit */
+    .nutrition-group-card .nutrition-progress,
+    .nutrition-group-card .nutrition-row .log-line-panel {
+      width: min(260px, 72%);
+      justify-self: start;
+    }
+
+    .nutrition-group-card .nutrition-row .log-line-chart,
+    .nutrition-group-card .nutrition-row .mini-line {
+      width: 100%;
+    }
+
+    .nutrition-group-card .nutrition-row .mini-line .line {
+      stroke-width: 2.8;
+    }
+
+    .nutrition-group-card .nutrition-row .mini-line .dot {
+      r: 4;
+    }
+
+    @media (max-width: 760px) {
+      .nutrition-group-card .nutrition-progress,
+      .nutrition-group-card .nutrition-row .log-line-panel {
+        width: min(190px, 76%);
+      }
+
+      .nutrition-group-card .nutrition-row .log-line-panel {
+        height: 30px;
+        grid-template-rows: 30px;
+      }
+
+      .nutrition-group-card .nutrition-row .log-line-chart,
+      .nutrition-group-card .nutrition-row .mini-line {
+        height: 30px;
+      }
+
+      .nutrition-group-card .nutrition-row .mini-line .line {
+        stroke-width: 2.7;
       }
     }
   </style>
@@ -4744,39 +4797,61 @@
     let statsMode = "recent7";
     let statsMonthKey = todayKey().slice(0, 7);
 
+    function nutritionKey(workout) {
+      const label = String(workout.name || i18n.ko[workout.nameKey] || workout.id || "").trim().toLowerCase();
+      if (workout.id === "protein" || /단백질|protein/.test(label)) return "protein";
+      if (workout.id === "nutrition-calories" || /칼로리|열량|kcal|calorie|energy/.test(label)) return "calories";
+      if (workout.id === "carbs" || /탄수화물|carb/.test(label)) return "carbs";
+      if (workout.id === "fat" || /지방|fat/.test(label)) return "fat";
+      return label || String(workout.id || "");
+    }
+
     function loadState() {
       try {
         const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
         if (!saved) return structuredClone(defaultState);
         let workouts = Array.isArray(saved.workouts) ? saved.workouts : defaultState.workouts;
-        const removedWorkoutIds = [];
+        const mergedWorkoutIds = [];
         workouts.forEach((workout) => {
-          if (workout.id === "protein" || /^(단백질|protein|단백질 섭취|protein intake)$/i.test(workout.name || "")) {
+          if (workout.id === "protein" || /단백질|protein/i.test(workout.name || "")) {
             workout.kind = "nutrition";
-            workout.name = workout.name || "단백질";
+            workout.name = "단백질";
             workout.target = Number(workout.target || 120);
             workout.unit = "g";
           }
         });
-        const seenNutritionNames = new Set();
+        const seenNutritionTargets = new Map();
         workouts = workouts.filter((workout) => {
           if (workout.kind !== "nutrition") return true;
-          const key = String(workout.name || workout.id || "").trim().toLowerCase();
-          if (!key || !seenNutritionNames.has(key)) {
-            if (key) seenNutritionNames.add(key);
+          const key = nutritionKey(workout);
+          if (!key || !seenNutritionTargets.has(key)) {
+            if (key) seenNutritionTargets.set(key, workout.id);
             return true;
           }
-          removedWorkoutIds.push(workout.id);
+          mergedWorkoutIds.push({ from: workout.id, to: seenNutritionTargets.get(key) });
           return false;
         });
         Object.keys(saved.records || {}).forEach((dateKey) => {
-          removedWorkoutIds.forEach((workoutId) => delete saved.records[dateKey][workoutId]);
+          mergedWorkoutIds.forEach(({ from, to }) => {
+            if (from === to) return;
+            const record = saved.records[dateKey];
+            if (record[from] !== undefined) {
+              record[to] = Math.max(Number(record[to] || 0), Number(record[from] || 0));
+              delete record[from];
+            }
+          });
           if (Object.keys(saved.records[dateKey]).length === 0) delete saved.records[dateKey];
         });
         saved.lastActions = Array.isArray(saved.lastActions)
-          ? saved.lastActions.filter((item) => !removedWorkoutIds.includes(item.workoutId))
+          ? saved.lastActions.map((item) => {
+              const merged = mergedWorkoutIds.find(({ from }) => from === item.workoutId);
+              return merged ? { ...item, workoutId: merged.to } : item;
+            })
           : [];
         defaultState.workouts.forEach((defaultWorkout) => {
+          if (defaultWorkout.kind === "nutrition" && workouts.some((workout) => workout.kind === "nutrition" && nutritionKey(workout) === nutritionKey(defaultWorkout))) {
+            return;
+          }
           if (!workouts.some((workout) => workout.id === defaultWorkout.id)) {
             workouts.push(structuredClone(defaultWorkout));
           }
@@ -5172,8 +5247,12 @@
       const width = options.width || 230;
       const height = options.height || 58;
       const pad = options.pad || 8;
-      const max = Math.max(1, ...values.map((item) => Number(item.value) || 0));
-      const min = options.allowRange ? Math.min(...values.map((item) => Number(item.value) || 0).filter((value) => value > 0), max) : 0;
+      const goal = Number(options.goal || 0);
+      const numericValues = values.map((item) => Number(item.value) || 0);
+      const max = Math.max(1, goal, ...numericValues);
+      const positiveValues = numericValues.filter((value) => value > 0);
+      if (goal > 0) positiveValues.push(goal);
+      const min = options.allowRange ? Math.min(...positiveValues, max) : 0;
       const range = Math.max(1, max - min);
       const points = values.map((item, index) => {
         const value = Number(item.value) || 0;
@@ -5191,8 +5270,16 @@
       const area = `${line} L ${points[points.length - 1].x.toFixed(1)} ${height - pad} L ${points[0].x.toFixed(1)} ${height - pad} Z`;
       const last = points[points.length - 1];
       const preserveAspectRatio = options.preserveAspectRatio || "none";
+      const goalLine = goal > 0
+        ? (() => {
+            const scaled = options.allowRange ? (goal - min) / range : goal / max;
+            const y = height - pad - Math.max(0, Math.min(1, scaled)) * (height - pad * 2);
+            return `<line class="goal-line" x1="${pad}" y1="${y.toFixed(1)}" x2="${width - pad}" y2="${y.toFixed(1)}"></line>`;
+          })()
+        : "";
       return `
         <svg class="mini-line ${options.className || ""}" viewBox="0 0 ${width} ${height}" preserveAspectRatio="${preserveAspectRatio}" aria-hidden="true">
+          ${goalLine}
           <path class="area" d="${area}"></path>
           <path class="line" d="${line}"></path>
           <circle class="dot" cx="${last.x.toFixed(1)}" cy="${last.y.toFixed(1)}" r="4"></circle>
@@ -5203,8 +5290,8 @@
     function buildLogLinePanel(values, workout) {
       const labels = values.map((item) => `<span>${item.dateKey.slice(5).replace("-", "/")}</span>`).join("");
       const miniOptions = workout.kind === "nutrition"
-        ? { allowRange: false, className: "log-mini-line", width: 160, height: 40, preserveAspectRatio: "xMinYMid meet" }
-        : { allowRange: workout.kind === "body", className: "log-mini-line" };
+        ? { allowRange: false, className: "log-mini-line", width: 230, height: 44, preserveAspectRatio: "none" }
+        : { allowRange: workout.kind === "body", className: "log-mini-line", goal: workout.kind === "body" ? Number(workout.target || 0) : 0 };
       return `
         <div class="log-line-panel">
           <div class="log-line-chart">${buildMiniLine(values, miniOptions)}</div>
@@ -5279,10 +5366,8 @@
       const orderedWorkouts = [
         ...state.workouts.filter((workout) => workout.kind === "body"),
         ...state.workouts.filter((workout) => workout.kind === "water"),
-        ...state.workouts.filter((workout) => workout.kind === "nutrition"),
         ...state.workouts.filter((workout) => !workout.kind || workout.kind === "exercise" || workout.kind === "combo")
       ];
-      let nutritionRendered = false;
       const exerciseSection = document.createElement("section");
       exerciseSection.className = "exercise-group-card";
       exerciseSection.innerHTML = `
@@ -5300,13 +5385,6 @@
       const exerciseGrid = exerciseSection.querySelector(".exercise-group-grid");
       exerciseSection.querySelector("#openExerciseManage").addEventListener("click", () => openWorkoutDialog());
       orderedWorkouts.forEach((workout, index) => {
-        if (workout.kind === "nutrition") {
-          if (!nutritionRendered) {
-            renderNutritionGroup();
-            nutritionRendered = true;
-          }
-          return;
-        }
         const count = getCount(dateKey, workout.id);
         const target = Number(workout.target || 0);
         const progress = target > 0 ? Math.min(100, Math.round((count / target) * 100)) : 0;
@@ -5420,14 +5498,24 @@
         exerciseGrid.append(card);
       });
       if (exerciseGrid.children.length) {
+        renderNutritionGroup();
         els.workoutGrid.append(exerciseSection);
+      } else {
+        renderNutritionGroup();
       }
     }
 
     function renderNutritionGroup() {
       const dateKey = todayKey();
+      const seenNutrition = new Set();
       const nutritionItems = state.workouts
-        .filter((workout) => workout.kind === "nutrition")
+        .filter((workout) => {
+          if (workout.kind !== "nutrition") return false;
+          const key = nutritionKey(workout);
+          if (seenNutrition.has(key)) return false;
+          seenNutrition.add(key);
+          return true;
+        })
         .sort((a, b) => {
           const rank = (workout) => /단백질|protein/i.test(workoutName(workout)) ? -1 : 0;
           return rank(a) - rank(b);
