@@ -7652,6 +7652,156 @@
         padding-right: 16px !important;
       }
     }
+
+    /* The record tab has wider full-width widgets, so pull only this tab inward. */
+    #page-today > .score-mini-strip,
+    #page-today > .surface {
+      width: calc(100% - 24px) !important;
+      max-width: calc(100% - 24px) !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      justify-self: center !important;
+    }
+
+    @media (max-width: 430px) {
+      #page-today > .score-mini-strip,
+      #page-today > .surface {
+        width: calc(100% - 20px) !important;
+        max-width: calc(100% - 20px) !important;
+      }
+    }
+
+    /* Final phone rail fix: shrink the record page itself and every real card inside it. */
+    #page-today.page,
+    #page-today.page.active {
+      width: calc(100% - 24px) !important;
+      max-width: calc(100% - 24px) !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      justify-self: center !important;
+    }
+
+    #page-today.page > .score-mini-strip,
+    #page-today.page > .surface,
+    #page-today.page #recordGrid {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      justify-self: stretch !important;
+      box-sizing: border-box !important;
+    }
+
+    #page-today.page #recordGrid {
+      grid-template-columns: 1fr !important;
+      gap: 12px !important;
+    }
+
+    #page-today.page #recordGrid > *,
+    #page-today.page .weight-record-card,
+    #page-today.page .water-record-card,
+    #page-today.page .nutrition-group-card,
+    #page-today.page .counter-card {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      grid-column: 1 / -1 !important;
+      box-sizing: border-box !important;
+    }
+
+    #page-today.page .weight-record-main,
+    #page-today.page .water-record-main,
+    #page-today.page .nutrition-group-card .nutrition-row,
+    #page-today.page .water-cup-row {
+      max-width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    @media (max-width: 430px) {
+      #page-today.page,
+      #page-today.page.active {
+        width: calc(100% - 28px) !important;
+        max-width: calc(100% - 28px) !important;
+      }
+    }
+
+    /* Nutrition rows must compress inside the narrower record rail. */
+    #page-today.page .nutrition-group-card {
+      overflow: hidden !important;
+    }
+
+    #page-today.page .nutrition-group-card .nutrition-row {
+      grid-template-columns: 48px minmax(54px, 0.48fr) minmax(0, 1fr) 52px !important;
+      gap: 6px !important;
+      padding: 12px 8px !important;
+      overflow: hidden !important;
+      align-items: center !important;
+    }
+
+    #page-today.page .nutrition-group-card .nutrition-percent {
+      width: 46px !important;
+      height: 46px !important;
+      min-width: 46px !important;
+      font-size: 13px !important;
+      transform: none !important;
+    }
+
+    #page-today.page .nutrition-group-card .nutrition-row-main {
+      width: 100% !important;
+      max-width: none !important;
+      min-width: 0 !important;
+      transform: none !important;
+      overflow: hidden !important;
+    }
+
+    #page-today.page .nutrition-group-card .nutrition-name {
+      font-size: 15px !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
+    }
+
+    #page-today.page .nutrition-group-card .nutrition-values {
+      width: 100% !important;
+      max-width: 100% !important;
+      font-size: 11px !important;
+      white-space: normal !important;
+      overflow-wrap: anywhere !important;
+      line-height: 1.15 !important;
+    }
+
+    #page-today.page .nutrition-trend {
+      width: 100% !important;
+      min-width: 0 !important;
+      padding-left: 6px !important;
+      overflow: hidden !important;
+    }
+
+    #page-today.page .nutrition-trend svg {
+      height: 46px !important;
+    }
+
+    #page-today.page .nutrition-record-button {
+      width: 52px !important;
+      min-width: 52px !important;
+      max-width: 52px !important;
+      height: 68px !important;
+      border-radius: 18px !important;
+      justify-self: end !important;
+    }
+
+    #page-today.page .nutrition-record-button span {
+      font-size: 23px !important;
+    }
+
+    #page-today.page .nutrition-record-button strong {
+      font-size: 9px !important;
+      line-height: 1.05 !important;
+    }
   </style>
 </head>
 <body>
