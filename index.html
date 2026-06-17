@@ -412,6 +412,10 @@
       display: none;
     }
 
+    #page-workout .toolbar {
+      display: none;
+    }
+
     .exercise-group-card {
       grid-column: 1 / -1;
       display: grid;
@@ -1073,6 +1077,25 @@
       grid-template-columns: 1fr auto;
       gap: 8px;
       align-items: center;
+    }
+
+    .unit-input-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .unit-input-row span {
+      min-width: 40px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: #f5f5f4;
+      color: #111;
+      font-size: 14px;
+      font-weight: 900;
     }
 
     .inline-add-row .quiet-button {
@@ -2721,6 +2744,45 @@
       letter-spacing: 0;
     }
 
+    .score-delta {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      margin-top: 14px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.1);
+      color: #16a34a;
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .score-delta.down {
+      background: rgba(255, 106, 61, 0.1);
+      color: #ff6a3d;
+    }
+
+    .score-breakdown {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .score-breakdown span {
+      display: inline-flex;
+      width: auto;
+      margin: 0;
+      min-height: 24px;
+      padding: 0 9px;
+      border-radius: 999px;
+      background: #f5f5f4;
+      color: #7b7d86;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 24px;
+    }
+
     .score-chart {
       grid-area: chart;
       height: 106px;
@@ -2729,6 +2791,20 @@
       background: transparent;
       border: 0;
       border-radius: 0;
+    }
+
+    .score-chart-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      margin-top: 6px;
+      color: #9ca0aa;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .score-chart .mini-line {
+      height: calc(100% - 22px);
     }
 
     .mini-line .area {
@@ -3911,8 +3987,36 @@
         font-size: clamp(42px, 12vw, 56px);
       }
 
+      .score-delta {
+        min-height: 22px;
+        margin-top: 9px;
+        padding: 0 8px;
+        font-size: 11px;
+      }
+
+      .score-breakdown {
+        gap: 5px;
+        margin-top: 8px;
+      }
+
+      .score-breakdown span {
+        min-height: 21px;
+        padding: 0 7px;
+        font-size: 10px;
+        line-height: 21px;
+      }
+
       .score-chart {
         height: 62px;
+      }
+
+      .score-chart-days {
+        margin-top: 3px;
+        font-size: 9px;
+      }
+
+      .score-chart .mini-line {
+        height: calc(100% - 15px);
       }
 
       .workout-grid {
@@ -4162,6 +4266,10 @@
       r: 4;
     }
 
+    .page-nav {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
     @media (max-width: 760px) {
       .nutrition-group-card .nutrition-progress,
       .nutrition-group-card .nutrition-row .log-line-panel {
@@ -4182,6 +4290,3330 @@
         stroke-width: 2.7;
       }
     }
+
+    /* Score card redesign based on the health score reference */
+    .score-card {
+      grid-template-columns: minmax(145px, 0.72fr) minmax(220px, 1.08fr) minmax(190px, 0.88fr);
+      grid-template-areas:
+        "top top top"
+        "score chart chart";
+      align-items: start;
+      min-height: 215px;
+      gap: 18px 28px;
+      padding: 26px 32px 24px;
+    }
+
+    .score-card-top {
+      justify-content: flex-start;
+    }
+
+    .score-card .date-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 20px;
+      font-weight: 850;
+    }
+
+    .score-info {
+      display: inline-grid;
+      place-items: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #b5b8c0;
+      color: #7b7d86;
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1;
+    }
+
+    .score-label {
+      display: none;
+    }
+
+    .score-line {
+      align-self: center;
+    }
+
+    .score-number {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .score-number strong {
+      color: #111111;
+      font-size: clamp(74px, 10vw, 100px);
+      line-height: 0.9;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .score-number span {
+      display: inline;
+      margin: 0;
+      color: #111111;
+      font-size: 22px;
+      font-weight: 850;
+      line-height: 1;
+    }
+
+    .score-chart {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(178px, 0.85fr);
+      gap: 24px;
+      height: auto;
+      padding: 0;
+    }
+
+    .score-trend,
+    .score-summary {
+      min-width: 0;
+    }
+
+    .score-panel-title {
+      margin: 0 0 10px;
+      color: #111111;
+      font-size: 15px;
+      font-weight: 850;
+    }
+
+    .score-trend-grid {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .score-y-axis {
+      display: grid;
+      grid-template-rows: repeat(3, 1fr);
+      color: #7b7d86;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .score-y-axis span:nth-child(2) {
+      align-self: center;
+    }
+
+    .score-y-axis span:nth-child(3) {
+      align-self: end;
+    }
+
+    .score-trend-chart {
+      min-width: 0;
+    }
+
+    .score-trend-chart .mini-line {
+      height: 92px;
+      width: 100%;
+    }
+
+    .score-trend-chart .area {
+      fill: rgba(34, 197, 94, 0.08);
+    }
+
+    .score-trend-chart .line {
+      stroke: #5bbf71;
+      stroke-width: 3.2;
+    }
+
+    .score-trend-chart .dot {
+      fill: #58bd70;
+      stroke: #ffffff;
+      stroke-width: 3;
+    }
+
+    .score-axis {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      margin-top: 6px;
+      color: #7b7d86;
+      font-size: 12px;
+      font-weight: 750;
+      text-align: center;
+    }
+
+    .score-axis span:last-child {
+      color: #16a34a;
+      font-weight: 900;
+    }
+
+    .score-items {
+      display: grid;
+      gap: 8px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .score-item {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      color: #111111;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .score-item-icon {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--score-item-bg, #ecfdf3);
+      color: var(--score-item-color, #16a34a);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .score-item-value {
+      color: #198044;
+      white-space: nowrap;
+      font-weight: 900;
+    }
+
+    .score-total-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: baseline;
+      margin-top: 10px;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .score-total-row strong {
+      color: #198044;
+      font-size: 23px;
+    }
+
+    @media (max-width: 760px) {
+      .score-card {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "top"
+          "score"
+          "chart";
+        gap: 14px;
+        min-height: 0;
+        padding: 20px;
+      }
+
+      .score-card .date-line {
+        font-size: 18px;
+      }
+
+      .score-line {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 14px;
+        align-items: center;
+      }
+
+      .score-number strong {
+        font-size: clamp(64px, 22vw, 92px);
+      }
+
+      .score-number span {
+        font-size: 20px;
+      }
+
+      .score-delta {
+        justify-self: start;
+        align-self: end;
+        margin-top: 0;
+      }
+
+      .score-chart {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .score-trend-chart .mini-line {
+        height: 86px;
+      }
+
+      .score-summary {
+        padding-top: 2px;
+      }
+    }
+
+    /* Lock the app to a phone-sized preview on every device.
+       This keeps desktop checks visually close to the real phone view. */
+    .app {
+      width: min(100%, 430px);
+      max-width: 430px;
+      padding:
+        calc(env(safe-area-inset-top, 0px) + 18px)
+        14px
+        calc(env(safe-area-inset-bottom, 0px) + 132px);
+    }
+
+    .topbar {
+      gap: 12px;
+      padding-bottom: 12px;
+    }
+
+    .brand p {
+      font-size: clamp(28px, 8.6vw, 38px);
+      line-height: 1.04;
+    }
+
+    .profile-button {
+      width: 52px;
+      height: 52px;
+      font-size: 14px;
+    }
+
+    .page.active {
+      gap: 14px;
+    }
+
+    .workout-grid,
+    .exercise-group-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .score-card {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "top"
+        "score"
+        "chart";
+      gap: 14px;
+      min-height: 0;
+      padding: 20px;
+      border-radius: 26px;
+    }
+
+    .score-card .date-line {
+      font-size: 18px;
+    }
+
+    .score-line {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .score-number strong {
+      font-size: clamp(64px, 22vw, 92px);
+    }
+
+    .score-number span {
+      font-size: 20px;
+    }
+
+    .score-delta {
+      justify-self: start;
+      align-self: end;
+      min-height: 22px;
+      margin-top: 0;
+      padding: 0 8px;
+      font-size: 11px;
+    }
+
+    .score-chart {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .score-trend-chart .mini-line {
+      height: 86px;
+    }
+
+    .score-summary {
+      padding-top: 2px;
+    }
+
+    .log-card,
+    .nutrition-group-card,
+    .exercise-group-card {
+      padding: 18px;
+      border-radius: 26px;
+    }
+
+    .log-card {
+      grid-template-columns: minmax(0, 0.72fr) minmax(148px, 1fr);
+      grid-template-areas:
+        "head head"
+        "value bars"
+        "quick quick";
+      gap: 8px 12px;
+    }
+
+    .log-title h3,
+    .nutrition-group-head h3,
+    .exercise-group-head h3 {
+      font-size: 18px;
+    }
+
+    .log-value {
+      font-size: 36px;
+    }
+
+    .log-line-chart {
+      height: 42px;
+    }
+
+    .nutrition-group-card .nutrition-row {
+      grid-template-columns: 42px minmax(0, 1fr) 54px;
+      gap: 8px;
+      min-height: 76px;
+      padding: 7px 0;
+    }
+
+    .nutrition-group-card .nutrition-percent {
+      width: 40px;
+      height: 40px;
+      font-size: 9px;
+    }
+
+    .nutrition-group-card .nutrition-row-main {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        "name values"
+        "bar bar"
+        "chart chart";
+      gap: 4px 8px;
+    }
+
+    .nutrition-group-card .nutrition-progress,
+    .nutrition-group-card .nutrition-row .log-line-panel {
+      width: min(190px, 76%);
+    }
+
+    .counter-card {
+      min-height: 0;
+      padding: 12px;
+      border-radius: 22px;
+      align-content: start;
+    }
+
+    .counter-card .sparkline-panel,
+    .counter-card .widget-meta {
+      display: none;
+    }
+
+    .counter-card .card-tools {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 7px;
+    }
+
+    .counter-card .quick-row button,
+    .counter-card .chip-button {
+      height: 34px;
+      border-radius: 12px;
+      font-size: 12px;
+    }
+
+    .page-nav {
+      width: min(406px, calc(100vw - 24px));
+      bottom: max(10px, env(safe-area-inset-bottom, 0px));
+      padding: 7px;
+      border-radius: 26px;
+    }
+
+    .nav-button {
+      height: 46px;
+      border-radius: 18px;
+      font-size: 13px;
+    }
+
+    /* Final split score card layout */
+    .score-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "top top"
+        "score chart"
+        "trend trend";
+      gap: 12px 18px;
+      padding: 16px;
+      min-height: 0;
+    }
+
+    .score-card-top {
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .score-card .date-line {
+      font-size: 15px;
+      line-height: 1.2;
+    }
+
+    .score-info {
+      width: 17px;
+      height: 17px;
+      font-size: 10px;
+      border-width: 1.5px;
+    }
+
+    .score-line {
+      display: block;
+      align-self: center;
+      min-width: 0;
+      height: 100%;
+      padding-right: 18px;
+      border-right: 1px solid #e1e3e7;
+      text-align: center;
+    }
+
+    .score-number {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .score-number strong {
+      display: block;
+      font-size: 54px;
+      line-height: 0.92;
+    }
+
+    .score-number span {
+      display: inline;
+      margin: 0;
+      font-size: 13px;
+      white-space: nowrap;
+      transform: translateY(-2px);
+    }
+
+    .score-delta {
+      min-height: 24px;
+      margin-top: 8px;
+      padding: 0 7px;
+      font-size: 10px;
+      white-space: nowrap;
+      justify-content: center;
+    }
+
+    .score-chart {
+      grid-area: chart;
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: start;
+      min-width: 0;
+      height: 100%;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .score-trend-area {
+      grid-area: trend;
+      padding-top: 12px;
+      border-top: 1px solid #e1e3e7;
+    }
+
+    .score-panel-title {
+      margin-bottom: 6px;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .score-trend-grid {
+      grid-template-columns: 18px minmax(0, 1fr);
+      gap: 5px;
+    }
+
+    .score-y-axis {
+      font-size: 9px;
+    }
+
+    .score-trend-chart .mini-line {
+      height: 64px;
+    }
+
+    .score-axis {
+      margin-top: 3px;
+      font-size: 8px;
+    }
+
+    .score-summary {
+      padding-top: 0;
+      min-width: 0;
+      width: 100%;
+    }
+
+    .score-items {
+      gap: 6px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e1e3e7;
+    }
+
+    .score-item {
+      grid-template-columns: 20px minmax(0, 1fr) auto;
+      gap: 6px;
+      font-size: 9px;
+      text-align: left;
+    }
+
+    .score-item-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 9px;
+    }
+
+    .score-item-value {
+      font-size: 9px;
+    }
+
+    .score-total-row {
+      margin-top: 7px;
+      font-size: 11px;
+    }
+
+    .score-total-row strong {
+      font-size: 16px;
+    }
+
+    /* Stop greeting typography from leaking into score card content */
+    #subtitle {
+      font-size: 28px;
+      line-height: 1.05;
+      max-width: 300px;
+    }
+
+    .score-card p,
+    .score-card span,
+    .score-card strong {
+      letter-spacing: 0;
+      max-width: 100%;
+    }
+
+    .score-card .score-panel-title {
+      display: block;
+      margin: 0 0 6px;
+      color: #111111;
+      font-size: 10px;
+      line-height: 1.2;
+      font-weight: 850;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .score-card .score-y-axis span,
+    .score-card .score-axis span {
+      display: block;
+      margin: 0;
+      color: #7b7d86;
+      font-size: 8px;
+      line-height: 1;
+      font-weight: 750;
+    }
+
+    .score-card .score-axis span:last-child {
+      color: #16a34a;
+    }
+
+    .score-card .score-item span {
+      display: block;
+      margin: 0;
+      font-size: 9px;
+      line-height: 1.1;
+      font-weight: 800;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .score-card .score-item-icon {
+      display: grid;
+      font-size: 9px;
+      line-height: 1;
+    }
+
+    .score-card .score-item-value {
+      color: #198044;
+      font-size: 9px;
+      line-height: 1.1;
+      font-weight: 900;
+    }
+
+    .score-card .score-total-row span {
+      font-size: 11px;
+      line-height: 1.1;
+    }
+
+    .score-card .score-total-row strong {
+      font-size: 16px;
+      line-height: 1.1;
+    }
+
+    /* Score card spacing refinement */
+    .score-card {
+      grid-template-columns: 86px minmax(0, 1fr);
+      gap: 10px 12px;
+      padding: 15px;
+    }
+
+    .score-card .date-line {
+      font-size: 13px;
+    }
+
+    .score-info {
+      width: 15px;
+      height: 15px;
+      font-size: 9px;
+    }
+
+    .score-number {
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+    }
+
+    .score-number strong {
+      font-size: 42px;
+      line-height: 0.92;
+    }
+
+    .score-number span {
+      display: inline;
+      margin: 0;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .score-delta {
+      min-height: 22px;
+      margin-top: 8px;
+      padding: 0 7px;
+      font-size: 10px;
+    }
+
+    .score-chart {
+      grid-template-columns: minmax(0, 0.86fr) 92px;
+      gap: 14px;
+    }
+
+    .score-trend-chart .mini-line {
+      height: 54px;
+    }
+
+    .score-trend-grid {
+      align-items: start;
+    }
+
+    .score-y-axis {
+      grid-template-rows: 14px 24px 16px;
+      height: 54px;
+    }
+
+    .score-axis {
+      margin-top: 3px;
+      padding-top: 6px;
+      border-top: 1px solid #e1e3e7;
+    }
+
+    .score-items {
+      gap: 4px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e1e3e7;
+    }
+
+    .score-item {
+      grid-template-columns: 20px 22px auto;
+      gap: 5px;
+    }
+
+    .score-item-value {
+      justify-self: end;
+      white-space: nowrap;
+    }
+
+    .score-total-row {
+      margin-top: 7px;
+      padding-top: 0;
+      text-align: left;
+    }
+
+    .score-bar-chart {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      align-items: end;
+      gap: 6px;
+      min-height: 98px;
+      padding-top: 6px;
+    }
+
+    .score-bar-item {
+      display: grid;
+      grid-template-rows: 18px 72px 14px;
+      align-items: end;
+      justify-items: center;
+      min-width: 0;
+    }
+
+    .score-bar-value {
+      color: #198044;
+      font-size: 9px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .score-bar-track {
+      display: flex;
+      align-items: end;
+      width: 100%;
+      height: 72px;
+      border-bottom: 1px solid #e1e3e7;
+    }
+
+    .score-bar {
+      width: 100%;
+      min-height: 4px;
+      border-radius: 999px 999px 4px 4px;
+      background: linear-gradient(180deg, #68c77b, #31a354);
+    }
+
+    .score-bar-label {
+      color: #7b7d86;
+      font-size: 8px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    /* Authoritative score-card layout */
+    .score-card {
+      position: relative;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "top top"
+        "score chart"
+        "trend trend";
+      gap: 12px 0;
+      padding: 16px;
+    }
+
+    .score-card::after {
+      content: "";
+      position: absolute;
+      top: 74px;
+      bottom: 168px;
+      left: 50%;
+      width: 1px;
+      background: #e1e3e7;
+      transform: translateX(-0.5px);
+      pointer-events: none;
+    }
+
+    .score-line,
+    .score-chart {
+      min-width: 0;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .score-line {
+      padding: 0 14px 0 0;
+      border-right: 0;
+      transform: translateX(12px);
+    }
+
+    .score-chart {
+      padding: 0 0 0 14px;
+      grid-template-columns: 1fr;
+    }
+
+    .score-summary {
+      width: 100%;
+      max-width: 150px;
+    }
+
+    .score-items {
+      gap: 5px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e1e3e7;
+    }
+
+    .score-item {
+      grid-template-columns: 20px minmax(0, 1fr) auto;
+      gap: 5px;
+    }
+
+    .score-card .score-item span {
+      font-size: 9px;
+    }
+
+    .score-trend-area {
+      margin-top: 6px;
+      padding-top: 10px;
+      border-top: 1px solid #e1e3e7;
+    }
+
+    .score-bar-chart {
+      min-height: 68px;
+      gap: 6px;
+      padding-top: 4px;
+    }
+
+    .score-bar-item {
+      grid-template-rows: 15px 44px 12px;
+    }
+
+    .score-bar-track {
+      height: 44px;
+      border-bottom: 1px solid #e1e3e7;
+    }
+
+    .score-bar {
+      border-radius: 0;
+      background: #35a853;
+      box-shadow: none;
+    }
+
+    .score-line .score-number {
+      justify-content: center;
+    }
+
+    .score-line .score-delta {
+      display: inline-flex;
+      margin-top: 12px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Final cleanup: stack score delta and reduce score-card top section */
+    .score-card {
+      gap: 8px 0;
+    }
+
+    .score-line {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transform: translateX(12px);
+    }
+
+    .score-line .score-number {
+      flex: 0 0 auto;
+      transform: translateY(8px);
+    }
+
+    .score-line .score-delta {
+      flex: 0 0 auto;
+      margin-top: 6px;
+    }
+
+    .score-items {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .score-total-row {
+      display: none;
+    }
+
+    .score-card::after {
+      bottom: 132px;
+    }
+
+    .score-trend-area {
+      margin-top: 2px;
+      padding-top: 8px;
+    }
+
+    .score-bar-chart {
+      min-height: 62px;
+    }
+
+    .score-bar-item {
+      grid-template-rows: 14px 38px 12px;
+    }
+
+    .score-bar-track {
+      height: 38px;
+    }
+
+    .weight-record-card {
+      grid-column: 1 / -1;
+      display: grid;
+      gap: 16px;
+      padding: 18px;
+      border-radius: 26px;
+      background: #fff;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .weight-record-head,
+    .weight-record-title,
+    .weight-record-actions {
+      display: flex;
+      align-items: center;
+    }
+
+    .weight-record-head {
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .weight-record-title {
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .weight-record-icon {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: #efe9ff;
+      color: #7c3aed;
+    }
+
+    .weight-record-icon svg {
+      width: 21px;
+      height: 21px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.35;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .weight-record-title h3 {
+      margin: 0;
+      color: #111;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .weight-record-actions {
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .weight-record-button,
+    .weight-manage-button {
+      height: 36px;
+      border: 0;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 850;
+      letter-spacing: 0;
+      cursor: pointer;
+    }
+
+    .weight-record-button {
+      padding: 0 15px;
+      background: #fff;
+      color: #111;
+      box-shadow: inset 0 0 0 1px #efeff1, 0 4px 14px rgba(0, 0, 0, 0.04);
+    }
+
+    .weight-manage-button {
+      padding: 0 12px;
+      background: #f5f5f4;
+      color: #7b7d86;
+    }
+
+    .weight-record-main {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(122px, 1fr);
+      align-items: end;
+      gap: 14px;
+    }
+
+    .weight-record-value {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      color: #111;
+      font-size: 46px;
+      font-weight: 950;
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .weight-record-value small {
+      color: #7b7d86;
+      font-size: 18px;
+      font-weight: 850;
+    }
+
+    .weight-record-time {
+      margin-top: 10px;
+      color: #8a8d95;
+      font-size: 13px;
+      font-weight: 750;
+      line-height: 1.2;
+    }
+
+    .weight-record-trend {
+      display: grid;
+      justify-items: end;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .weight-record-trend .mini-line {
+      width: 100%;
+      height: 54px;
+    }
+
+    .weight-record-trend .mini-line .goal-line {
+      stroke: #ddd7ea;
+      stroke-dasharray: 5 5;
+      stroke-width: 1.5;
+    }
+
+    .weight-record-trend .mini-line .area {
+      display: none;
+    }
+
+    .weight-record-trend .mini-line .line {
+      stroke: #7c3aed;
+      stroke-width: 3;
+    }
+
+    .weight-record-trend .mini-line .dot {
+      fill: #7c3aed;
+      stroke: #fff;
+      stroke-width: 2;
+    }
+
+    .weight-record-delta {
+      min-height: 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 9px;
+      border-radius: 999px;
+      background: #f1ebff;
+      color: #7c3aed;
+      font-size: 11px;
+      font-weight: 750;
+      line-height: 1;
+    }
+
+    .weight-record-delta span {
+      color: #8a8d95;
+      font-size: 11px;
+      font-weight: 750;
+    }
+
+    .weight-record-delta strong {
+      color: currentColor;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .weight-record-delta.up {
+      color: #ff6a3d;
+      background: #fff0e8;
+    }
+
+    .weight-record-note {
+      color: #8a8d95;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .weight-record-history {
+      padding-top: 14px;
+      border-top: 1px solid #eeeeef;
+    }
+
+    .weight-record-history h4 {
+      margin: 0 0 12px;
+      color: #111;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .weight-history-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 5px;
+      text-align: center;
+    }
+
+    .weight-history-date,
+    .weight-history-value {
+      display: block;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .weight-history-date {
+      color: #8a8d95;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .weight-history-value {
+      margin-top: 7px;
+      color: #111;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .weight-history-item.today .weight-history-date,
+    .weight-history-item.today .weight-history-value {
+      color: #7c3aed;
+    }
+
+    .weight-record-main {
+      grid-template-columns: minmax(122px, 0.78fr) minmax(118px, 0.92fr);
+      justify-content: center;
+      column-gap: 8px;
+      max-width: 322px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .weight-record-main > div:first-child {
+      justify-self: start;
+      transform: translate(12px, -22px);
+    }
+
+    .weight-record-trend {
+      justify-self: end;
+      width: min(142px, 100%);
+      transform: translateY(7px);
+    }
+
+    .weight-record-trend .mini-line {
+      height: 50px;
+    }
+
+    .weight-record-value {
+      font-size: 42px;
+    }
+
+    .weight-record-time {
+      margin-top: 8px;
+      font-size: 12px;
+    }
+
+    .water-record-card {
+      grid-column: 1 / -1;
+      display: grid;
+      gap: 16px;
+      padding: 18px;
+      border-radius: 26px;
+      background: #fff;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .water-record-head,
+    .water-record-title {
+      display: flex;
+      align-items: center;
+    }
+
+    .water-record-head {
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .water-record-title {
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .water-record-icon {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: #e9f3ff;
+      color: #2f80ed;
+    }
+
+    .water-record-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.25;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .water-record-title h3 {
+      margin: 0;
+      color: #111;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .water-manage-button {
+      height: 34px;
+      padding: 0 13px;
+      border: 0;
+      border-radius: 999px;
+      background: #f5f5f4;
+      color: #7b7d86;
+      font-size: 13px;
+      font-weight: 850;
+      letter-spacing: 0;
+      cursor: pointer;
+    }
+
+    .water-record-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .water-cup-row {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .water-cup-item {
+      display: grid;
+      justify-items: center;
+      align-content: start;
+      gap: 5px;
+      min-width: 0;
+      min-height: 72px;
+    }
+
+    .water-cup-amount {
+      min-height: 12px;
+      color: #2374ff;
+      font-size: 8px;
+      font-weight: 850;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .water-cup {
+      width: 23px;
+      height: 36px;
+      color: #9aa4b2;
+    }
+
+    .water-cup svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .water-cup .cup-outline {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linejoin: round;
+    }
+
+    .water-cup .cup-fill {
+      fill: #4a9df7;
+      opacity: 0;
+    }
+
+    .water-cup .cup-overflow {
+      fill: none;
+      stroke: #2374ff;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .water-cup-item.filled .water-cup {
+      color: #8ea0b8;
+    }
+
+    .water-cup-item.filled .cup-fill {
+      opacity: 1;
+    }
+
+    .water-cup-item.low .cup-fill {
+      fill: #8fc5ff;
+    }
+
+    .water-cup-item.ok .cup-fill {
+      fill: #4a9df7;
+    }
+
+    .water-cup-item.high .cup-fill,
+    .water-cup-item.overflow .cup-fill {
+      fill: #2374ff;
+    }
+
+    .water-cup-item.unfilled .water-cup {
+      color: #b8bec8;
+      opacity: 0.8;
+    }
+
+    .water-cup-label {
+      color: #7b7d86;
+      font-size: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .water-record-total {
+      min-width: 66px;
+      display: grid;
+      gap: 5px;
+      justify-items: end;
+      text-align: right;
+    }
+
+    .water-record-liters {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .water-record-liters strong {
+      color: #2374ff;
+      font-size: 24px;
+      font-weight: 950;
+      letter-spacing: 0;
+    }
+
+    .water-record-liters span {
+      color: #111;
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .water-record-percent {
+      color: #111;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .water-sip-button {
+      width: 100%;
+      height: 46px;
+      border: 0;
+      border-radius: 18px;
+      background: #111;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 0;
+      cursor: pointer;
+    }
+
+    .water-sip-button span {
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 13px;
+      font-weight: 800;
+      margin-left: 4px;
+    }
+
+    .water-action-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 54px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .water-undo-button {
+      width: 54px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 18px;
+      background: #f5f5f4;
+      color: #111;
+      cursor: pointer;
+    }
+
+    .water-undo-button svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .water-week-history {
+      display: grid;
+      gap: 10px;
+      padding-top: 14px;
+      border-top: 1px solid #eeeeef;
+    }
+
+    .water-week-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 6px;
+      text-align: center;
+    }
+
+    .water-week-item {
+      display: grid;
+      justify-items: center;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .water-week-date,
+    .water-week-amount {
+      color: #7b7d86;
+      font-size: 9px;
+      font-weight: 850;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .water-week-amount {
+      color: #2374ff;
+      font-size: 10px;
+    }
+
+    .water-week-ring {
+      --ring-color: #2374ff;
+      --ring-progress: 0deg;
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: conic-gradient(var(--ring-color) var(--ring-progress), #eef0f3 0deg);
+      color: #111;
+      font-size: 9px;
+      font-weight: 900;
+      position: relative;
+    }
+
+    .water-week-ring::before {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .water-week-ring span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .water-week-item.today .water-week-date,
+    .water-week-item.today .water-week-amount {
+      color: #2374ff;
+    }
+
+    .nutrition-group-card {
+      grid-column: 1 / -1;
+      display: grid;
+      gap: 12px;
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    .nutrition-group-head {
+      padding: 0 4px;
+    }
+
+    .nutrition-group-head h3 {
+      font-size: 20px;
+    }
+
+    .nutrition-group-head p {
+      display: none;
+    }
+
+    .nutrition-group-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .nutrition-group-card .nutrition-row {
+      min-height: 122px;
+      display: grid;
+      grid-template-columns: 62px minmax(96px, 0.9fr) minmax(98px, 1fr) 62px;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 12px;
+      border: 0;
+      border-radius: 22px;
+      background: #fff;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .nutrition-group-card .nutrition-percent {
+      width: 56px;
+      height: 56px;
+      background:
+        radial-gradient(circle at center, #fff 58%, transparent 60%),
+        conic-gradient(var(--card-accent) var(--progress), var(--nutrition-faint) 0);
+      color: #111;
+      font-size: 16px;
+      font-weight: 950;
+    }
+
+    .nutrition-group-card .nutrition-percent::before {
+      display: none;
+    }
+
+    .nutrition-group-card .nutrition-percent span {
+      position: static;
+    }
+
+    .nutrition-group-card .nutrition-row-main {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-areas: none;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .nutrition-group-card .nutrition-name {
+      color: #111;
+      font-size: 16px;
+      font-weight: 950;
+      letter-spacing: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nutrition-group-card .nutrition-values {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      color: #7b7d86;
+      font-size: 12px;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .nutrition-group-card .nutrition-num {
+      color: #111;
+      font-size: 15px;
+      font-weight: 950;
+    }
+
+    .nutrition-group-card .nutrition-goal {
+      color: #7b7d86;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .nutrition-recommend {
+      display: none;
+    }
+
+    .nutrition-trend {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+      padding-left: 9px;
+      border-left: 1px dashed #dfe2e8;
+      color: var(--card-accent);
+    }
+
+    .nutrition-trend p {
+      margin: 0;
+      color: #7b7d86;
+      font-size: 10px;
+      font-weight: 850;
+    }
+
+    .nutrition-trend svg {
+      width: 100%;
+      height: 46px;
+      overflow: visible;
+    }
+
+    .nutrition-trend-area {
+      fill: currentColor;
+      opacity: 0.08;
+    }
+
+    .nutrition-trend-line {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nutrition-trend-dots circle {
+      fill: currentColor;
+      stroke: #fff;
+      stroke-width: 1.5;
+    }
+
+    .nutrition-trend-days {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 2px;
+      color: #7b7d86;
+      font-size: 9px;
+      font-weight: 750;
+      text-align: center;
+    }
+
+    .nutrition-trend-days .active {
+      color: var(--card-accent);
+      font-weight: 950;
+    }
+
+    .nutrition-record-button {
+      width: 60px;
+      height: 82px;
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 3px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--nutrition-soft);
+      color: var(--card-accent);
+      cursor: pointer;
+    }
+
+    .nutrition-record-button span {
+      font-size: 30px;
+      font-weight: 350;
+      line-height: 1;
+    }
+
+    .nutrition-record-button strong {
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .nutrition-group-card .nutrition-row {
+      grid-template-columns: 56px 96px minmax(150px, 1fr) 58px;
+      gap: 7px;
+      padding: 14px 10px;
+    }
+
+    .nutrition-group-card .nutrition-percent {
+      width: 54px;
+      height: 54px;
+      font-size: 15px;
+    }
+
+    .nutrition-group-card .nutrition-row-main {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) !important;
+      grid-template-areas:
+        "name"
+        "values" !important;
+      align-content: center;
+      justify-items: start;
+      gap: 6px;
+      overflow: visible;
+    }
+
+    .nutrition-group-card .nutrition-name {
+      grid-area: name !important;
+      max-width: 100%;
+      font-size: 16px;
+      line-height: 1.1;
+      white-space: nowrap;
+      overflow: visible;
+      text-overflow: clip;
+    }
+
+    .nutrition-group-card .nutrition-values {
+      grid-area: values !important;
+      display: block;
+      width: auto;
+      line-height: 1.15;
+      white-space: nowrap;
+      justify-self: start !important;
+      text-align: left !important;
+      margin: 0 !important;
+      transform: none !important;
+    }
+
+    .nutrition-group-card .nutrition-num {
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .nutrition-group-card .nutrition-goal {
+      font-size: 11px;
+      line-height: 1;
+    }
+
+    .nutrition-trend {
+      padding-left: 8px;
+    }
+
+    .nutrition-trend svg {
+      height: 52px;
+    }
+
+    .nutrition-record-button {
+      width: 58px;
+      height: 78px;
+      border-radius: 16px;
+    }
+
+    .nutrition-group-card .nutrition-row {
+      grid-template-columns: 56px 78px minmax(168px, 1fr) 58px;
+      gap: 5px;
+    }
+
+    .nutrition-group-card .nutrition-percent {
+      transform: translateX(5px);
+    }
+
+    .nutrition-group-card .nutrition-row-main {
+      transform: translateX(5px);
+    }
+
+    .nutrition-trend {
+      padding-left: 7px;
+    }
+
+    .nutrition-group-card .nutrition-row {
+      grid-template-columns: 56px 64px minmax(184px, 1fr) 58px;
+      gap: 5px;
+    }
+
+    .nutrition-group-card .nutrition-row-main {
+      max-width: 64px;
+    }
+
+    .nutrition-group-card .nutrition-values {
+      width: 100%;
+      max-width: 64px;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: keep-all;
+      line-height: 1.18;
+    }
+
+    .nutrition-group-card .nutrition-num,
+    .nutrition-group-card .nutrition-goal {
+      display: inline;
+    }
+
+    .nutrition-trend {
+      padding-left: 6px;
+    }
+
+    .nutrition-group-card {
+      padding: 16px 14px 14px;
+      border-radius: 28px;
+      background: #fff;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      gap: 12px;
+    }
+
+    .nutrition-group-head {
+      padding: 0 2px 2px;
+    }
+
+    .nutrition-group-head .nutrition-head-title {
+      min-width: 0;
+    }
+
+    .nutrition-group-head h3 {
+      font-size: 20px;
+      line-height: 1.1;
+    }
+
+    .nutrition-group-head .section-actions .text-btn,
+    .nutrition-group-card .section-actions .text-btn {
+      height: 34px;
+      border: 0;
+      border-radius: 999px;
+      background: #f5f5f4;
+      color: #7b7d86;
+      box-shadow: none;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .nutrition-group-list {
+      gap: 10px;
+    }
+
+    .nutrition-group-card .nutrition-row {
+      border-radius: 22px;
+      background: #fbfbfa;
+      box-shadow: none;
+    }
+
+    #nutritionManageDialog .modal {
+      color: #111;
+      background: #fff;
+    }
+
+    #nutritionManageDialog .modal h2 {
+      color: #111;
+      font-size: 24px;
+      font-weight: 950;
+      letter-spacing: 0;
+    }
+
+    #nutritionManageDialog .manage-list {
+      gap: 10px;
+    }
+
+    #nutritionManageDialog .manage-item,
+    #nutritionManageDialog .add-section {
+      padding: 14px;
+      border: 1px solid #eeeeef;
+      border-radius: 20px;
+      background: #fbfbfa;
+      box-shadow: none;
+    }
+
+    #nutritionManageDialog .manage-row {
+      grid-template-columns: auto minmax(0, 1fr) auto auto;
+      gap: 9px;
+      min-height: 34px;
+    }
+
+    #nutritionManageDialog .manage-name,
+    #nutritionManageDialog .add-section h3 {
+      color: #111;
+      font-size: 16px;
+      font-weight: 950;
+    }
+
+    #nutritionManageDialog .manage-unit,
+    #nutritionManageDialog .goal-row,
+    #nutritionManageDialog .field label {
+      color: #7b7d86;
+      font-weight: 850;
+    }
+
+    #nutritionManageDialog .manage-delete {
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 50%;
+      background: #fff0e8;
+      color: #ff6a3d;
+      font-size: 22px;
+      font-weight: 950;
+      line-height: 1;
+    }
+
+    #nutritionManageDialog .goal-row {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    #nutritionManageDialog .goal-row input,
+    #nutritionManageDialog .text-input,
+    #nutritionManageDialog .number-input {
+      height: 42px;
+      border: 0;
+      border-radius: 16px;
+      background: #f4f4f2;
+      color: #111;
+      font-size: 15px;
+      font-weight: 850;
+      box-shadow: none;
+    }
+
+    #nutritionManageDialog .field-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    #nutritionManageDialog .add-section .quiet-button {
+      height: 42px;
+      border: 0;
+      border-radius: 16px;
+      background: #111;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    #nutritionManageDialog .modal-actions {
+      justify-content: flex-end;
+    }
+
+    #nutritionManageDialog #closeNutritionManage {
+      min-width: 96px;
+      height: 52px;
+      border-radius: 24px;
+      background: #111;
+      color: #fff;
+    }
+
+    .score-mini-strip {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 18px 22px;
+      border: 1px solid #e6e6e4;
+      border-radius: 24px;
+      background: linear-gradient(180deg, #fff, #fbfbfa);
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.055);
+      color: #111;
+      text-align: center;
+    }
+
+    .score-mini-title {
+      min-width: 0;
+      color: #111;
+      font-size: 17px;
+      font-weight: 450;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .score-mini-title strong {
+      margin-left: 10px;
+      color: #111;
+      font-size: 23px;
+      font-weight: 950;
+    }
+
+    .score-mini-unit {
+      margin-left: 2px;
+      color: #111;
+      font-size: 15px;
+      font-weight: 450;
+    }
+
+    .score-mini-delta {
+      flex: 0 0 auto;
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 17px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.1);
+      color: #188044;
+      box-shadow: inset 0 0 0 1px rgba(34, 197, 94, 0.08);
+      font-size: 14px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .score-mini-delta.down {
+      background: rgba(255, 106, 61, 0.1);
+      color: #ff6a3d;
+    }
+
+    .counter-card .card-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .exercise-title-line {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .exercise-title-line h3 {
+      min-width: 0;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .exercise-count-inline {
+      flex: 0 0 auto;
+      color: #111;
+      font-size: 28px;
+      font-weight: 950;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .exercise-count-inline small {
+      margin-left: 3px;
+      color: #7b7d86;
+      font-size: 15px;
+      font-weight: 850;
+    }
+
+    .counter-card .count-row,
+    .counter-card .card-tools {
+      display: none !important;
+    }
+
+    .counter-card .target-pill {
+      width: 42px;
+      height: 42px;
+      font-size: 10px;
+    }
+
+    .counter-card .quick-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 7px;
+    }
+
+    .counter-card .quick-row button {
+      min-width: 0;
+      height: 34px;
+      border-radius: 13px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    #workoutDialog .modal {
+      color: #111;
+      background: #fff;
+    }
+
+    #workoutDialog .modal h2,
+    #workoutDialog .widget-manager h3,
+    #workoutDialog .widget-order-name strong,
+    #workoutDialog .check-pill {
+      color: #111;
+    }
+
+    #workoutDialog .field label,
+    #workoutDialog .widget-order-name span {
+      color: #7b7d86;
+    }
+
+    #workoutDialog .widget-manager {
+      background: #fbfbfa;
+      border: 1px solid #eeeeef;
+      box-shadow: none;
+    }
+
+    #workoutDialog .widget-order-item {
+      background: #fff;
+      border: 1px solid #eeeeef;
+      color: #111;
+    }
+
+    #workoutDialog .order-button {
+      background: #f5f5f4;
+      color: #111;
+    }
+
+    #workoutDialog .text-input,
+    #workoutDialog .number-input,
+    #workoutDialog .select-input {
+      background: #f4f4f2;
+      color: #111;
+      border: 0;
+    }
+
+    #workoutDialog .check-pill {
+      background: #f5f5f4;
+      border-color: #eeeeef;
+    }
+
+    .counter-card .quick-row {
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+
+    .counter-card .quick-row button:nth-child(4) {
+      background: #f4f4f2;
+      color: #111;
+    }
+
+    .counter-card .sparkline-panel {
+      display: grid !important;
+      min-height: 56px;
+      margin-top: 12px;
+    }
+
+    .counter-card .sparkline {
+      height: 46px;
+    }
+
+    .counter-card .sparkline path.line {
+      stroke-width: 3.2;
+    }
+
+    .counter-card .sparkline circle {
+      r: 4;
+    }
+
+    .workout-history-panel {
+      padding-top: 10px;
+      border-top: 1px solid #eeeeef;
+    }
+
+    .workout-history-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 5px;
+      text-align: center;
+    }
+
+    .workout-history-date,
+    .workout-history-value {
+      display: block;
+      white-space: nowrap;
+      letter-spacing: 0;
+    }
+
+    .workout-history-date {
+      color: #8a8d95;
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .workout-history-value {
+      margin-top: 5px;
+      color: #111;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .workout-history-item.today .workout-history-date,
+    .workout-history-item.today .workout-history-value {
+      color: var(--card-accent);
+    }
+
+    .counter-card .quick-row {
+      margin-top: 14px;
+    }
+
+    .counter-card .sparkline-panel {
+      display: grid !important;
+      min-height: 82px;
+      margin-top: 16px;
+      align-items: end;
+    }
+
+    .workout-trend {
+      display: grid;
+      gap: 3px;
+      width: 100%;
+    }
+
+    .workout-trend-svg {
+      display: block;
+      width: 100%;
+      height: 58px;
+      overflow: visible;
+    }
+
+    .workout-trend-area {
+      fill: var(--card-accent);
+      opacity: 0.08;
+    }
+
+    .workout-trend-line {
+      fill: none;
+      stroke: var(--card-accent);
+      stroke-width: 2.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .workout-trend-dot {
+      fill: var(--card-accent);
+      stroke: #fff;
+      stroke-width: 2;
+    }
+
+    .workout-trend-days {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      color: #9aa0aa;
+      font-size: 10px;
+      font-weight: 850;
+      line-height: 1;
+      text-align: center;
+    }
+
+    .workout-trend-days .active {
+      color: var(--card-accent);
+    }
+
+    .stats-manage-button {
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: #f4f4f2;
+      color: #111;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .stat-section-card .icon-bubble {
+      background: var(--bubble);
+      color: var(--card-accent);
+    }
+
+    .stat-section-card .icon-bubble svg {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .stat-section-card .stat-bar {
+      border-radius: 8px 8px 3px 3px;
+      background: var(--card-accent);
+      opacity: 0.78;
+    }
+
+    .stat-section-card .stat-bar.today {
+      background: #111;
+      opacity: 1;
+    }
+
+    #statsManageDialog .modal {
+      background: #fff;
+      color: #111;
+    }
+
+    #statsManageDialog .mini-note {
+      color: #7b7d86;
+    }
+
+    .stats-manage-list {
+      margin-top: 10px;
+    }
+
+    .stats-manage-item.is-hidden {
+      opacity: 0.48;
+    }
+
+    .stats-manage-item.is-hidden .widget-order-name strong {
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+      text-decoration-color: #b8b8b8;
+    }
+
+    .stats-toggle-button {
+      background: #111;
+      color: #fff;
+    }
+
+    .stats-manage-item.is-hidden .stats-toggle-button {
+      background: #22c55e;
+      color: #fff;
+    }
+
+    .counter-card .quick-row .workout-undo-button {
+      display: grid;
+      place-items: center;
+      background: #f4f4f2;
+      color: #111;
+      font-size: 0;
+      line-height: 0;
+      padding: 0;
+    }
+
+    .counter-card .quick-row .workout-undo-button svg {
+      width: 19px;
+      height: 19px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.35;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    #page-stats .month-switcher {
+      background: #ffffff !important;
+      color: #111111 !important;
+      border: 1px solid #e8e6df !important;
+      box-shadow: 0 12px 28px rgba(17, 17, 17, 0.08) !important;
+    }
+
+    #page-stats .month-switcher strong {
+      color: #111111 !important;
+      font-weight: 900;
+    }
+
+    #page-stats .month-switcher button {
+      background: #f4f4f2 !important;
+      color: #111111 !important;
+      border-color: transparent !important;
+      box-shadow: none !important;
+    }
+
+    #page-stats .exercise-stat-card {
+      background: #ffffff !important;
+      color: #111111 !important;
+      border-color: rgba(17, 17, 17, 0.04) !important;
+      box-shadow: 0 18px 42px rgba(17, 17, 17, 0.08) !important;
+    }
+
+    #statsManageDialog .modal,
+    #statsManageDialog .widget-order-item {
+      background: #ffffff !important;
+      color: #111111 !important;
+      border-color: #ecebe6 !important;
+      box-shadow: none !important;
+    }
+
+    #statsManageDialog .widget-order-name strong {
+      color: #111111 !important;
+    }
+
+    #statsManageDialog .widget-order-name span,
+    #statsManageDialog .mini-note {
+      color: #7b7d86 !important;
+    }
+
+    #statsManageDialog .order-button {
+      background: #f4f4f2 !important;
+      color: #111111 !important;
+      border-color: transparent !important;
+      box-shadow: none !important;
+    }
+
+    #statsManageDialog .stats-toggle-button {
+      background: #111111 !important;
+      color: #ffffff !important;
+    }
+
+    #statsManageDialog .stats-manage-item.is-hidden .stats-toggle-button {
+      background: #22c55e !important;
+      color: #ffffff !important;
+    }
+
+    /* Apple polish layer: visual refinement only, no layout or feature changes. */
+    :root {
+      --bg: #f5f5f7;
+      --panel: #ffffff;
+      --panel-soft: #fafafc;
+      --ink: #1d1d1f;
+      --muted: #7a7a7a;
+      --line: #e0e0e0;
+      --accent: #0066cc;
+      --accent-2: #1d1d1f;
+      --accent-4: #0071e3;
+      --good: #1d8f42;
+      --shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+      --shadow-soft: 0 6px 18px rgba(0, 0, 0, 0.045);
+      --radius: 18px;
+      font-family: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    }
+
+    body {
+      background: #f5f5f7 !important;
+      color: #1d1d1f !important;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .app {
+      max-width: 760px;
+    }
+
+    .brand p {
+      color: #1d1d1f !important;
+      font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      font-weight: 600 !important;
+      letter-spacing: -0.28px !important;
+    }
+
+    .profile-button,
+    .score-card,
+    .score-mini-strip,
+    .surface,
+    .weight-record-card,
+    .water-record-card,
+    .nutrition-group-card,
+    .counter-card,
+    .exercise-stat-card,
+    .stat-section-card,
+    .modal,
+    dialog {
+      background: #ffffff !important;
+      color: #1d1d1f !important;
+      border: 1px solid rgba(29, 29, 31, 0.08) !important;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.045) !important;
+    }
+
+    .score-card,
+    .weight-record-card,
+    .water-record-card,
+    .nutrition-group-card,
+    .counter-card,
+    .exercise-stat-card,
+    .score-mini-strip {
+      border-radius: 18px !important;
+    }
+
+    .surface {
+      border-radius: 18px !important;
+      box-shadow: none !important;
+    }
+
+    .score-card {
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.055) !important;
+    }
+
+    .score-line,
+    .score-chart {
+      background: #fafafc !important;
+      color: #1d1d1f !important;
+      border-color: #f0f0f0 !important;
+      box-shadow: none !important;
+    }
+
+    .score-line span,
+    .score-mini-title strong,
+    .today-score-main,
+    .exercise-stat-total,
+    .weight-record-delta strong,
+    .water-record-liters strong {
+      color: #0066cc !important;
+    }
+
+    .date-line,
+    .score-note,
+    .score-mini-title,
+    .score-mini-unit,
+    .card-title p,
+    .log-title p,
+    .exercise-stat-title p,
+    .nutrition-head-title p,
+    .widget-order-name span,
+    .meta-pill,
+    .stat-axis,
+    .workout-history-date,
+    .weight-record-time,
+    .water-cup-label {
+      color: #7a7a7a !important;
+    }
+
+    h2,
+    .toolbar h2,
+    .log-title h3,
+    .nutrition-head-title h3,
+    .exercise-stat-title h3,
+    .card-title h3,
+    .weight-record-title h3,
+    .water-record-title h3,
+    .nutrition-name,
+    .widget-order-name strong {
+      color: #1d1d1f !important;
+      font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      font-weight: 600 !important;
+      letter-spacing: -0.224px !important;
+    }
+
+    .exercise-count-inline,
+    .weight-record-value,
+    .water-record-percent,
+    .score-total-number,
+    .score-summary-main,
+    .exercise-stat-total {
+      font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      font-weight: 600 !important;
+      letter-spacing: -0.28px !important;
+    }
+
+    .primary-button,
+    .text-btn,
+    .quiet-button,
+    .chip-button,
+    .icon-button,
+    .order-button,
+    .month-switcher button,
+    .quick-row button,
+    .nutrition-record-button,
+    .water-sip-button,
+    .water-manage-button,
+    .weight-record-button,
+    .stats-manage-button {
+      border-radius: 999px !important;
+      box-shadow: none !important;
+      font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      font-weight: 600 !important;
+      letter-spacing: -0.12px !important;
+    }
+
+    .primary-button,
+    .quick-row button:nth-child(3),
+    .nutrition-record-button,
+    .water-sip-button {
+      background: #0066cc !important;
+      color: #ffffff !important;
+      border-color: transparent !important;
+    }
+
+    .quiet-button,
+    .text-btn,
+    .chip-button,
+    .order-button,
+    .month-switcher button,
+    .quick-row button,
+    .water-manage-button,
+    .weight-record-button,
+    .stats-manage-button,
+    .counter-card .quick-row .workout-undo-button {
+      background: #fafafc !important;
+      color: #1d1d1f !important;
+      border: 1px solid #f0f0f0 !important;
+    }
+
+    .text-btn {
+      color: #0066cc !important;
+    }
+
+    .page-nav {
+      background: rgba(255, 255, 255, 0.82) !important;
+      border: 1px solid rgba(29, 29, 31, 0.08) !important;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06) !important;
+      -webkit-backdrop-filter: blur(24px);
+      backdrop-filter: blur(24px);
+    }
+
+    .nav-button {
+      background: transparent !important;
+      color: #7a7a7a !important;
+      box-shadow: none !important;
+      font-weight: 500 !important;
+    }
+
+    .nav-button.active {
+      background: #1d1d1f !important;
+      color: #ffffff !important;
+      box-shadow: none !important;
+    }
+
+    .icon-bubble,
+    .log-icon,
+    .nutrition-head-icon,
+    .weight-record-icon,
+    .water-record-icon {
+      background: #fafafc !important;
+      color: #0066cc !important;
+      border: 1px solid #f0f0f0;
+    }
+
+    .target-pill,
+    .meta-pill,
+    .record-status,
+    .water-week-ring,
+    .nutrition-percent {
+      background-color: #fafafc !important;
+      color: #1d1d1f !important;
+    }
+
+    .target-pill {
+      background:
+        conic-gradient(var(--card-accent, #0066cc) calc(var(--progress, 0) * 1%), #f0f0f0 0) !important;
+    }
+
+    .workout-trend-line,
+    .mini-line .line,
+    .nutrition-trend-line {
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .stat-section-card .stat-bar,
+    .stat-bar {
+      background: #0066cc !important;
+      opacity: 0.86 !important;
+      border-radius: 5px 5px 2px 2px !important;
+    }
+
+    .stat-bar.today {
+      background: #1d1d1f !important;
+      opacity: 1 !important;
+    }
+
+    .month-switcher,
+    #page-stats .month-switcher {
+      background: #ffffff !important;
+      color: #1d1d1f !important;
+      border: 1px solid rgba(29, 29, 31, 0.08) !important;
+      box-shadow: none !important;
+      border-radius: 999px !important;
+    }
+
+    input,
+    select,
+    textarea,
+    .text-input,
+    .number-input,
+    .select-input {
+      background: #fafafc !important;
+      color: #1d1d1f !important;
+      border: 1px solid #f0f0f0 !important;
+      box-shadow: none !important;
+      border-radius: 11px !important;
+    }
+
+    .manage-item,
+    .add-section,
+    .widget-manager,
+    .widget-order-item,
+    #statsManageDialog .widget-order-item {
+      background: #fafafc !important;
+      color: #1d1d1f !important;
+      border-color: #f0f0f0 !important;
+      box-shadow: none !important;
+    }
+
+    .manage-delete,
+    #statsManageDialog .stats-toggle-button {
+      background: #1d1d1f !important;
+      color: #ffffff !important;
+    }
+
+    #page-stats .score-card {
+      display: grid !important;
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr) !important;
+      grid-template-areas:
+        "top top"
+        "score summary"
+        "trend trend" !important;
+      gap: 18px 22px !important;
+      min-height: 0 !important;
+      padding: 24px !important;
+      border-radius: 18px !important;
+      background: #ffffff !important;
+      border: 1px solid rgba(29, 29, 31, 0.08) !important;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.055) !important;
+      overflow: hidden;
+    }
+
+    #page-stats .score-card::after {
+      content: "" !important;
+      top: 78px !important;
+      bottom: 132px !important;
+      left: 50% !important;
+      width: 1px !important;
+      background: #f0f0f0 !important;
+      transform: translateX(-0.5px) !important;
+    }
+
+    #page-stats .score-card-top {
+      grid-area: top !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 12px !important;
+      min-height: auto !important;
+    }
+
+    #page-stats .score-card .date-line {
+      margin: 0 !important;
+      padding: 0 !important;
+      color: #1d1d1f !important;
+      background: transparent !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      font-size: 17px !important;
+      line-height: 1.24 !important;
+      font-weight: 600 !important;
+      letter-spacing: -0.374px !important;
+    }
+
+    #page-stats .score-info {
+      width: 18px !important;
+      height: 18px !important;
+      border: 1.5px solid #86868b !important;
+      color: #86868b !important;
+      font-size: 11px !important;
+      font-weight: 600 !important;
+    }
+
+    #page-stats .score-line {
+      grid-area: score !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 100% !important;
+      min-height: 126px !important;
+      padding: 0 14px 0 0 !important;
+      margin: 0 !important;
+      transform: none !important;
+      background: transparent !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      text-align: center !important;
+    }
+
+    #page-stats .score-number {
+      display: inline-flex !important;
+      align-items: baseline !important;
+      justify-content: center !important;
+      gap: 6px !important;
+      transform: none !important;
+    }
+
+    #page-stats .score-number strong {
+      color: #1d1d1f !important;
+      font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, system-ui, sans-serif !important;
+      font-size: clamp(58px, 12vw, 86px) !important;
+      line-height: 0.92 !important;
+      font-weight: 600 !important;
+      letter-spacing: -0.28px !important;
+    }
+
+    #page-stats .score-number span {
+      color: #1d1d1f !important;
+      font-size: 17px !important;
+      font-weight: 400 !important;
+      line-height: 1 !important;
+    }
+
+    #page-stats .score-delta {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      min-height: 32px !important;
+      margin-top: 12px !important;
+      padding: 0 13px !important;
+      border-radius: 999px !important;
+      background: #eaf7ee !important;
+      color: #1d8f42 !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      letter-spacing: -0.12px !important;
+      white-space: nowrap !important;
+    }
+
+    #page-stats .score-delta.down {
+      background: #fff1ec !important;
+      color: #bf4800 !important;
+    }
+
+    #page-stats .score-chart {
+      grid-area: summary !important;
+      display: grid !important;
+      align-content: center !important;
+      justify-items: stretch !important;
+      width: 100% !important;
+      min-height: 126px !important;
+      padding: 0 0 0 18px !important;
+      margin: 0 !important;
+      background: transparent !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      text-align: left !important;
+    }
+
+    #page-stats .score-summary {
+      width: 100% !important;
+      max-width: none !important;
+    }
+
+    #page-stats .score-panel-title {
+      margin: 0 0 10px !important;
+      color: #1d1d1f !important;
+      font-size: 14px !important;
+      line-height: 1.29 !important;
+      font-weight: 600 !important;
+      letter-spacing: -0.224px !important;
+      white-space: normal !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+    }
+
+    #page-stats .score-items {
+      display: grid !important;
+      gap: 8px !important;
+      padding: 0 !important;
+      border: 0 !important;
+    }
+
+    #page-stats .score-item {
+      display: grid !important;
+      grid-template-columns: 24px minmax(0, 1fr) auto !important;
+      gap: 8px !important;
+      align-items: center !important;
+      min-height: 24px !important;
+    }
+
+    #page-stats .score-item-icon {
+      width: 24px !important;
+      height: 24px !important;
+      display: grid !important;
+      place-items: center !important;
+      border-radius: 50% !important;
+      background: color-mix(in srgb, var(--score-item-color) 12%, #fff) !important;
+      color: var(--score-item-color) !important;
+      font-size: 11px !important;
+      font-weight: 600 !important;
+    }
+
+    #page-stats .score-card .score-item span {
+      color: #1d1d1f !important;
+      font-size: 13px !important;
+      line-height: 1.2 !important;
+      font-weight: 600 !important;
+      letter-spacing: -0.12px !important;
+    }
+
+    #page-stats .score-card .score-item-value {
+      color: #1d8f42 !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      white-space: nowrap !important;
+    }
+
+    #page-stats .score-trend-area {
+      grid-area: trend !important;
+      margin: 0 !important;
+      padding-top: 16px !important;
+      border-top: 1px solid #f0f0f0 !important;
+    }
+
+    #page-stats .score-trend {
+      display: grid !important;
+      gap: 10px !important;
+    }
+
+    #page-stats .score-bar-chart {
+      display: grid !important;
+      grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+      align-items: end !important;
+      gap: 8px !important;
+      min-height: 74px !important;
+      padding-top: 0 !important;
+    }
+
+    #page-stats .score-bar-item {
+      display: grid !important;
+      grid-template-rows: 16px 44px 14px !important;
+      gap: 5px !important;
+      align-items: end !important;
+      justify-items: center !important;
+      min-width: 0 !important;
+    }
+
+    #page-stats .score-bar-value,
+    #page-stats .score-bar-label {
+      color: #7a7a7a !important;
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      line-height: 1 !important;
+    }
+
+    #page-stats .score-bar-track {
+      width: 100% !important;
+      height: 44px !important;
+      display: flex !important;
+      align-items: end !important;
+      border-bottom: 1px solid #f0f0f0 !important;
+    }
+
+    #page-stats .score-bar {
+      width: 100% !important;
+      min-height: 3px !important;
+      display: block !important;
+      border-radius: 4px 4px 1px 1px !important;
+      background: #0066cc !important;
+      box-shadow: none !important;
+    }
+
+    #page-stats .score-bar-item:last-child .score-bar,
+    #page-stats .score-bar-item:last-child .score-bar-value,
+    #page-stats .score-bar-item:last-child .score-bar-label {
+      color: #0066cc !important;
+    }
+
+    @media (max-width: 390px) {
+      #page-stats .score-card {
+        padding: 18px !important;
+        gap: 14px 16px !important;
+      }
+
+      #page-stats .score-card::after {
+        top: 68px !important;
+        bottom: 122px !important;
+      }
+
+      #page-stats .score-card .date-line {
+        font-size: 15px !important;
+      }
+
+      #page-stats .score-number strong {
+        font-size: clamp(48px, 15vw, 68px) !important;
+      }
+
+      #page-stats .score-item {
+        grid-template-columns: 22px minmax(0, 1fr) auto !important;
+        gap: 6px !important;
+      }
+
+      #page-stats .score-card .score-item span,
+      #page-stats .score-card .score-item-value {
+        font-size: 12px !important;
+      }
+    }
+
+    /* Apple baseline header tune-up */
+    .app {
+      padding-top: 14px !important;
+      padding-bottom: 112px !important;
+    }
+
+    .topbar {
+      min-height: 58px !important;
+      margin-bottom: 6px !important;
+      padding: 0 8px 4px !important;
+      align-items: center !important;
+    }
+
+    .brand p {
+      font-size: clamp(22px, 4.2vw, 32px) !important;
+      line-height: 1.08 !important;
+      letter-spacing: -0.42px !important;
+      font-weight: 600 !important;
+    }
+
+    .profile-button {
+      width: 52px !important;
+      height: 52px !important;
+      outline-width: 3px !important;
+      font-size: 15px !important;
+    }
+
+    #page-record .score-mini-strip,
+    #page-workout .score-mini-strip,
+    #page-me .score-mini-strip {
+      min-height: 58px !important;
+      margin-bottom: 14px !important;
+      padding: 12px 16px !important;
+    }
+
+    .score-mini-title {
+      font-size: 15px !important;
+      font-weight: 400 !important;
+    }
+
+    .score-mini-title strong {
+      margin-left: 8px !important;
+      font-size: 22px !important;
+      font-weight: 600 !important;
+    }
+
+    .score-mini-unit {
+      font-size: 13px !important;
+      font-weight: 400 !important;
+    }
+
+    @media (max-width: 390px) {
+      .app {
+        padding-top: 12px !important;
+      }
+
+      .topbar {
+        min-height: 54px !important;
+        margin-bottom: 4px !important;
+        padding-bottom: 4px !important;
+      }
+
+      .brand p {
+        font-size: clamp(21px, 6vw, 28px) !important;
+      }
+
+      .profile-button {
+        width: 48px !important;
+        height: 48px !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .score-mini-strip {
+        min-height: 66px;
+        padding: 15px 16px;
+        border-radius: 22px;
+      }
+
+      .score-mini-title {
+        font-size: 14px;
+        font-weight: 450;
+      }
+
+      .score-mini-title strong {
+        margin-left: 6px;
+        font-size: 19px;
+      }
+
+      .score-mini-unit {
+        font-size: 12px;
+      }
+
+      .score-mini-delta {
+        min-height: 32px;
+        padding: 0 12px;
+        font-size: 12px;
+      }
+    }
+
+    /* Attach greeting row to the score strip. */
+    .app {
+      padding-top: 10px !important;
+    }
+
+    .topbar {
+      min-height: 50px !important;
+      margin-bottom: 0 !important;
+      padding: 0 0 6px !important;
+      gap: 10px !important;
+    }
+
+    .brand p {
+      font-size: clamp(20px, 3.8vw, 28px) !important;
+      line-height: 1.05 !important;
+      letter-spacing: -0.34px !important;
+    }
+
+    .profile-button {
+      width: 46px !important;
+      height: 46px !important;
+      font-size: 14px !important;
+      outline-width: 2px !important;
+    }
+
+    #page-record .score-mini-strip,
+    #page-workout .score-mini-strip,
+    #page-me .score-mini-strip {
+      margin-top: 0 !important;
+      margin-bottom: 12px !important;
+    }
+
+    @media (max-width: 390px) {
+      .app {
+        padding-top: 8px !important;
+      }
+
+      .topbar {
+        min-height: 46px !important;
+        padding-bottom: 5px !important;
+      }
+
+      .brand p {
+        font-size: clamp(19px, 5.2vw, 25px) !important;
+      }
+
+      .profile-button {
+        width: 42px !important;
+        height: 42px !important;
+      }
+    }
+    /* Final Apple header compression */
+    .app {
+      padding-top: 4px !important;
+      padding-left: 20px !important;
+      padding-right: 20px !important;
+    }
+
+    .topbar {
+      min-height: 38px !important;
+      height: 38px !important;
+      margin: 0 0 2px !important;
+      padding: 0 8px !important;
+      align-items: center !important;
+    }
+
+    .topbar .brand p,
+    .brand p {
+      color: #7a7a7a !important;
+      font-size: clamp(18px, 3.4vw, 24px) !important;
+      line-height: 1 !important;
+      letter-spacing: -0.28px !important;
+      font-weight: 600 !important;
+    }
+
+    .topbar .profile-button,
+    .profile-button {
+      width: 38px !important;
+      height: 38px !important;
+      min-width: 38px !important;
+      outline-width: 0 !important;
+      font-size: 13px !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.045) !important;
+    }
+
+    #page-record .score-mini-strip,
+    #page-workout .score-mini-strip,
+    #page-me .score-mini-strip {
+      min-height: 50px !important;
+      margin-top: 0 !important;
+      margin-bottom: 10px !important;
+      padding: 10px 14px !important;
+      border-radius: 18px !important;
+    }
+
+    .score-mini-title {
+      font-size: 14px !important;
+      line-height: 1 !important;
+    }
+
+    .score-mini-title strong {
+      margin-left: 6px !important;
+      font-size: 20px !important;
+      line-height: 1 !important;
+    }
+
+    .score-mini-unit {
+      font-size: 12px !important;
+    }
+
+    @media (max-width: 390px) {
+      .app {
+        padding-top: 3px !important;
+      }
+
+      .topbar {
+        min-height: 34px !important;
+        height: 34px !important;
+        margin-bottom: 1px !important;
+      }
+
+      .topbar .brand p,
+      .brand p {
+        font-size: clamp(17px, 4.8vw, 22px) !important;
+      }
+
+      .topbar .profile-button,
+      .profile-button {
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        font-size: 12px !important;
+      }
+    }
+
+    /* Compact greeting row above the score strip. */
+    .topbar {
+      display: flex !important;
+      min-height: 48px !important;
+      height: auto !important;
+      margin: 0 0 4px !important;
+      padding: 0 2px 4px !important;
+      align-items: flex-end !important;
+    }
+
+    .app {
+      padding-top: 10px !important;
+    }
+
+    .topbar .brand {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .topbar .brand p {
+      font-size: clamp(19px, 3.7vw, 27px) !important;
+      line-height: 1.04 !important;
+      letter-spacing: -0.3px !important;
+    }
+
+    .header-date-line {
+      margin: 0 0 2px;
+      color: #7a7a7a;
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 400;
+      letter-spacing: -0.12px;
+      white-space: nowrap;
+    }
+
+    .profile-button {
+      display: none !important;
+    }
+
+    #page-record .score-mini-strip,
+    #page-workout .score-mini-strip {
+      min-height: 56px !important;
+      padding: 12px 16px !important;
+      margin-bottom: 12px !important;
+      border-radius: 18px !important;
+    }
+
+    /* Final greeting/date alignment: date sits under the greeting, right-aligned. */
+    .topbar {
+      min-height: 46px !important;
+      height: auto !important;
+      margin: 0 0 6px !important;
+      padding: 0 2px 2px !important;
+      justify-content: flex-start !important;
+      align-items: flex-start !important;
+    }
+
+    .topbar .brand {
+      display: inline-flex !important;
+      width: max-content !important;
+      max-width: 100% !important;
+      flex-direction: column !important;
+      align-items: flex-end !important;
+      gap: 3px !important;
+      min-width: 0 !important;
+    }
+
+    .topbar .brand #subtitle {
+      color: #111111 !important;
+      font-size: clamp(20px, 4.1vw, 28px) !important;
+      line-height: 1.02 !important;
+      font-weight: 800 !important;
+      letter-spacing: -0.35px !important;
+      white-space: nowrap !important;
+    }
+
+    .topbar .brand .header-date-line {
+      align-self: flex-end !important;
+      margin: 0 24px 0 0 !important;
+      color: #8a8a8a !important;
+      font-size: clamp(9px, 1.65vw, 11px) !important;
+      line-height: 1 !important;
+      font-weight: 500 !important;
+      letter-spacing: -0.05px !important;
+      white-space: nowrap !important;
+    }
+
+    #page-today .score-mini-strip,
+    #page-record .score-mini-strip,
+    #page-workout .score-mini-strip,
+    #page-me .score-mini-strip {
+      height: 56px !important;
+      min-height: 56px !important;
+      max-height: 56px !important;
+      padding: 12px 16px !important;
+      width: 100% !important;
+      margin: 0 0 12px !important;
+      border-radius: 18px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
   </style>
 </head>
 <body>
@@ -4190,30 +7622,38 @@
       <div class="brand">
         <h1 data-i18n="appTitle">Daily Rep Counter</h1>
         <p id="subtitle"></p>
-        <section class="score-card" aria-label="Today score">
-          <div class="score-card-top">
-            <div class="date-line" id="todayLine"></div>
-            <div class="score-label">Score</div>
-          </div>
-          <div class="score-line" id="todayScoreLine"></div>
-          <div class="score-chart" id="todayCalorieChart"></div>
-        </section>
+        <p class="header-date-line" id="headerDateLine"></p>
       </div>
       <button class="profile-button" id="profileButton" type="button" title="Profile">ME</button>
     </header>
 
     <nav class="page-nav" aria-label="App pages">
-      <button class="nav-button active" type="button" data-page-target="today" data-i18n="todayPage">Today</button>
+      <button class="nav-button active" type="button" data-page-target="today" data-i18n="todayPage">Records</button>
+      <button class="nav-button" type="button" data-page-target="workout" data-i18n="workoutPage">Workout</button>
       <button class="nav-button" type="button" data-page-target="stats" data-i18n="statsPage">Stats</button>
       <button class="nav-button" type="button" data-page-target="me" data-i18n="myPage">My page</button>
     </nav>
 
     <section class="page active" id="page-today">
+      <section class="score-mini-strip" aria-label="Today score summary"></section>
       <section class="surface" aria-labelledby="todayTitle">
         <div class="toolbar">
-          <h2 id="todayTitle" data-i18n="todayTraining">Today</h2>
+          <h2 id="todayTitle" data-i18n="recordPage">Records</h2>
           <div class="toolbar-actions">
             <button class="primary-button" id="addWorkoutButton" type="button" data-i18n="addWorkout">Widget +</button>
+          </div>
+        </div>
+        <div class="workout-grid" id="recordGrid"></div>
+      </section>
+    </section>
+
+    <section class="page" id="page-workout">
+      <section class="score-mini-strip" aria-label="Today score summary"></section>
+      <section class="surface" aria-labelledby="workoutTitle">
+        <div class="toolbar">
+          <h2 id="workoutTitle" data-i18n="workoutPage">Workout</h2>
+          <div class="toolbar-actions">
+            <button class="primary-button" id="addWorkoutButtonWorkout" type="button" data-i18n="addWorkout">Widget +</button>
           </div>
         </div>
         <div class="workout-grid" id="workoutGrid"></div>
@@ -4222,16 +7662,21 @@
 
     <section class="page" id="page-stats">
       <aside class="sheet" aria-labelledby="statsTitle">
+        <section class="score-card" aria-label="Today score">
+          <div class="score-card-top">
+            <div class="date-line" id="todayLine"></div>
+            <div class="score-label">Score</div>
+          </div>
+          <div class="score-line" id="todayScoreLine"></div>
+          <div class="score-chart" id="todayCalorieChart"></div>
+          <div class="score-trend-area" id="todayScoreTrend"></div>
+        </section>
         <h2 id="statsTitle" data-i18n="stats">Stats</h2>
         <div class="stats-top">
           <div>
             <p id="statsRangeLabel"></p>
           </div>
-          <div class="period-toggle" aria-label="Stats period">
-            <button class="active" type="button" data-stats-mode="recent7" data-i18n="recent7Mode">7 days</button>
-            <button type="button" data-stats-mode="recent30" data-i18n="recent30Mode">30 days</button>
-            <button type="button" data-stats-mode="calendarMonth" data-i18n="monthlyMode">Monthly</button>
-          </div>
+          <button class="text-btn stats-manage-button" type="button" id="openStatsManage">통계 관리</button>
         </div>
         <div class="month-switcher" id="monthSwitcher">
           <button type="button" id="prevStatsMonth" aria-label="Previous month">‹</button>
@@ -4243,6 +7688,7 @@
     </section>
 
     <section class="page" id="page-me">
+      <section class="score-mini-strip" aria-label="Today score summary"></section>
       <section class="surface profile-surface" aria-labelledby="profileTitle">
         <form class="modal" id="profileForm">
           <h2 id="profileTitle" data-i18n="profile">My page</h2>
@@ -4389,32 +7835,36 @@
   <dialog id="waterManageDialog">
     <form class="modal" method="dialog" id="waterManageForm">
       <h2>수분 섭취 관리</h2>
-      <div class="field" id="waterModeField" hidden>
-        <label for="waterMode">기록 방식</label>
-        <select class="select-input" id="waterMode">
-          <option value="count">횟수로 기록</option>
-        </select>
-      </div>
-      <div class="field" id="waterUnitField" hidden>
-        <label for="waterUnit">용량 단위</label>
-        <select class="select-input" id="waterUnit">
-          <option value="회">회</option>
-        </select>
-      </div>
       <div class="field-grid">
         <div class="field">
-          <label for="waterGoalInput" id="waterGoalLabel">목표 횟수</label>
-          <input class="number-input" id="waterGoalInput" type="number" min="0" step="1" placeholder="8">
+          <label for="waterGoalInput" id="waterGoalLabel">목표 섭취량</label>
+          <div class="unit-input-row">
+            <input class="number-input" id="waterGoalInput" type="number" min="0" step="0.1" placeholder="2.0">
+            <span>L</span>
+          </div>
         </div>
-        <div class="field" id="waterCupField" hidden>
-          <label for="waterCupInput">1회 기준 ml</label>
-          <input class="number-input" id="waterCupInput" type="number" min="1" step="1" placeholder="250">
+        <div class="field" id="waterCupField">
+          <label for="waterCupInput">한 모금 용량</label>
+          <div class="unit-input-row">
+            <input class="number-input" id="waterCupInput" type="number" min="1" step="1" placeholder="20">
+            <span>ml</span>
+          </div>
         </div>
       </div>
-      <p class="mini-note" id="waterManageNote">수분은 마신 횟수만 기록합니다. 1회 기록하면 1점이 올라갑니다.</p>
       <div class="modal-actions">
         <button class="quiet-button" type="button" id="closeWaterManage">취소</button>
         <button class="primary-button" type="submit">저장</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="statsManageDialog">
+    <form class="modal" method="dialog">
+      <h2>통계 관리</h2>
+      <p class="mini-note">월별 통계에 표시할 기록 섹션과 순서를 정합니다.</p>
+      <div class="widget-order-list stats-manage-list" id="statsManageList"></div>
+      <div class="modal-actions">
+        <button class="primary-button" type="button" id="closeStatsManage">완료</button>
       </div>
     </form>
   </dialog>
@@ -4489,12 +7939,26 @@
       en: {
         appTitle: "Daily Rep Counter",
         hello: "Hello , {name} ~",
-        todayPage: "Today",
+        todayPage: "Records",
+        recordPage: "Records",
+        workoutPage: "Workout",
         statsPage: "Stats",
         myPage: "My",
         todayLine: "today is {date}",
         scoreLine: "Today's health score <span>{score} pts</span>",
         scoreNote: "Score: weight 5 pts once, water 1 pt each, nutrition 3 pts per item, workouts by reps and difficulty.",
+        scoreSame: "Same as yesterday",
+        scoreDelta: "{delta} pts vs yesterday",
+        scoreWorkout: "Workout {value}",
+        scoreRecord: "Record {value}",
+        scoreNutrition: "Nutrition {value}",
+        scoreWater: "Water {value}",
+        scoreTitle: "Today's health score",
+        scoreUnit: "pts",
+        recentScoreTitle: "Last 7 days",
+        todayItemScoreTitle: "Today's score by item",
+        scoreWeight: "Weight {value}",
+        scoreTotal: "Total",
         todayTraining: "Counters",
         totalReps: "Today",
         activeItems: "Items",
@@ -4550,12 +8014,26 @@
       zh: {
         appTitle: "每日运动计数",
         hello: "Hello , {name} ~",
-        todayPage: "今天",
+        todayPage: "记录",
+        recordPage: "记录",
+        workoutPage: "运动",
         statsPage: "统计",
         myPage: "我的",
         todayLine: "today is {date}",
         scoreLine: "今日健康分数 <span>{score} 分</span>",
         scoreNote: "分数：体重记录5分，饮水每次1分，营养每项3分，运动按次数和难度计算。",
+        scoreSame: "与昨天相同",
+        scoreDelta: "比昨天 {delta} 分",
+        scoreWorkout: "运动 {value}",
+        scoreRecord: "记录 {value}",
+        scoreNutrition: "营养 {value}",
+        scoreWater: "饮水 {value}",
+        scoreTitle: "今日健康分数",
+        scoreUnit: "分",
+        recentScoreTitle: "最近7天分数",
+        todayItemScoreTitle: "今日项目分数",
+        scoreWeight: "体重 {value}",
+        scoreTotal: "合计",
         todayTraining: "计数器",
         totalReps: "今天",
         activeItems: "项目",
@@ -4611,12 +8089,26 @@
       ko: {
         appTitle: "운동 카운트",
         hello: "Hello , {name}님 ~",
-        todayPage: "오늘",
+        todayPage: "기록",
+        recordPage: "기록",
+        workoutPage: "운동",
         statsPage: "통계",
         myPage: "나",
         todayLine: "today is {date}",
         scoreLine: "오늘 건강 점수 <span>{score}점</span>",
         scoreNote: "점수: 체중 기록 5점, 수분 1회당 1점, 영양소 항목당 3점, 운동은 횟수와 난이도 기준으로 계산합니다.",
+        scoreSame: "어제와 같아요",
+        scoreDelta: "어제보다 {delta}점",
+        scoreWorkout: "운동 {value}",
+        scoreRecord: "기록 {value}",
+        scoreNutrition: "영양 {value}",
+        scoreWater: "수분 {value}",
+        scoreTitle: "오늘의 건강 점수",
+        scoreUnit: "점",
+        recentScoreTitle: "최근 7일 점수",
+        todayItemScoreTitle: "오늘 항목별 점수",
+        scoreWeight: "체중 {value}",
+        scoreTotal: "합계",
         todayTraining: "카운터",
         totalReps: "오늘",
         activeItems: "항목",
@@ -4684,9 +8176,11 @@
         { id: "carbs", kind: "nutrition", name: "탄수화물", target: 260, unit: "g" },
         { id: "fat", kind: "nutrition", name: "지방", target: 60, unit: "g" },
         { id: "body-weight", kind: "body", name: "체중", target: 70, unit: "kg" },
-        { id: "water-intake", kind: "water", name: "수분 섭취", target: 8, unit: "회", mode: "count", cupMl: 250 }
+        { id: "water-intake", kind: "water", name: "수분 섭취", target: 8, targetMl: 2000, unit: "회", mode: "count", cupMl: 20, sipConfigured: true }
       ],
       records: {},
+      waterLogs: {},
+      statsSections: [],
       lastActions: []
     };
 
@@ -4694,13 +8188,18 @@
 
     const els = {
       subtitle: document.querySelector("#subtitle"),
+      headerDateLine: document.querySelector("#headerDateLine"),
       todayLine: document.querySelector("#todayLine"),
       todayScoreLine: document.querySelector("#todayScoreLine"),
       todayCalorieChart: document.querySelector("#todayCalorieChart"),
+      todayScoreTrend: document.querySelector("#todayScoreTrend"),
+      scoreMiniStrips: document.querySelectorAll(".score-mini-strip"),
       profileButton: document.querySelector("#profileButton"),
       pageButtons: document.querySelectorAll("[data-page-target]"),
       pages: document.querySelectorAll(".page"),
       addWorkoutButton: document.querySelector("#addWorkoutButton"),
+      addWorkoutButtonWorkout: document.querySelector("#addWorkoutButtonWorkout"),
+      recordGrid: document.querySelector("#recordGrid"),
       workoutGrid: document.querySelector("#workoutGrid"),
       statsModeButtons: document.querySelectorAll("[data-stats-mode]"),
       statsRangeLabel: document.querySelector("#statsRangeLabel"),
@@ -4709,6 +8208,10 @@
       prevStatsMonth: document.querySelector("#prevStatsMonth"),
       nextStatsMonth: document.querySelector("#nextStatsMonth"),
       statsWorkoutList: document.querySelector("#statsWorkoutList"),
+      openStatsManage: document.querySelector("#openStatsManage"),
+      statsManageDialog: document.querySelector("#statsManageDialog"),
+      statsManageList: document.querySelector("#statsManageList"),
+      closeStatsManage: document.querySelector("#closeStatsManage"),
       exportButton: document.querySelector("#exportButton"),
       toast: document.querySelector("#toast"),
       profileForm: document.querySelector("#profileForm"),
@@ -4794,7 +8297,7 @@
       running: false
     };
 
-    let statsMode = "recent7";
+    let statsMode = "calendarMonth";
     let statsMonthKey = todayKey().slice(0, 7);
 
     function nutritionKey(workout) {
@@ -4879,7 +8382,10 @@
           if (workout.kind === "water") {
             workout.mode = "count";
             workout.cupMl = Number(workout.cupMl || defaults?.cupMl || 250);
+            if (!workout.sipConfigured && workout.cupMl === 250) workout.cupMl = 20;
+            workout.sipConfigured = true;
             workout.unit = "회";
+            workout.targetMl = Number(workout.targetMl || defaults?.targetMl || 2000);
             if (!workout.target || Number(workout.target) > 100) workout.target = defaults?.target || 8;
           }
           if (workout.kind === "nutrition") {
@@ -4897,6 +8403,8 @@
           profile: { ...defaultState.profile, ...saved.profile },
           workouts,
           records: saved.records || {},
+          waterLogs: saved.waterLogs || {},
+          statsSections: Array.isArray(saved.statsSections) ? saved.statsSections : [],
           lastActions: Array.isArray(saved.lastActions) ? saved.lastActions : []
         };
       } catch {
@@ -5052,15 +8560,37 @@
       return 0;
     }
 
+    function waterPointForDate(dateKey, workout) {
+      const ml = waterTotalMlForDate(dateKey, workout);
+      const goal = waterGoalMl(workout);
+      const ratio = ml / Math.max(1, goal);
+      if (ratio >= 1) return 10;
+      if (ratio >= 0.7) return 5;
+      if (ratio >= 0.5) return 3;
+      return 0;
+    }
+
     function scoreForDate(dateKey) {
       return Math.round(state.workouts.reduce((sum, workout) => {
         const count = getCount(dateKey, workout.id);
         if (!count) return sum;
         if (workout.kind === "body") return sum + 5;
-        if (workout.kind === "water") return sum + count;
+        if (workout.kind === "water") return sum + waterPointForDate(dateKey, workout);
         if (workout.kind === "nutrition") return sum + 3;
         return sum + workoutPointForCount(workout, count);
       }, 0));
+    }
+
+    function scoreBreakdownForDate(dateKey) {
+      return state.workouts.reduce((parts, workout) => {
+        const count = getCount(dateKey, workout.id);
+        if (!count) return parts;
+        if (workout.kind === "body") parts.record += 5;
+        else if (workout.kind === "water") parts.water += waterPointForDate(dateKey, workout);
+        else if (workout.kind === "nutrition") parts.nutrition += 3;
+        else parts.workout += workoutPointForCount(workout, count);
+        return parts;
+      }, { workout: 0, record: 0, nutrition: 0, water: 0 });
     }
 
     function displayKind(workout) {
@@ -5211,6 +8741,297 @@
       });
     }
 
+    function shortMonthDay(dateKey) {
+      const [, month, day] = dateKey.split("-");
+      return `${Number(month)}/${Number(day)}`;
+    }
+
+    function latestWorkoutEntry(workoutId, endDate = todayKey()) {
+      let cursor = endDate;
+      for (let index = 0; index < 365; index += 1) {
+        const value = getCount(cursor, workoutId);
+        if (value > 0) return { dateKey: cursor, value };
+        cursor = addDays(cursor, -1);
+      }
+      return null;
+    }
+
+    function previousWorkoutEntry(workoutId, beforeDateKey) {
+      let cursor = addDays(beforeDateKey, -1);
+      for (let index = 0; index < 365; index += 1) {
+        const value = getCount(cursor, workoutId);
+        if (value > 0) return { dateKey: cursor, value };
+        cursor = addDays(cursor, -1);
+      }
+      return null;
+    }
+
+    function fillForwardWorkoutValues(values, workoutId) {
+      let carried = null;
+      return values.map((item) => {
+        const value = Number(item.value || 0);
+        if (value > 0) carried = value;
+        if (carried === null) {
+          const previous = previousWorkoutEntry(workoutId, item.dateKey);
+          carried = previous ? previous.value : 0;
+        }
+        return { ...item, value: carried || 0 };
+      });
+    }
+
+    function formatWeightValue(value) {
+      if (!value) return "—";
+      return Number(value).toFixed(1).replace(/\.0$/, "");
+    }
+
+    function formatWeightTimestamp(dateKey) {
+      const [year, month, day] = dateKey.split("-");
+      const nowKey = todayKey();
+      const time = dateKey === nowKey
+        ? new Intl.DateTimeFormat("ko-KR", {
+            timeZone: "Asia/Bangkok",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false
+          }).format(new Date())
+        : "08:30";
+      return `${year}.${month}.${day} ${time}`;
+    }
+
+    function buildWeightHistory(values, todayDateKey) {
+      return values.map((item) => `
+        <div class="weight-history-item${item.dateKey === todayDateKey ? " today" : ""}">
+          <span class="weight-history-date">${shortMonthDay(item.dateKey)}</span>
+          <strong class="weight-history-value">${formatWeightValue(item.value)}</strong>
+        </div>
+      `).join("");
+    }
+
+    function buildWorkoutHistory(values, todayDateKey) {
+      return values.map((item) => `
+        <div class="workout-history-item${item.dateKey === todayDateKey ? " today" : ""}">
+          <span class="workout-history-date">${shortMonthDay(item.dateKey)}</span>
+          <strong class="workout-history-value">${Number(item.value || 0)}</strong>
+        </div>
+      `).join("");
+    }
+
+    function waterGoalMl(workout) {
+      return Number(workout.targetMl || 0) > 0 ? Number(workout.targetMl) : 2000;
+    }
+
+    function waterSipMl(workout) {
+      return Math.max(1, Number(workout.cupMl || 20) || 20);
+    }
+
+    function waterTotalMlForDate(dateKey, workout) {
+      const logs = state.waterLogs?.[dateKey]?.[workout.id];
+      if (logs && typeof logs === "object") {
+        return Object.values(logs).reduce((sum, ml) => sum + Math.max(0, Number(ml) || 0), 0);
+      }
+      return getCount(dateKey, workout.id) * waterSipMl(workout);
+    }
+
+    function formatLiters(ml) {
+      return (ml / 1000).toFixed(1);
+    }
+
+    function waterBucketDefinitions() {
+      return [
+        { key: "08", label: "08시", hour: 8 },
+        { key: "10", label: "10시", hour: 10 },
+        { key: "12", label: "12시", hour: 12 },
+        { key: "14", label: "14시", hour: 14 },
+        { key: "16", label: "16시", hour: 16 },
+        { key: "18", label: "18시", hour: 18 },
+        { key: "20", label: "20시", hour: 20 },
+        { key: "22", label: "22시", hour: 22 }
+      ];
+    }
+
+    function bangkokHour() {
+      return Number(new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Bangkok",
+        hour: "2-digit",
+        hour12: false
+      }).format(new Date()));
+    }
+
+    function waterBucketForHour(hour) {
+      if (hour < 9) return "08";
+      if (hour < 11) return "10";
+      if (hour < 13) return "12";
+      if (hour < 15) return "14";
+      if (hour < 17) return "16";
+      if (hour < 19) return "18";
+      if (hour < 21) return "20";
+      return "22";
+    }
+
+    function waterLogsForDate(dateKey, workout, count) {
+      const dayLogs = state.waterLogs?.[dateKey]?.[workout.id];
+      const bucketValues = Object.fromEntries(waterBucketDefinitions().map((bucket) => [bucket.key, 0]));
+      if (dayLogs && typeof dayLogs === "object") {
+        Object.entries(dayLogs).forEach(([bucket, ml]) => {
+          if (bucketValues[bucket] !== undefined) bucketValues[bucket] = Math.max(0, Number(ml) || 0);
+        });
+      }
+      const loggedMl = Object.values(bucketValues).reduce((sum, ml) => sum + ml, 0);
+      const totalMl = count * waterSipMl(workout);
+      if (!loggedMl && totalMl > 0) {
+        bucketValues[waterBucketForHour(bangkokHour())] = totalMl;
+      }
+      return bucketValues;
+    }
+
+    function addWaterSip(workout, amount = 1) {
+      const dateKey = todayKey();
+      const sipCount = Math.max(1, Number(amount) || 1);
+      const sipMl = waterSipMl(workout);
+      const bucket = waterBucketForHour(bangkokHour());
+      state.waterLogs ||= {};
+      state.waterLogs[dateKey] ||= {};
+      state.waterLogs[dateKey][workout.id] ||= {};
+      state.waterLogs[dateKey][workout.id][bucket] = Number(state.waterLogs[dateKey][workout.id][bucket] || 0) + sipCount * sipMl;
+      const before = getCount(dateKey, workout.id);
+      state.lastActions.push({ dateKey, workoutId: workout.id, amount: sipCount, linked: [], waterBucket: bucket, waterMl: sipCount * sipMl });
+      state.lastActions = state.lastActions.slice(-20);
+      setCount(dateKey, workout.id, before + sipCount, { bump: workout.id });
+    }
+
+    function buildWaterCups(bucketValues, targetMl) {
+      const buckets = waterBucketDefinitions();
+      const bucketTarget = Math.max(20, targetMl / buckets.length);
+      return buckets.map((bucket) => {
+        const ml = Math.max(0, Number(bucketValues[bucket.key] || 0));
+        const ratio = Math.min(1, ml / Math.max(1, bucketTarget * 1.2));
+        const fillHeight = ml > 0 ? Math.max(6, ratio * 25) : 0;
+        const fillY = 39.4 - fillHeight;
+        const filled = ml > 0;
+        const level = !filled ? "unfilled" : ml <= bucketTarget * 0.55 ? "low" : ml <= bucketTarget * 1.15 ? "ok" : ml <= bucketTarget * 1.55 ? "high" : "overflow";
+        return `
+          <div class="water-cup-item ${filled ? `filled ${level}` : "unfilled"}">
+            <span class="water-cup-amount">${filled ? `${Math.round(ml)}ml` : ""}</span>
+            <div class="water-cup" aria-hidden="true">
+              <svg viewBox="0 0 32 44">
+                <path class="cup-outline" d="M7 3h18l-2 36a3 3 0 0 1-3 2.8h-8a3 3 0 0 1-3-2.8L7 3Z"/>
+                ${level === "overflow" ? `<path class="cup-overflow" d="M9.2 2.4c3.2-1.8 5.9 1.1 9.2-.3 2.4-1 4.1-.4 5.4.7"/>` : ""}
+                <rect class="cup-fill" x="9.4" y="${fillY.toFixed(1)}" width="13.2" height="${fillHeight.toFixed(1)}" rx="2"/>
+              </svg>
+            </div>
+            <span class="water-cup-label">${bucket.label}</span>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function buildWaterWeekHistory(endDate, workout) {
+      const targetMl = waterGoalMl(workout);
+      return Array.from({ length: 7 }, (_, index) => {
+        const dateKey = addDays(endDate, index - 6);
+        const ml = waterTotalMlForDate(dateKey, workout);
+        const percent = Math.min(100, Math.round((ml / Math.max(1, targetMl)) * 100));
+        const progress = Math.min(360, Math.round((ml / Math.max(1, targetMl)) * 360));
+        return `
+          <div class="water-week-item${dateKey === endDate ? " today" : ""}">
+            <span class="water-week-date">${shortMonthDay(dateKey)}</span>
+            <span class="water-week-amount">${formatLiters(ml)}L</span>
+            <div class="water-week-ring" style="--ring-progress:${progress}deg"><span>${percent}%</span></div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function demoRandom(seed) {
+      let value = seed;
+      return () => {
+        value = (value * 1664525 + 1013904223) % 4294967296;
+        return value / 4294967296;
+      };
+    }
+
+    function seedPreviewData() {
+      const version = "preview-30-days-v2";
+      if (state.previewDataVersion === version) return;
+      const random = demoRandom(20260616);
+      const endDate = todayKey();
+      const exerciseWorkouts = state.workouts.filter((workout) => !workout.kind || workout.kind === "exercise");
+      const comboWorkouts = state.workouts.filter((workout) => workout.kind === "combo");
+      const nutritionWorkouts = state.workouts.filter((workout) => workout.kind === "nutrition");
+      const bodyWorkout = state.workouts.find((workout) => workout.kind === "body");
+      const waterWorkout = state.workouts.find((workout) => workout.kind === "water");
+      const waterBuckets = waterBucketDefinitions().map((bucket) => bucket.key);
+      state.records ||= {};
+      state.waterLogs ||= {};
+      for (let offset = 29; offset >= 0; offset -= 1) {
+        const dateKey = addDays(endDate, -offset);
+        const age = 29 - offset;
+        const weekday = new Date(`${dateKey}T12:00:00Z`).getUTCDay();
+        const effortWave = 0.58 + Math.sin(age / 3.2) * 0.22 + (random() - 0.5) * 0.26;
+        const restDay = weekday === 0 || random() < 0.11;
+        state.records[dateKey] = state.records[dateKey] || {};
+        exerciseWorkouts.forEach((workout, index) => {
+          const target = Math.max(10, Number(workout.target) || 30);
+          const consistency = index === 0 ? 0.88 : index === 1 ? 0.78 : 0.64;
+          const shouldRecord = !restDay && random() < consistency;
+          const value = shouldRecord ? Math.max(1, Math.round(target * Math.max(0.12, Math.min(1.18, effortWave + (random() - 0.45) * 0.28)))) : 0;
+          if (value > 0) state.records[dateKey][workout.id] = value;
+          else delete state.records[dateKey][workout.id];
+        });
+        comboWorkouts.forEach((workout) => {
+          const target = Math.max(8, Number(workout.target) || 20);
+          const value = !restDay && random() < 0.38 ? Math.round(target * (0.35 + random() * 0.55)) : 0;
+          if (value > 0) state.records[dateKey][workout.id] = value;
+          else delete state.records[dateKey][workout.id];
+        });
+        nutritionWorkouts.forEach((workout) => {
+          const target = Math.max(1, Number(workout.target) || 100);
+          const key = nutritionKey(workout);
+          const base = key === "calories" ? 0.74 : key === "protein" ? 0.68 : key === "carbs" ? 0.7 : 0.62;
+          const shouldRecord = random() < 0.82;
+          const ratio = Math.max(0.28, Math.min(1.08, base + Math.sin((age + target) / 4.7) * 0.14 + (random() - 0.5) * 0.24));
+          const value = shouldRecord ? Math.round(target * ratio) : 0;
+          if (value > 0) state.records[dateKey][workout.id] = value;
+          else delete state.records[dateKey][workout.id];
+        });
+        if (bodyWorkout) {
+          const trend = 74.2 - age * 0.055;
+          const value = Math.max(60, trend + (random() - 0.5) * 0.45);
+          if (age % 3 !== 1 || offset < 7) state.records[dateKey][bodyWorkout.id] = Number(value.toFixed(1));
+          else delete state.records[dateKey][bodyWorkout.id];
+        }
+        if (waterWorkout) {
+          const targetMl = waterGoalMl(waterWorkout);
+          const sipMl = waterSipMl(waterWorkout);
+          const ratio = Math.max(0.35, Math.min(1.08, 0.68 + Math.sin(age / 4) * 0.18 + (random() - 0.5) * 0.22));
+          const totalMl = Math.round(targetMl * ratio / sipMl) * sipMl;
+          const sipCount = Math.max(0, Math.round(totalMl / sipMl));
+          if (sipCount > 0) state.records[dateKey][waterWorkout.id] = sipCount;
+          else delete state.records[dateKey][waterWorkout.id];
+          state.waterLogs[dateKey] ||= {};
+          state.waterLogs[dateKey][waterWorkout.id] = {};
+          let remaining = totalMl;
+          waterBuckets.forEach((bucket, index) => {
+            if (remaining <= 0) return;
+            const leftBuckets = waterBuckets.length - index;
+            const baseMl = Math.max(0, Math.round((remaining / leftBuckets) / sipMl) * sipMl);
+            const variation = Math.round(((random() - 0.42) * sipMl * 3) / sipMl) * sipMl;
+            const ml = Math.max(0, Math.min(remaining, baseMl + variation));
+            if (ml > 0) state.waterLogs[dateKey][waterWorkout.id][bucket] = ml;
+            remaining -= ml;
+          });
+          if (remaining > 0) {
+            const lastBucket = waterBuckets[waterBuckets.length - 1];
+            state.waterLogs[dateKey][waterWorkout.id][lastBucket] = Number(state.waterLogs[dateKey][waterWorkout.id][lastBucket] || 0) + remaining;
+          }
+        }
+        if (Object.keys(state.records[dateKey]).length === 0) delete state.records[dateKey];
+      }
+      state.previewDataVersion = version;
+      state.lastActions = [];
+      saveState();
+    }
+
     function buildSparkline(values) {
       const width = 230;
       const height = 58;
@@ -5243,13 +9064,49 @@
       `;
     }
 
+    function buildWorkoutTrend(values, target = 0) {
+      const width = 230;
+      const height = 58;
+      const padX = 8;
+      const padY = 8;
+      const numericValues = values.map((item) => Number(item.value) || 0);
+      const max = Math.max(1, Number(target) || 0, ...numericValues);
+      const points = values.map((item, index) => {
+        const value = Number(item.value) || 0;
+        const x = padX + (index / Math.max(1, values.length - 1)) * (width - padX * 2);
+        const y = height - padY - (value / max) * (height - padY * 2);
+        return { x, y };
+      });
+      const line = points.reduce((path, point, index) => {
+        if (index === 0) return `M ${point.x.toFixed(1)} ${point.y.toFixed(1)}`;
+        const prev = points[index - 1];
+        const curve = Math.min(12, Math.max(6, Math.abs(point.x - prev.x) * 0.42));
+        return `${path} C ${(prev.x + curve).toFixed(1)} ${prev.y.toFixed(1)}, ${(point.x - curve).toFixed(1)} ${point.y.toFixed(1)}, ${point.x.toFixed(1)} ${point.y.toFixed(1)}`;
+      }, "");
+      const baseline = height - padY;
+      const area = `${line} L ${points[points.length - 1].x.toFixed(1)} ${baseline} L ${points[0].x.toFixed(1)} ${baseline} Z`;
+      const last = points[points.length - 1];
+      const dayLabels = ["M", "T", "W", "T", "F", "S", "S"];
+      const labels = values.map((item, index) => `<span class="${index === values.length - 1 ? "active" : ""}">${dayLabels[index]}</span>`).join("");
+      return `
+        <div class="workout-trend">
+          <svg class="workout-trend-svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">
+            <path class="workout-trend-area" d="${area}"></path>
+            <path class="workout-trend-line" d="${line}"></path>
+            <circle class="workout-trend-dot" cx="${last.x.toFixed(1)}" cy="${last.y.toFixed(1)}" r="3.5"></circle>
+          </svg>
+          <div class="workout-trend-days">${labels}</div>
+        </div>
+      `;
+    }
+
     function buildMiniLine(values, options = {}) {
       const width = options.width || 230;
       const height = options.height || 58;
       const pad = options.pad || 8;
       const goal = Number(options.goal || 0);
       const numericValues = values.map((item) => Number(item.value) || 0);
-      const max = Math.max(1, goal, ...numericValues);
+      const max = Number(options.max || 0) || Math.max(1, goal, ...numericValues);
       const positiveValues = numericValues.filter((value) => value > 0);
       if (goal > 0) positiveValues.push(goal);
       const min = options.allowRange ? Math.min(...positiveValues, max) : 0;
@@ -5287,6 +9144,52 @@
       `;
     }
 
+    function nutritionAccent(workout, index = 0) {
+      const key = nutritionKey(workout);
+      if (key === "calories") return "#ff6a1a";
+      if (key === "protein") return "#f5a400";
+      if (key === "carbs") return "#2fa356";
+      if (key === "fat") return "#2f80ed";
+      const colors = ["#7c3aed", "#ff6a3d", "#22c55e", "#2374ff"];
+      return colors[index % colors.length];
+    }
+
+    function buildNutritionTrend(values, color) {
+      const width = 150;
+      const height = 58;
+      const pad = 7;
+      const max = Math.max(1, ...values.map((item) => Number(item.value) || 0));
+      const points = values.map((item, index) => {
+        const value = Number(item.value) || 0;
+        const x = pad + (index / Math.max(1, values.length - 1)) * (width - pad * 2);
+        const y = height - pad - (value / max) * (height - pad * 2);
+        return { x, y };
+      });
+      const line = points.reduce((path, point, index) => {
+        if (index === 0) return `M ${point.x.toFixed(1)} ${point.y.toFixed(1)}`;
+        const prev = points[index - 1];
+        const midX = (prev.x + point.x) / 2;
+        return `${path} C ${midX.toFixed(1)} ${prev.y.toFixed(1)}, ${midX.toFixed(1)} ${point.y.toFixed(1)}, ${point.x.toFixed(1)} ${point.y.toFixed(1)}`;
+      }, "");
+      const area = `${line} L ${points[points.length - 1].x.toFixed(1)} ${height - pad} L ${points[0].x.toFixed(1)} ${height - pad} Z`;
+      const labels = values.map((item, index) => {
+        const day = String(Number(item.dateKey.slice(8)));
+        return `<span class="${index === values.length - 1 ? "active" : ""}">${day}</span>`;
+      }).join("");
+      const markers = points.map((point) => `<circle cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="3.2"></circle>`).join("");
+      return `
+        <div class="nutrition-trend">
+          <p>최근 7일 추이</p>
+          <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">
+            <path class="nutrition-trend-area" d="${area}"></path>
+            <path class="nutrition-trend-line" d="${line}"></path>
+            <g class="nutrition-trend-dots">${markers}</g>
+          </svg>
+          <div class="nutrition-trend-days">${labels}</div>
+        </div>
+      `;
+    }
+
     function buildLogLinePanel(values, workout) {
       const labels = values.map((item) => `<span>${item.dateKey.slice(5).replace("-", "/")}</span>`).join("");
       const miniOptions = workout.kind === "nutrition"
@@ -5296,6 +9199,27 @@
         <div class="log-line-panel">
           <div class="log-line-chart">${buildMiniLine(values, miniOptions)}</div>
           <div class="log-line-dates">${labels}</div>
+        </div>
+      `;
+    }
+
+    function buildScoreTrend(values) {
+      const axisMax = Math.max(100, Math.ceil(Math.max(...values.map((item) => item.value), 1) / 50) * 50);
+      const bars = values.map((item) => {
+        const label = item.dateKey.slice(5).replace("-", "/").replace(/^0/, "").replace("/0", "/");
+        const height = Math.max(4, Math.round((Number(item.value || 0) / axisMax) * 100));
+        return `
+          <div class="score-bar-item">
+            <span class="score-bar-value">${Math.round(item.value || 0)}</span>
+            <div class="score-bar-track"><span class="score-bar" style="height:${height}%"></span></div>
+            <span class="score-bar-label">${label}</span>
+          </div>
+        `;
+      }).join("");
+      return `
+        <div class="score-trend">
+          <p class="score-panel-title">${t("recentScoreTitle")}</p>
+          <div class="score-bar-chart">${bars}</div>
         </div>
       `;
     }
@@ -5329,6 +9253,7 @@
       });
       const nickname = state.profile.nickname.trim() || t("defaultName");
       els.subtitle.textContent = t("hello", { name: nickname });
+      if (els.headerDateLine) els.headerDateLine.textContent = formatThaiDate(todayKey());
       els.todayLine.textContent = t("todayLine", { date: formatThaiDate(todayKey()) });
       els.profileButton.textContent = nickname.slice(0, 2).toUpperCase();
       els.profileButton.title = t("profile");
@@ -5341,25 +9266,69 @@
     }
 
     function renderTodayScore() {
-      const score = scoreForDate(todayKey());
-      els.todayScoreLine.innerHTML = t("scoreLine", { score });
+      const dateKey = todayKey();
+      const score = scoreForDate(dateKey);
+      const yesterdayScore = scoreForDate(addDays(dateKey, -1));
+      const diff = score - yesterdayScore;
+      const breakdown = scoreBreakdownForDate(dateKey);
+      const rounded = {
+        workout: Math.round(breakdown.workout),
+        record: Math.round(breakdown.record),
+        nutrition: Math.round(breakdown.nutrition),
+        water: Math.round(breakdown.water)
+      };
+      const deltaText = diff === 0
+        ? t("scoreSame")
+        : t("scoreDelta", { delta: `${diff > 0 ? "+" : ""}${Math.round(diff)}` });
+      els.scoreMiniStrips.forEach((strip) => {
+        strip.innerHTML = `
+          <div class="score-mini-title">오늘의 건강 점수 : <strong>${score}</strong><span class="score-mini-unit">${t("scoreUnit")}</span></div>
+        `;
+      });
+      els.todayLine.innerHTML = `${t("scoreTitle")} <span class="score-info">i</span>`;
+      els.todayScoreLine.innerHTML = `
+        <div class="score-number"><strong>${score}</strong><span>${t("scoreUnit")}</span></div>
+        <div class="score-delta${diff < 0 ? " down" : ""}">${deltaText}</div>
+      `;
       const days = Array.from({ length: 7 }, (_, index) => addDays(todayKey(), index - 6));
-      els.todayCalorieChart.innerHTML = buildMiniLine(days.map((dateKey) => ({
-        dateKey,
-        value: scoreForDate(dateKey)
-      })), { className: "calorie-line" });
+      const itemRows = [
+        { label: t("scoreWorkout", { value: "" }).trim(), value: rounded.workout, icon: "운", bg: "#e8f7ee", color: "#188044" },
+        { label: t("scoreNutrition", { value: "" }).trim(), value: rounded.nutrition, icon: "영", bg: "#fff0e8", color: "#ff6a3d" },
+        { label: t("scoreWater", { value: "" }).trim(), value: rounded.water, icon: "수", bg: "#e9f3ff", color: "#2374ff" },
+        { label: t("scoreWeight", { value: "" }).trim(), value: rounded.record, icon: "체", bg: "#efe9ff", color: "#7c3aed" }
+      ];
+      els.todayCalorieChart.innerHTML = `
+        <div class="score-summary">
+          <p class="score-panel-title">${t("todayItemScoreTitle")}</p>
+          <div class="score-items">
+            ${itemRows.map((item) => `
+              <div class="score-item">
+                <span class="score-item-icon" style="--score-item-bg:${item.bg};--score-item-color:${item.color}">${item.icon}</span>
+                <span>${item.label}</span>
+                <span class="score-item-value">+${item.value} ${t("scoreUnit")}</span>
+              </div>
+            `).join("")}
+          </div>
+          <div class="score-total-row"><span>${t("scoreTotal")}</span><strong>${score} ${t("scoreUnit")}</strong></div>
+        </div>
+      `;
+      els.todayScoreTrend.innerHTML = buildScoreTrend(days.map((itemDateKey) => ({
+        dateKey: itemDateKey,
+        value: scoreForDate(itemDateKey)
+      })));
       els.todayScoreLine.title = t("scoreNote");
     }
 
     function renderCounters() {
       const dateKey = todayKey();
+      els.recordGrid.innerHTML = "";
       els.workoutGrid.innerHTML = "";
 
       if (state.workouts.length === 0) {
         const empty = document.createElement("div");
         empty.className = "empty";
         empty.textContent = t("noItems");
-        els.workoutGrid.append(empty);
+        els.recordGrid.append(empty);
         return;
       }
 
@@ -5403,6 +9372,102 @@
           const unit = unitForWorkout(workout);
           const remain = target > 0 ? Math.max(0, target - count) : 0;
           const done = count > 0;
+          if (workout.kind === "body") {
+            const latest = latestWorkoutEntry(workout.id, dateKey);
+            const fallbackWeight = Number(state.profile.weightKg || 0);
+            const currentValue = latest ? latest.value : (count || fallbackWeight || 0);
+            const currentDateKey = latest ? latest.dateKey : dateKey;
+            const previous = latest ? previousWorkoutEntry(workout.id, latest.dateKey) : null;
+            const diff = previous ? currentValue - previous.value : 0;
+            const diffText = previous ? `${diff > 0 ? "+" : ""}${diff.toFixed(1)} kg` : "첫 기록";
+            const historyValues = weeklyWorkoutValues(dateKey, workout.id);
+            const trendValues = fillForwardWorkoutValues(historyValues, workout.id);
+            const trendHasData = trendValues.some((item) => item.value > 0);
+            const trendData = trendHasData ? trendValues : historyValues.map((item) => ({ ...item, value: currentValue || 0 }));
+            card.className = "weight-record-card body-card";
+            card.dataset.workoutId = workout.id;
+            card.innerHTML = `
+              <div class="weight-record-head">
+                <div class="weight-record-title">
+                  <div class="weight-record-icon">${logIcon("body")}</div>
+                  <h3></h3>
+                </div>
+                <div class="weight-record-actions">
+                  <button class="weight-record-button" type="button" data-action="set">+ 기록</button>
+                  <button class="weight-manage-button" type="button" data-action="weight-manage">목표</button>
+                </div>
+              </div>
+              <div class="weight-record-main">
+                <div>
+                  <div class="weight-record-value">${formatWeightValue(currentValue)} <small>${unit}</small></div>
+                  <div class="weight-record-time">${currentValue ? formatWeightTimestamp(currentDateKey) : "오늘 체중을 기록하세요"}</div>
+                </div>
+                <div class="weight-record-trend">
+                  ${buildMiniLine(trendData, {
+                    allowRange: true,
+                    className: "weight-mini-line",
+                    goal: Number(workout.target || 0),
+                    width: 150,
+                    height: 56,
+                    pad: 7,
+                    preserveAspectRatio: "none"
+                  })}
+                  <div class="weight-record-delta${diff > 0 ? " up" : ""}"><span>지난 기록보다</span><strong>${diffText}</strong></div>
+                </div>
+              </div>
+              <div class="weight-record-history">
+                <h4>최근 기록</h4>
+                <div class="weight-history-grid">${buildWeightHistory(historyValues, currentDateKey)}</div>
+              </div>
+            `;
+            card.querySelector("h3").textContent = displayKind(workout);
+            card.querySelector("[data-action='set']").addEventListener("click", () => handleCounterAction(workout, "set"));
+            card.querySelector("[data-action='weight-manage']").addEventListener("click", openWeightManage);
+            els.recordGrid.append(card);
+            return;
+          }
+          if (workout.kind === "water") {
+            const targetMl = waterGoalMl(workout);
+            const currentMl = waterTotalMlForDate(dateKey, workout);
+            const percent = Math.min(100, Math.round((currentMl / Math.max(1, targetMl)) * 100));
+            const bucketValues = waterLogsForDate(dateKey, workout, count);
+            card.className = "water-record-card water-card";
+            card.dataset.workoutId = workout.id;
+            card.innerHTML = `
+              <div class="water-record-head">
+                <div class="water-record-title">
+                  <div class="water-record-icon">${logIcon("water")}</div>
+                  <h3></h3>
+                </div>
+                <button class="water-manage-button" type="button" data-action="water-manage">관리</button>
+              </div>
+              <div class="water-record-main">
+                <div class="water-cup-row">${buildWaterCups(bucketValues, targetMl)}</div>
+                <div class="water-record-total">
+                  <div class="water-record-liters"><strong>${formatLiters(currentMl)}</strong><span>/ ${formatLiters(targetMl)} L</span></div>
+                  <div class="water-record-percent">${percent}%</div>
+                </div>
+              </div>
+              <div class="water-action-row">
+                <button class="water-sip-button" type="button" data-action="inc" data-value="1">+1 모금 <span>${waterSipMl(workout)}ml</span></button>
+                <button class="water-undo-button" type="button" data-action="undo" aria-label="되돌리기">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M9 14 4 9l5-5"/>
+                    <path d="M5 9h8a6 6 0 1 1 0 12H8"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="water-week-history">
+                <div class="water-week-grid">${buildWaterWeekHistory(dateKey, workout)}</div>
+              </div>
+            `;
+            card.querySelector("h3").textContent = "수분 섭취";
+            card.querySelector("[data-action='water-manage']").addEventListener("click", openWaterManage);
+            card.querySelector("[data-action='inc']").addEventListener("click", () => addWaterSip(workout, 1));
+            card.querySelector("[data-action='undo']").addEventListener("click", () => handleCounterAction(workout, "undo"));
+            els.recordGrid.append(card);
+            return;
+          }
           card.className = `log-card ${workout.kind}-card`;
           card.dataset.workoutId = workout.id;
           card.style.setProperty("--card-accent", workout.kind === "body" ? "#8fb0ff" : "#70e3d0");
@@ -5448,7 +9513,7 @@
               button.addEventListener("click", () => handleCounterAction(workout, button.dataset.action, button.dataset.value));
             }
           });
-          els.workoutGrid.append(card);
+          els.recordGrid.append(card);
           return;
         }
         card.className = "counter-card";
@@ -5461,14 +9526,14 @@
             <div class="card-title">
               <div class="icon-bubble">${workoutIcon(theme.icon)}</div>
               <div>
-                <h3></h3>
+                <div class="exercise-title-line">
+                  <h3></h3>
+                </div>
                 <p></p>
               </div>
             </div>
+            <div class="exercise-count-inline">${count}<small>/ ${target || "-"}</small></div>
             <div class="target-pill"><span>${target > 0 ? `${progress}%` : "-"}</span></div>
-          </div>
-          <div class="count-row">
-            <div class="count">${count} <small>/ ${target || "-"}</small></div>
           </div>
           <div class="widget-meta">
             <span class="meta-pill">${displayKind(workout)}</span>
@@ -5476,18 +9541,22 @@
             ${workout.kind === "nutrition" || workout.kind === "body" || workout.kind === "water" ? "" : `<span class="meta-pill">${points}점</span><span class="meta-pill">~${kcal} kcal</span>`}
           </div>
           <div class="sparkline-panel">
-            ${buildSparkline(weeklyValues)}
+            ${buildWorkoutTrend(weeklyValues, target)}
             <div class="sparkline-total">${weeklyTotal}</div>
+          </div>
+          <div class="workout-history-panel">
+            <div class="workout-history-grid">${buildWorkoutHistory(weeklyValues, dateKey)}</div>
           </div>
           <div class="quick-row">
             <button type="button" data-action="inc" data-value="1">+1</button>
             <button type="button" data-action="inc" data-value="5">+5</button>
             <button type="button" data-action="inc" data-value="10">+10</button>
-          </div>
-          <div class="card-tools">
-            <button class="chip-button run-button" type="button" data-action="run">실행</button>
-            <button class="chip-button" type="button" data-action="undo">${t("undo")}</button>
-            <button class="chip-button" type="button" data-action="edit">${t("edit")}</button>
+            <button class="workout-undo-button" type="button" data-action="undo" aria-label="되돌리기">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 14 4 9l5-5"/>
+                <path d="M5 9h8a6 6 0 1 1 0 12H8"/>
+              </svg>
+            </button>
           </div>
         `;
         card.querySelector("h3").textContent = workoutName(workout);
@@ -5498,14 +9567,12 @@
         exerciseGrid.append(card);
       });
       if (exerciseGrid.children.length) {
-        renderNutritionGroup();
         els.workoutGrid.append(exerciseSection);
-      } else {
-        renderNutritionGroup();
       }
+      renderNutritionGroup(els.recordGrid);
     }
 
-    function renderNutritionGroup() {
+    function renderNutritionGroup(targetGrid = els.recordGrid) {
       const dateKey = todayKey();
       const seenNutrition = new Set();
       const nutritionItems = state.workouts
@@ -5528,24 +9595,23 @@
         const target = Number(workout.target || 0);
         const unit = unitForWorkout(workout);
         const progress = target > 0 ? Math.min(100, (count / target) * 100) : (count > 0 ? 28 : 0);
-        const theme = workoutTheme(index + 1);
+        const accent = nutritionAccent(workout, index);
         const weeklyValues = weeklyWorkoutValues(dateKey, workout.id);
         return `
-          <div class="nutrition-row" data-workout-id="${workout.id}" style="--card-accent:${theme.accent}">
+          <div class="nutrition-row" data-workout-id="${workout.id}" style="--card-accent:${accent};--nutrition-soft:${accent}14;--nutrition-faint:${accent}24">
             <div class="nutrition-percent" style="--progress:${progress}%"><span>${target > 0 ? `${Math.round(progress)}%` : "-"}</span></div>
             <div class="nutrition-row-main">
-              <div class="nutrition-name-row">
-                <span class="nutrition-dot"></span>
-                <span class="nutrition-name">${workoutName(workout)}</span>
-              </div>
+              <div class="nutrition-name">${workoutName(workout)}</div>
               <div class="nutrition-values">
                 <span class="nutrition-num">${formatMetric(count, workout)}</span>
-                <span class="nutrition-goal">${unit}${target > 0 ? ` / ${formatMetric(target, workout)} ${unit}` : ""} · ${count > 0 ? "3점" : "0점"}</span>
+                <span class="nutrition-goal">${target > 0 ? `/ ${formatMetric(target, workout)} ${unit}` : unit}</span>
               </div>
-              <div class="nutrition-progress" style="--fill:${progress}%"><span></span></div>
-              ${buildLogLinePanel(weeklyValues, workout)}
             </div>
-            <button class="log-record" type="button" data-action="set" data-workout-id="${workout.id}">기록</button>
+            ${buildNutritionTrend(weeklyValues, accent)}
+            <button class="nutrition-record-button" type="button" data-action="set" data-workout-id="${workout.id}">
+              <span>+</span>
+              <strong>기록하기</strong>
+            </button>
           </div>
         `;
       }).join("");
@@ -5571,7 +9637,7 @@
         const workout = getWorkout(button.dataset.workoutId);
         button.addEventListener("click", () => handleCounterAction(workout, "set"));
       });
-      els.workoutGrid.append(card);
+      targetGrid.append(card);
     }
 
     function handleCounterAction(workout, action, value) {
@@ -5614,6 +9680,14 @@
         (actionItem.linked || []).forEach((componentId) => {
           setCount(dateKey, componentId, getCount(dateKey, componentId) - actionItem.amount, { silent: true });
         });
+        if (actionItem.waterBucket && state.waterLogs?.[dateKey]?.[workout.id]) {
+          const nextMl = Math.max(0, Number(state.waterLogs[dateKey][workout.id][actionItem.waterBucket] || 0) - Number(actionItem.waterMl || 0));
+          if (nextMl) {
+            state.waterLogs[dateKey][workout.id][actionItem.waterBucket] = nextMl;
+          } else {
+            delete state.waterLogs[dateKey][workout.id][actionItem.waterBucket];
+          }
+        }
         setCount(dateKey, workout.id, getCount(dateKey, workout.id) - actionItem.amount, { bump: workout.id });
         showToast(t("undoDone"));
       }
@@ -5625,78 +9699,144 @@
       }
     }
 
+    function statsCatalog() {
+      return state.workouts
+        .filter((workout) => {
+          return workout.kind === "body"
+            || workout.kind === "water"
+            || workout.kind === "nutrition"
+            || workout.kind === "combo"
+            || !workout.kind
+            || workout.kind === "exercise";
+        })
+        .map((workout) => {
+          const type = workout.kind === "body" ? "weight"
+            : workout.kind === "water" ? "water"
+              : workout.kind === "nutrition" ? "nutrition"
+                : "workout";
+          return {
+            id: `${type}:${workout.id}`,
+            workoutId: workout.id,
+            type,
+            title: type === "weight" ? "체중 기록"
+              : type === "water" ? "수분 섭취"
+                : type === "nutrition" ? `${workoutName(workout)} 섭취 기록`
+                  : `${workoutName(workout)} 운동 기록`,
+            subtitle: type === "weight" ? "월별 체중 변화"
+              : type === "water" ? "월별 수분 섭취량"
+                : type === "nutrition" ? "월별 영양소 섭취량"
+                  : displayKind(workout),
+            unit: type === "weight" ? "kg"
+              : type === "water" ? "L"
+                : type === "workout" ? "회"
+                  : unitForWorkout(workout),
+            workout
+          };
+        });
+    }
+
+    function ensureStatsSections() {
+      const catalog = statsCatalog();
+      const ids = new Set(catalog.map((item) => item.id));
+      const existing = Array.isArray(state.statsSections) ? state.statsSections : [];
+      state.statsSections = existing
+        .filter((section) => ids.has(section.id))
+        .map((section) => ({ id: section.id, enabled: section.enabled !== false }));
+      catalog.forEach((item) => {
+        if (!state.statsSections.some((section) => section.id === item.id)) {
+          state.statsSections.push({ id: item.id, enabled: true });
+        }
+      });
+    }
+
+    function statSectionValue(definition, dateKey) {
+      const workout = definition.workout;
+      if (definition.type === "water") return Number((waterTotalMlForDate(dateKey, workout) / 1000).toFixed(2));
+      return getCount(dateKey, workout.id);
+    }
+
+    function formatStatValue(value, definition) {
+      if (!value) return "0";
+      if (definition.type === "weight") return Number(value).toFixed(1).replace(/\.0$/, "");
+      if (definition.type === "water") return Number(value).toFixed(2).replace(/0$/, "").replace(/\.0$/, "");
+      return Number(value).toLocaleString();
+    }
+
+    function statSectionIcon(definition, index) {
+      if (definition.type === "weight") return logIcon("body");
+      if (definition.type === "water") return logIcon("water");
+      if (definition.type === "nutrition") return logIcon("nutrition");
+      return workoutIcon(workoutTheme(index).icon);
+    }
+
     function renderStats() {
       const days = statsDays();
-      const statWorkouts = state.workouts.filter((workout) => !workout.kind || workout.kind === "exercise" || workout.kind === "combo");
-
-      els.statsModeButtons.forEach((button) => {
-        button.classList.toggle("active", button.dataset.statsMode === statsMode);
-      });
+      ensureStatsSections();
+      const catalog = new Map(statsCatalog().map((item) => [item.id, item]));
+      const activeSections = state.statsSections
+        .filter((section) => section.enabled !== false)
+        .map((section) => catalog.get(section.id))
+        .filter(Boolean);
       const monthLabel = formatMonthLabel(statsMonthKey);
-      els.monthSwitcher.classList.toggle("show", statsMode === "calendarMonth");
+      els.monthSwitcher.classList.add("show");
       els.statsMonthLabel.textContent = monthLabel;
-      const rangeKey = statsMode === "recent7"
-        ? "statsRangeRecent7"
-        : statsMode === "recent30"
-          ? "statsRangeRecent30"
-          : "statsRangeCalendarMonth";
-      els.statsRangeLabel.textContent = t(rangeKey, { month: monthLabel });
+      els.statsRangeLabel.textContent = `${monthLabel} 기록 통계`;
 
       els.statsWorkoutList.innerHTML = "";
-      if (statWorkouts.length === 0) {
+      if (activeSections.length === 0) {
         const empty = document.createElement("div");
         empty.className = "empty";
-        empty.textContent = t("noItems");
+        empty.textContent = "통계 관리에서 표시할 섹션을 추가하세요.";
         els.statsWorkoutList.append(empty);
         return;
       }
 
-      statWorkouts.forEach((workout, index) => {
-        const values = days.map((dateKey) => ({ dateKey, value: getCount(dateKey, workout.id) }));
+      activeSections.forEach((definition, index) => {
+        const values = days.map((dateKey) => ({ dateKey, value: statSectionValue(definition, dateKey) }));
         const total = values.reduce((sum, item) => sum + item.value, 0);
-        const kcal = Math.round(kcalForWorkout(workout, total));
+        const recordedDays = values.filter((item) => item.value > 0).length;
+        const latestValue = values.filter((item) => item.value > 0).at(-1)?.value || 0;
         const theme = workoutTheme(index);
+        const accent = definition.type === "weight" ? "#7c3aed"
+          : definition.type === "water" ? "#2f7df6"
+            : theme.accent;
+        const displayValue = definition.type === "weight" ? latestValue : total;
         const card = document.createElement("article");
-        card.className = "exercise-stat-card";
-        card.style.setProperty("--card-accent", theme.accent);
-        card.style.setProperty("--bubble", theme.bubble);
+        card.className = `exercise-stat-card stat-section-card stat-${definition.type}`;
+        card.style.setProperty("--card-accent", accent);
+        card.style.setProperty("--bubble", `${accent}18`);
         card.innerHTML = `
           <div class="exercise-stat-head">
             <div class="exercise-stat-title">
-              <div class="icon-bubble">${workoutIcon(theme.icon)}</div>
+              <div class="icon-bubble">${statSectionIcon(definition, index)}</div>
               <div>
-                <h3></h3>
-                <p>${displayKind(workout)}</p>
+                <h3>${definition.title}</h3>
+                <p>${definition.subtitle}</p>
               </div>
             </div>
-            <div class="exercise-stat-total">${total.toLocaleString()}<span>total</span></div>
+            <div class="exercise-stat-total">${formatStatValue(displayValue, definition)}<span>${definition.unit}</span></div>
           </div>
           ${buildStatBars(values)}
           <div class="stat-card-meta">
-            <span class="meta-pill">${statsMode === "recent7" ? t("recent7Mode") : statsMode === "recent30" ? t("recent30Mode") : t("monthlyMode")}</span>
-            <span class="meta-pill">~${kcal.toLocaleString()} kcal</span>
-            <span class="meta-pill">${workout.target ? `${Math.round((total / Math.max(1, workout.target * days.length)) * 100)}%` : "-"}</span>
+            <span class="meta-pill">${t("monthlyMode")}</span>
+            <span class="meta-pill">${recordedDays}일 기록</span>
+            <span class="meta-pill">${definition.type === "weight" ? "최근 기록" : "월 누적"}</span>
           </div>
         `;
-        card.querySelector("h3").textContent = workoutName(workout);
         els.statsWorkoutList.append(card);
       });
       bindStatInteractions();
     }
 
     function statsDays() {
-      if (statsMode === "calendarMonth") {
-        const length = daysInMonth(statsMonthKey);
-        return Array.from({ length }, (_, index) => `${statsMonthKey}-${String(index + 1).padStart(2, "0")}`);
-      }
-      const length = statsMode === "recent7" ? 7 : 30;
-      return Array.from({ length }, (_, index) => addDays(todayKey(), index - length + 1));
+      const length = daysInMonth(statsMonthKey);
+      return Array.from({ length }, (_, index) => `${statsMonthKey}-${String(index + 1).padStart(2, "0")}`);
     }
 
     function buildStatBars(values) {
       const max = Math.max(1, ...values.map((item) => item.value));
       const axis = values.map((item, index) => {
-        if (statsMode !== "recent7" && index % 5 !== 0 && index !== values.length - 1) return "<span></span>";
+        if (index % 5 !== 0 && index !== values.length - 1) return "<span></span>";
         return `<span>${item.dateKey.slice(5).replace("-", "/")}</span>`;
       }).join("");
       return `
@@ -5722,7 +9862,7 @@
           const x = barRect.left + barRect.width / 2 - chartRect.left;
           guide.style.left = `${x}px`;
           tooltip.style.left = `${Math.max(58, Math.min(chartRect.width - 58, x))}px`;
-          tooltip.innerHTML = `${bar.dataset.date}<span>${Number(bar.dataset.value).toLocaleString()}점</span>`;
+          tooltip.innerHTML = `${bar.dataset.date}<span>${Number(bar.dataset.value).toLocaleString()}</span>`;
           chart.classList.add("active");
         };
         bars.forEach((bar) => {
@@ -5740,6 +9880,52 @@
           bars.forEach((bar) => bar.classList.remove("is-selected"));
         });
       });
+    }
+
+    function openStatsManage() {
+      renderStatsManageList();
+      els.statsManageDialog.showModal();
+    }
+
+    function renderStatsManageList() {
+      ensureStatsSections();
+      const catalog = new Map(statsCatalog().map((item) => [item.id, item]));
+      els.statsManageList.innerHTML = state.statsSections.map((section, index) => {
+        const definition = catalog.get(section.id);
+        if (!definition) return "";
+        return `
+          <div class="widget-order-item stats-manage-item ${section.enabled === false ? "is-hidden" : ""}" data-stats-section-id="${section.id}">
+            <div class="widget-order-name">
+              <strong>${definition.title}</strong>
+              <span>${definition.subtitle}</span>
+            </div>
+            <div class="widget-order-actions">
+              <button class="order-button" type="button" data-stats-action="up" data-stats-id="${section.id}" ${index === 0 ? "disabled" : ""}>↑</button>
+              <button class="order-button" type="button" data-stats-action="down" data-stats-id="${section.id}" ${index === state.statsSections.length - 1 ? "disabled" : ""}>↓</button>
+              <button class="order-button stats-toggle-button" type="button" data-stats-action="toggle" data-stats-id="${section.id}">${section.enabled === false ? "+" : "−"}</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+      els.statsManageList.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => handleStatsManageAction(button.dataset.statsId, button.dataset.statsAction));
+      });
+    }
+
+    function handleStatsManageAction(sectionId, action) {
+      const index = state.statsSections.findIndex((section) => section.id === sectionId);
+      if (index === -1) return;
+      if (action === "toggle") {
+        state.statsSections[index].enabled = state.statsSections[index].enabled === false;
+      } else {
+        const targetIndex = index + (action === "up" ? -1 : 1);
+        if (targetIndex < 0 || targetIndex >= state.statsSections.length) return;
+        const [item] = state.statsSections.splice(index, 1);
+        state.statsSections.splice(targetIndex, 0, item);
+      }
+      saveState();
+      renderStats();
+      renderStatsManageList();
     }
 
     function render() {
@@ -5961,22 +10147,20 @@
     function openWaterManage() {
       const water = state.workouts.find((workout) => workout.kind === "water");
       if (!water) return;
-      els.waterMode.value = "count";
-      els.waterUnit.value = "회";
-      els.waterGoalInput.value = water.target || "";
-      els.waterCupInput.value = water.cupMl || 250;
+      els.waterGoalInput.value = formatLiters(waterGoalMl(water));
+      if (els.waterCupInput) els.waterCupInput.value = water.cupMl || 20;
       updateWaterManageFields();
       els.waterManageDialog.showModal();
       setTimeout(() => els.waterGoalInput.select(), 50);
     }
 
     function updateWaterManageFields() {
-      els.waterUnitField.style.display = "none";
-      els.waterCupField.style.display = "none";
-      els.waterGoalLabel.textContent = "목표 횟수";
-      els.waterGoalInput.placeholder = "8";
-      els.waterGoalInput.step = "1";
-      els.waterManageNote.textContent = "수분은 마신 횟수만 기록합니다. 1회 기록하면 1점이 올라갑니다.";
+      if (els.waterUnitField) els.waterUnitField.style.display = "none";
+      if (els.waterCupField) els.waterCupField.style.display = "grid";
+      els.waterGoalLabel.textContent = "목표 섭취량";
+      els.waterGoalInput.placeholder = "2.0";
+      els.waterGoalInput.step = "0.1";
+      if (els.waterManageNote) els.waterManageNote.textContent = "";
     }
 
     function showToast(message) {
@@ -6132,10 +10316,12 @@
 
     els.statsModeButtons.forEach((button) => {
       button.addEventListener("click", () => {
-        statsMode = button.dataset.statsMode;
+        statsMode = "calendarMonth";
         renderStats();
       });
     });
+    if (els.openStatsManage) els.openStatsManage.addEventListener("click", openStatsManage);
+    if (els.closeStatsManage) els.closeStatsManage.addEventListener("click", () => els.statsManageDialog.close());
     els.prevStatsMonth.addEventListener("click", () => {
       statsMonthKey = addMonths(statsMonthKey, -1);
       renderStats();
@@ -6159,6 +10345,7 @@
     });
 
     els.addWorkoutButton.addEventListener("click", () => openWorkoutDialog());
+    els.addWorkoutButtonWorkout.addEventListener("click", () => openWorkoutDialog());
     els.closeWorkout.addEventListener("click", () => els.workoutDialog.close());
     els.widgetKind.addEventListener("change", updateWidgetKindFields);
     els.closeNutritionManage.addEventListener("click", () => els.nutritionManageDialog.close());
@@ -6192,15 +10379,19 @@
       showToast(t("saved"));
     });
     els.closeWaterManage.addEventListener("click", () => els.waterManageDialog.close());
-    els.waterMode.addEventListener("change", updateWaterManageFields);
-    els.waterUnit.addEventListener("change", updateWaterManageFields);
+    if (els.waterMode) els.waterMode.addEventListener("change", updateWaterManageFields);
+    if (els.waterUnit) els.waterUnit.addEventListener("change", updateWaterManageFields);
     els.waterManageForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const water = state.workouts.find((workout) => workout.kind === "water");
       if (!water) return;
       water.mode = "count";
       water.unit = "회";
-      water.target = els.waterGoalInput.value === "" ? 0 : Math.max(0, Number(els.waterGoalInput.value) || 0);
+      const liters = Math.max(0, Number(els.waterGoalInput.value) || 0);
+      water.targetMl = liters > 0 ? Math.round(liters * 1000) : 2000;
+      water.cupMl = Math.max(1, Number(els.waterCupInput?.value) || 20);
+      water.sipConfigured = true;
+      water.target = Math.max(1, Math.round(water.targetMl / water.cupMl));
       saveState();
       els.waterManageDialog.close();
       render();
@@ -6314,6 +10505,7 @@
       });
     }
 
+    seedPreviewData();
     render();
   </script>
 </body>
