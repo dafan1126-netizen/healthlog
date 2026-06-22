@@ -412,6 +412,29 @@
       display: none;
     }
 
+    .record-manage-footer {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: center;
+      padding: 18px 0 18px;
+    }
+
+    .record-manage-footer .stats-manage-button {
+      min-width: 136px;
+      justify-content: center;
+    }
+
+    .exercise-manage-footer {
+      display: flex;
+      justify-content: center;
+      padding: 18px 0 18px;
+    }
+
+    .exercise-manage-footer .stats-manage-button {
+      min-width: 150px;
+      justify-content: center;
+    }
+
     #page-workout .toolbar {
       display: none;
     }
@@ -1143,7 +1166,7 @@
 
     .manage-row {
       display: grid;
-      grid-template-columns: auto minmax(0, 1fr) auto auto;
+      grid-template-columns: auto minmax(0, 1fr) auto auto auto;
       gap: 8px;
       align-items: center;
     }
@@ -1166,13 +1189,35 @@
       font-weight: 800;
     }
 
+    .manage-toggle,
     .manage-delete {
       width: 30px;
       height: 30px;
       border-radius: 50%;
+      font-weight: 900;
+    }
+
+    .manage-toggle {
+      background: #f4f4f2;
+      color: #111111;
+      font-size: 11px;
+      padding: 0 8px;
+      width: auto;
+      min-width: 48px;
+      border-radius: 999px;
+    }
+
+    .manage-item.is-hidden {
+      opacity: 0.62;
+    }
+
+    .manage-item.is-hidden .manage-name {
+      color: var(--muted);
+    }
+
+    .manage-delete {
       background: #2a1815;
       color: #ff9b88;
-      font-weight: 900;
     }
 
     .goal-row {
@@ -6190,7 +6235,7 @@
     }
 
     #nutritionManageDialog .manage-row {
-      grid-template-columns: auto minmax(0, 1fr) auto auto;
+      grid-template-columns: auto minmax(0, 1fr) auto auto auto;
       gap: 9px;
       min-height: 34px;
     }
@@ -6207,6 +6252,23 @@
     #nutritionManageDialog .field label {
       color: #7b7d86;
       font-weight: 850;
+    }
+
+    #nutritionManageDialog .manage-toggle {
+      min-width: 58px;
+      height: 34px;
+      border: 0;
+      border-radius: 999px;
+      background: #f4f4f2;
+      color: #111111;
+      font-size: 12px;
+      font-weight: 950;
+      padding: 0 10px;
+    }
+
+    #nutritionManageDialog .manage-item.is-hidden .manage-toggle {
+      background: #eaf7ef;
+      color: #188044;
     }
 
     #nutritionManageDialog .manage-delete {
@@ -6417,9 +6479,45 @@
       color: #111;
     }
 
+    #workoutDialog .widget-order-item.is-hidden {
+      background: #f7f7f5;
+      color: #8a8d95;
+      opacity: 0.72;
+    }
+
+    #workoutDialog .widget-order-item.is-hidden .widget-order-name strong {
+      color: #666a73;
+    }
+
+    .hidden-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 22px;
+      margin-left: 6px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: #eeeeef;
+      color: #7b7d86;
+      font-size: 11px;
+      font-style: normal;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
     #workoutDialog .order-button {
       background: #f5f5f4;
       color: #111;
+    }
+
+    #workoutDialog .order-button.is-danger {
+      background: #fff0e8;
+      color: #ff6a3d;
+    }
+
+    #workoutDialog .order-button.is-hidden-toggle {
+      min-width: 66px;
+      color: #2374ff;
     }
 
     #workoutDialog .text-input,
@@ -6699,6 +6797,40 @@
     }
 
     #statsManageDialog .stats-manage-item.is-hidden .stats-toggle-button {
+      background: #22c55e !important;
+      color: #ffffff !important;
+    }
+
+    #recordManageDialog .modal,
+    #recordManageDialog .widget-order-item {
+      background: #ffffff !important;
+      color: #111111 !important;
+      border-color: #ecebe6 !important;
+      box-shadow: none !important;
+    }
+
+    #recordManageDialog .widget-order-name strong {
+      color: #111111 !important;
+    }
+
+    #recordManageDialog .widget-order-name span,
+    #recordManageDialog .mini-note {
+      color: #7b7d86 !important;
+    }
+
+    #recordManageDialog .order-button {
+      background: #f4f4f2 !important;
+      color: #111111 !important;
+      border-color: transparent !important;
+      box-shadow: none !important;
+    }
+
+    #recordManageDialog .stats-toggle-button {
+      background: #111111 !important;
+      color: #ffffff !important;
+    }
+
+    #recordManageDialog .stats-manage-item.is-hidden .stats-toggle-button {
       background: #22c55e !important;
       color: #ffffff !important;
     }
@@ -7599,6 +7731,20 @@
       white-space: nowrap !important;
     }
 
+    .topbar .sync-top-pill {
+      align-self: flex-start;
+      margin: 4px 0 0 auto;
+      transform: translateY(1px);
+    }
+
+    @media (max-width: 390px) {
+      .topbar .sync-top-pill {
+        min-height: 30px;
+        padding: 0 9px;
+        font-size: 11px;
+      }
+    }
+
     #page-today .score-mini-strip,
     #page-record .score-mini-strip,
     #page-workout .score-mini-strip,
@@ -7826,6 +7972,671 @@
         max-width: 100% !important;
       }
     }
+
+    /* Prevent iOS Safari from zooming dialogs when inputs receive focus. */
+    @media (max-width: 760px) {
+      dialog input,
+      dialog select,
+      dialog textarea {
+        font-size: 16px !important;
+      }
+    }
+
+    .exercise-image-section {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 20px;
+      background: #f7f7f5;
+      border: 1px solid rgba(29, 29, 31, 0.07);
+    }
+
+    .exercise-image-control {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .exercise-image-preview {
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      border-radius: 16px;
+      background: #fff;
+      color: #7b7d86;
+      font-size: 13px;
+      font-weight: 800;
+      overflow: hidden;
+    }
+
+    .exercise-image-preview img {
+      width: 58px;
+      height: 42px;
+      flex: 0 0 auto;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid #ececef;
+      background: #fff;
+    }
+
+    .exercise-image-grid {
+      max-height: 320px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      overflow: auto;
+      padding: 2px 1px 4px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .exercise-image-grid[hidden] {
+      display: none !important;
+    }
+
+    .exercise-image-option {
+      min-width: 0;
+      display: grid;
+      gap: 5px;
+      padding: 6px;
+      border-radius: 16px;
+      background: #fff;
+      color: #1d1d1f;
+      border: 1px solid #ececef;
+      box-shadow: none;
+      text-align: left;
+    }
+
+    .exercise-image-option.is-selected {
+      border-color: #0066cc;
+      box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.14);
+    }
+
+    .exercise-image-option img {
+      width: 100%;
+      aspect-ratio: 1.36;
+      display: block;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .exercise-image-option span {
+      min-width: 0;
+      color: #111;
+      font-size: 11px;
+      font-weight: 850;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 430px) {
+      .exercise-image-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+      }
+
+      .exercise-image-option {
+        padding: 4px;
+        border-radius: 13px;
+      }
+
+      .exercise-image-option img {
+        border-radius: 10px;
+      }
+
+      .exercise-image-option span {
+        font-size: 9px;
+      }
+    }
+
+    .icon-bubble .exercise-thumb {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      border-radius: inherit;
+      background: #fff;
+    }
+
+    .profile-user-card {
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 22px;
+      background: #f7f7f5;
+      border: 1px solid rgba(29, 29, 31, 0.07);
+    }
+
+    .profile-user-head {
+      display: grid;
+      gap: 3px;
+    }
+
+    .profile-user-head h3 {
+      margin: 0;
+      color: #111;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .profile-user-head p {
+      margin: 0;
+      color: #8a8d95;
+      font-size: 12px;
+      font-weight: 750;
+      line-height: 1.35;
+    }
+
+    .user-choice-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .language-choice-row {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .sheet-sync-card .text-input {
+      min-height: 48px;
+      border-radius: 16px;
+      font-size: 14px;
+    }
+
+    .sync-action-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .sync-action-row button {
+      min-width: 0;
+      min-height: 48px;
+      padding: 0 10px;
+      border-radius: 16px;
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .sync-status-line {
+      min-height: 18px;
+      margin: 0;
+      color: #7b7d86;
+      font-size: 12px;
+      font-weight: 750;
+      line-height: 1.35;
+    }
+
+    .sync-top-pill {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: #fff;
+      color: #8a8d95;
+      border: 1px solid rgba(29, 29, 31, 0.08);
+      box-shadow: 0 7px 20px rgba(0, 0, 0, 0.06);
+      font-size: 12px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .sync-top-pill::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.65;
+    }
+
+    .sync-top-pill.is-syncing {
+      color: #0b66d8;
+    }
+
+    .sync-top-pill.is-synced {
+      color: #188044;
+    }
+
+    .sync-top-pill.is-warning {
+      color: #ff6a3d;
+    }
+
+    .sync-top-pill.is-off {
+      color: #8a8d95;
+    }
+
+    .user-choice {
+      min-width: 0;
+      min-height: 50px;
+      border: 0;
+      border-radius: 17px;
+      background: #fff;
+      color: #7b7d86;
+      box-shadow: inset 0 0 0 1px #eeeeef;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .user-choice.is-selected {
+      background: #111;
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .score-rule-button {
+      width: 19px;
+      height: 19px;
+      display: inline-grid;
+      place-items: center;
+      flex: 0 0 auto;
+      margin-left: 7px;
+      padding: 0;
+      border-radius: 50%;
+      border: 1.5px solid #b5b8c0;
+      background: #fff;
+      color: #7b7d86;
+      font: 850 11px/1 var(--font);
+      cursor: pointer;
+      vertical-align: middle;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .score-rule-button:active {
+      transform: scale(0.94);
+    }
+
+    .score-rule-button.score-info {
+      margin-left: 6px;
+      border-width: 1.5px;
+      background: #fff;
+    }
+
+    .score-mini-title {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #scoreRuleDialog {
+      width: min(360px, calc(100vw - 64px));
+      border-radius: 28px;
+    }
+
+    .score-rule-modal {
+      gap: 12px;
+      padding: 18px;
+    }
+
+    .score-rule-modal h2 {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .score-rule-intro,
+    .score-rule-note {
+      margin: 0;
+      color: #7b7d86;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .score-rule-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .score-rule-item {
+      display: grid;
+      grid-template-columns: 58px minmax(0, 1fr);
+      gap: 9px;
+      align-items: start;
+      padding: 10px;
+      border-radius: 16px;
+      background: #f7f7f5;
+      border: 1px solid rgba(29, 29, 31, 0.07);
+    }
+
+    .score-rule-item strong {
+      color: #111;
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.35;
+    }
+
+    .score-rule-item span {
+      color: #5f636d;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.42;
+    }
+
+    #scoreRuleDialog .modal-actions {
+      margin-top: 2px;
+    }
+
+    #scoreRuleDialog .primary-button {
+      min-height: 46px;
+      border-radius: 18px;
+      font-size: 15px;
+    }
+
+    body.theme-figma {
+      --bg: #ffffff;
+      --panel: #ffffff;
+      --panel-soft: #f7f7f5;
+      --ink: #000000;
+      --muted: #5f5f5f;
+      --line: #000000;
+      --accent: #000000;
+      --accent-2: #000000;
+      --accent-3: #c5b0f4;
+      --accent-4: #ff3d8b;
+      --good: #1ea64a;
+      --shadow: none;
+      --shadow-soft: none;
+      --radius: 24px;
+      background: #ffffff !important;
+      color: #000000 !important;
+      font-family: "Figma Sans", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif !important;
+    }
+
+    body.theme-figma .app {
+      background: #ffffff !important;
+    }
+
+    body.theme-figma .brand h1,
+    body.theme-figma .brand p,
+    body.theme-figma h2,
+    body.theme-figma .toolbar h2,
+    body.theme-figma .log-title h3,
+    body.theme-figma .nutrition-head-title h3,
+    body.theme-figma .exercise-stat-title h3,
+    body.theme-figma .card-title h3,
+    body.theme-figma .weight-record-title h3,
+    body.theme-figma .water-record-title h3,
+    body.theme-figma .nutrition-name,
+    body.theme-figma .widget-order-name strong {
+      color: #000000 !important;
+      font-family: "Figma Sans", Inter, ui-sans-serif, system-ui, sans-serif !important;
+      letter-spacing: -0.2px !important;
+    }
+
+    body.theme-figma .brand h1 {
+      font-weight: 640 !important;
+    }
+
+    body.theme-figma .header-date-line,
+    body.theme-figma .date-line,
+    body.theme-figma .score-note,
+    body.theme-figma .score-mini-title,
+    body.theme-figma .score-mini-unit,
+    body.theme-figma .card-title p,
+    body.theme-figma .log-title p,
+    body.theme-figma .exercise-stat-title p,
+    body.theme-figma .nutrition-head-title p,
+    body.theme-figma .widget-order-name span,
+    body.theme-figma .meta-pill,
+    body.theme-figma .stat-axis,
+    body.theme-figma .workout-history-date,
+    body.theme-figma .weight-record-time,
+    body.theme-figma .water-cup-label,
+    body.theme-figma .score-panel-title {
+      color: #5f5f5f !important;
+      font-family: "Figma Sans", Inter, ui-sans-serif, system-ui, sans-serif !important;
+      font-weight: 520 !important;
+    }
+
+    body.theme-figma .score-card,
+    body.theme-figma .score-mini-strip,
+    body.theme-figma .surface,
+    body.theme-figma .weight-record-card,
+    body.theme-figma .water-record-card,
+    body.theme-figma .nutrition-group-card,
+    body.theme-figma .counter-card,
+    body.theme-figma .exercise-stat-card,
+    body.theme-figma .stat-section-card,
+    body.theme-figma .modal,
+    body.theme-figma dialog,
+    body.theme-figma .profile-user-card {
+      border: 1px solid #000000 !important;
+      box-shadow: none !important;
+      border-radius: 24px !important;
+    }
+
+    body.theme-figma .surface {
+      background: transparent !important;
+      border-color: transparent !important;
+    }
+
+    body.theme-figma .score-mini-strip {
+      background: #f4ecd6 !important;
+      border-color: #000000 !important;
+    }
+
+    body.theme-figma .score-card,
+    body.theme-figma #page-stats .score-card {
+      background: #dceeb1 !important;
+      color: #000000 !important;
+      border-color: #000000 !important;
+    }
+
+    body.theme-figma .weight-record-card {
+      background: #c5b0f4 !important;
+      border-color: #000000 !important;
+    }
+
+    body.theme-figma .water-record-card {
+      background: #c8e6cd !important;
+      border-color: #000000 !important;
+    }
+
+    body.theme-figma .nutrition-group-card {
+      background: #f4ecd6 !important;
+      border-color: #000000 !important;
+    }
+
+    body.theme-figma .profile-user-card {
+      background: #f7f7f5 !important;
+      border-color: #000000 !important;
+    }
+
+    body.theme-figma .nutrition-group-card .nutrition-row,
+    body.theme-figma .counter-card,
+    body.theme-figma .manage-item,
+    body.theme-figma .add-section,
+    body.theme-figma .widget-order-item {
+      background: #ffffff !important;
+      border: 1px solid #000000 !important;
+      box-shadow: none !important;
+      border-radius: 24px !important;
+    }
+
+    body.theme-figma .counter-card:nth-child(4n + 1),
+    body.theme-figma .exercise-stat-card:nth-child(4n + 1) {
+      background: #f3c9b6 !important;
+    }
+
+    body.theme-figma .counter-card:nth-child(4n + 2),
+    body.theme-figma .exercise-stat-card:nth-child(4n + 2) {
+      background: #c8e6cd !important;
+    }
+
+    body.theme-figma .counter-card:nth-child(4n + 3),
+    body.theme-figma .exercise-stat-card:nth-child(4n + 3) {
+      background: #efd4d4 !important;
+    }
+
+    body.theme-figma .counter-card:nth-child(4n + 4),
+    body.theme-figma .exercise-stat-card:nth-child(4n + 4) {
+      background: #f4ecd6 !important;
+    }
+
+    body.theme-figma .profile-button,
+    body.theme-figma .icon-bubble,
+    body.theme-figma .log-icon,
+    body.theme-figma .nutrition-head-icon,
+    body.theme-figma .weight-record-icon,
+    body.theme-figma .water-record-icon {
+      background: #ffffff !important;
+      color: #000000 !important;
+      border: 1px solid #000000 !important;
+      box-shadow: none !important;
+    }
+
+    body.theme-figma .primary-button,
+    body.theme-figma .quick-row button:nth-child(3),
+    body.theme-figma .nutrition-record-button,
+    body.theme-figma .water-sip-button,
+    body.theme-figma .nav-button.active,
+    body.theme-figma .log-record,
+    body.theme-figma .manage-delete {
+      background: #000000 !important;
+      color: #ffffff !important;
+      border: 1px solid #000000 !important;
+      box-shadow: none !important;
+      border-radius: 50px !important;
+      font-weight: 720 !important;
+    }
+
+    body.theme-figma .quiet-button,
+    body.theme-figma .text-btn,
+    body.theme-figma .chip-button,
+    body.theme-figma .order-button,
+    body.theme-figma .month-switcher button,
+    body.theme-figma .quick-row button,
+    body.theme-figma .water-manage-button,
+    body.theme-figma .weight-record-button,
+    body.theme-figma .stats-manage-button,
+    body.theme-figma .counter-card .quick-row .workout-undo-button,
+    body.theme-figma .user-choice {
+      background: #ffffff !important;
+      color: #000000 !important;
+      border: 1px solid #000000 !important;
+      box-shadow: none !important;
+      border-radius: 50px !important;
+      font-weight: 700 !important;
+    }
+
+    body.theme-figma .user-choice.is-selected {
+      background: #000000 !important;
+      color: #ffffff !important;
+      border-color: #000000 !important;
+    }
+
+    body.theme-figma .page-nav {
+      background: #000000 !important;
+      border: 1px solid #000000 !important;
+      box-shadow: none !important;
+      border-radius: 32px !important;
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+    }
+
+    body.theme-figma .nav-button {
+      background: transparent !important;
+      color: #ffffff !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      font-weight: 700 !important;
+    }
+
+    body.theme-figma .nav-button.active {
+      background: #ffffff !important;
+      color: #000000 !important;
+    }
+
+    body.theme-figma .meta-pill,
+    body.theme-figma .target-pill,
+    body.theme-figma .record-status,
+    body.theme-figma .water-week-ring,
+    body.theme-figma .nutrition-percent {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      border: 1px solid #000000 !important;
+    }
+
+    body.theme-figma .target-pill {
+      background: conic-gradient(#000000 calc(var(--progress, 0) * 1%), #ffffff 0) !important;
+    }
+
+    body.theme-figma .target-pill span {
+      background: #ffffff !important;
+      color: #000000 !important;
+    }
+
+    body.theme-figma .exercise-count-inline,
+    body.theme-figma .weight-record-value,
+    body.theme-figma .water-record-percent,
+    body.theme-figma .score-total-number,
+    body.theme-figma .score-summary-main,
+    body.theme-figma .exercise-stat-total,
+    body.theme-figma #page-stats .score-number strong {
+      color: #000000 !important;
+      font-family: "Figma Sans", Inter, ui-sans-serif, system-ui, sans-serif !important;
+      font-weight: 520 !important;
+      letter-spacing: -0.9px !important;
+    }
+
+    body.theme-figma .workout-trend-line,
+    body.theme-figma .mini-line .line,
+    body.theme-figma .nutrition-trend-line {
+      stroke: #000000 !important;
+    }
+
+    body.theme-figma .workout-trend-area,
+    body.theme-figma .mini-line .area,
+    body.theme-figma .nutrition-trend-area {
+      fill: rgba(0, 0, 0, 0.08) !important;
+    }
+
+    body.theme-figma .workout-trend-dot,
+    body.theme-figma .mini-line .dot,
+    body.theme-figma .nutrition-trend-dot {
+      fill: #000000 !important;
+      stroke: #ffffff !important;
+    }
+
+    body.theme-figma .stat-bar,
+    body.theme-figma #page-stats .score-bar {
+      background: #000000 !important;
+      border-radius: 2px !important;
+      box-shadow: none !important;
+    }
+
+    body.theme-figma .stat-bar.today {
+      background: #ff3d8b !important;
+    }
+
+    body.theme-figma input,
+    body.theme-figma select,
+    body.theme-figma textarea,
+    body.theme-figma .text-input,
+    body.theme-figma .number-input,
+    body.theme-figma .select-input {
+      background: #ffffff !important;
+      color: #000000 !important;
+      border: 1px solid #000000 !important;
+      box-shadow: none !important;
+      border-radius: 12px !important;
+    }
+
+    .profile-hidden-fields {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
@@ -7836,6 +8647,7 @@
         <p id="subtitle"></p>
         <p class="header-date-line" id="headerDateLine"></p>
       </div>
+      <div class="sync-top-pill is-off" id="syncTopStatus" data-i18n="syncOff">동기화 꺼짐</div>
       <button class="profile-button" id="profileButton" type="button" title="Profile">ME</button>
     </header>
 
@@ -7856,6 +8668,9 @@
           </div>
         </div>
         <div class="workout-grid" id="recordGrid"></div>
+        <div class="record-manage-footer">
+          <button class="text-btn stats-manage-button" type="button" id="openRecordManage" data-i18n="recordManage">위젯관리</button>
+        </div>
       </section>
     </section>
 
@@ -7888,7 +8703,7 @@
           <div>
             <p id="statsRangeLabel"></p>
           </div>
-          <button class="text-btn stats-manage-button" type="button" id="openStatsManage">통계 관리</button>
+          <button class="text-btn stats-manage-button" type="button" id="openStatsManage" data-i18n="statsManage">통계 관리</button>
         </div>
         <div class="month-switcher" id="monthSwitcher">
           <button type="button" id="prevStatsMonth" aria-label="Previous month">‹</button>
@@ -7904,44 +8719,52 @@
       <section class="surface profile-surface" aria-labelledby="profileTitle">
         <form class="modal" id="profileForm">
           <h2 id="profileTitle" data-i18n="profile">My page</h2>
-          <div class="field">
-            <label for="nickname" data-i18n="nickname">Nickname</label>
-            <input class="text-input" id="nickname" maxlength="24" autocomplete="nickname">
+          <section class="profile-user-card" aria-labelledby="deviceUserTitle">
+            <div class="profile-user-head">
+              <h3 id="deviceUserTitle" data-i18n="deviceUser">사용자 선택</h3>
+              <p data-i18n="deviceUserHint">이 기기에서 사용할 사람을 먼저 선택하세요.</p>
+            </div>
+            <div class="user-choice-row" id="userChoiceRow">
+              <button class="user-choice" type="button" data-user-id="jed" data-default-name="Jed">Jed</button>
+              <button class="user-choice" type="button" data-user-id="yona" data-default-name="Yona">Yona</button>
+            </div>
+          </section>
+          <section class="profile-user-card" aria-labelledby="languageTitle">
+            <div class="profile-user-head">
+              <h3 id="languageTitle" data-i18n="language">Language</h3>
+              <p data-i18n="languageHint">표시 언어를 선택하세요.</p>
+            </div>
+            <div class="user-choice-row language-choice-row" id="languageChoiceRow">
+              <button class="user-choice" type="button" data-language-value="en">English</button>
+              <button class="user-choice" type="button" data-language-value="zh">中文</button>
+              <button class="user-choice" type="button" data-language-value="ko">한국어</button>
+            </div>
+          </section>
+          <section class="profile-user-card" aria-labelledby="designThemeTitle">
+            <div class="profile-user-head">
+              <h3 id="designThemeTitle" data-i18n="designTheme">디자인</h3>
+              <p data-i18n="designThemeHint">앱의 디자인 시스템을 선택하세요.</p>
+            </div>
+            <div class="user-choice-row design-choice-row" id="designThemeChoiceRow">
+              <button class="user-choice" type="button" data-design-theme-value="apple">Apple</button>
+              <button class="user-choice" type="button" data-design-theme-value="figma">Figma</button>
+            </div>
+          </section>
+          <div class="sheet-sync-hidden" hidden>
+            <input id="sheetSyncUrl" type="url" inputmode="url" value="">
+            <button type="button" id="saveSheetSyncUrl"></button>
+            <button type="button" id="loadSheetState"></button>
+            <button type="button" id="saveSheetState"></button>
+            <p id="sheetSyncStatus"></p>
           </div>
-          <div class="field">
-            <label for="language" data-i18n="language">Language</label>
-            <select class="select-input" id="language">
-              <option value="en">English</option>
-              <option value="zh">中文</option>
-              <option value="ko">한국어</option>
-            </select>
-          </div>
-          <div class="field-grid">
-            <div class="field">
-              <label for="age">나이</label>
-              <input class="number-input" id="age" type="number" min="1" max="120" step="1" placeholder="36">
-            </div>
-            <div class="field">
-              <label for="sex">성별</label>
-              <select class="select-input" id="sex">
-                <option value="">선택</option>
-                <option value="female">여성</option>
-                <option value="male">남성</option>
-                <option value="other">기타</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="heightCm">키 cm</label>
-              <input class="number-input" id="heightCm" type="number" min="80" max="240" step="1" placeholder="175">
-            </div>
-            <div class="field">
-              <label for="weightKg">체중 kg</label>
-              <input class="number-input" id="weightKg" type="number" min="20" max="250" step="0.1" placeholder="70">
-            </div>
-          </div>
-          <p class="mini-note" data-i18n="profileHint">Your data is saved in this browser.</p>
-          <div class="modal-actions">
-            <button class="primary-button" type="submit" data-i18n="save">Save</button>
+          <div class="profile-hidden-fields">
+            <input id="nickname" type="hidden">
+            <input id="language" type="hidden" value="ko">
+            <input id="age" type="hidden">
+            <input id="sex" type="hidden">
+            <input id="heightCm" type="hidden">
+            <input id="weightKg" type="hidden">
+            <input id="designTheme" type="hidden" value="apple">
           </div>
         </form>
       </section>
@@ -7952,38 +8775,38 @@
     <form class="modal" method="dialog" id="workoutForm">
       <h2 id="workoutDialogTitle" data-i18n="addWorkout">Add item</h2>
       <input type="hidden" id="editingWorkoutId">
-      <div class="field">
-        <label for="widgetKind">위젯 종류</label>
-        <select class="select-input" id="widgetKind">
-          <option value="exercise">개별 운동</option>
-          <option value="combo">조합 운동</option>
-        </select>
-      </div>
+      <input type="hidden" id="workoutImage">
+      <input type="hidden" id="exerciseBodyPart" value="">
+      <input type="hidden" id="widgetKind" value="exercise">
       <div class="field">
         <label for="workoutName" data-i18n="itemName">Item name</label>
         <input class="text-input" id="workoutName" maxlength="28" required>
       </div>
+      <section class="exercise-image-section">
+        <div class="exercise-image-control">
+          <div class="exercise-image-preview" id="exerciseImagePreview">
+            <span data-i18n="imageNoSelection">선택된 이미지 없음</span>
+          </div>
+          <button class="quiet-button" type="button" id="toggleExerciseImages" data-i18n="selectImage">이미지 선택</button>
+        </div>
+        <div class="exercise-image-grid" id="exerciseImageGrid" hidden></div>
+      </section>
       <div class="field">
         <label for="workoutTarget" data-i18n="dailyTarget">Daily target</label>
         <input class="number-input" id="workoutTarget" type="number" min="0" step="1" value="50">
       </div>
-      <div class="field exercise-settings">
-        <label for="workoutMet">기본 칼로리 기준</label>
-        <input class="number-input" id="workoutMet" type="number" min="1" max="15" step="0.1" value="5">
+      <div class="field">
+        <label for="workoutMet" data-i18n="workoutDifficulty">운동 난이도 점수</label>
+        <input class="number-input" id="workoutMet" type="number" min="1" max="5" step="1" value="5">
       </div>
-      <div class="field exercise-settings">
-        <label for="secondsPerRep">기본 템포 초</label>
-        <input class="number-input" id="secondsPerRep" type="number" min="1" max="600" step="1" value="3">
-      </div>
-      <div class="field" id="comboField">
-        <label>조합할 운동</label>
-        <div class="check-list" id="comboList"></div>
-      </div>
+      <input id="secondsPerRep" type="hidden" value="3">
+      <div class="field" id="comboField" hidden><div class="check-list" id="comboList"></div></div>
       <section class="widget-manager" id="widgetManager">
-        <h3>현재 위젯</h3>
+        <h3 data-i18n="currentWidgets">현재 위젯</h3>
         <div class="widget-order-list" id="widgetOrderList"></div>
       </section>
       <div class="modal-actions">
+        <button class="quiet-button" type="button" id="hideWorkoutButton" data-i18n="hide">숨김</button>
         <button class="danger-button" type="button" id="deleteWorkoutButton" data-i18n="delete">Delete</button>
         <button class="quiet-button" type="button" id="closeWorkout" data-i18n="cancel">Cancel</button>
         <button class="primary-button" type="submit" data-i18n="save">Save</button>
@@ -7993,70 +8816,70 @@
 
   <dialog id="nutritionManageDialog">
     <form class="modal" method="dialog" id="nutritionManageForm">
-      <h2>영양소 항목 관리</h2>
+      <h2 data-i18n="nutritionManageTitle">항목관리</h2>
       <div class="manage-list" id="nutritionManageList"></div>
       <section class="add-section">
-        <h3>새 항목 추가</h3>
+        <h3 data-i18n="addNewItem">새 항목 추가</h3>
         <div class="field-grid">
           <div class="field">
-            <label for="newNutritionName">항목명</label>
+            <label for="newNutritionName" data-i18n="itemNameShort">항목명</label>
             <input class="text-input" id="newNutritionName" maxlength="18" placeholder="비타민C">
           </div>
           <div class="field">
-            <label for="newNutritionUnit">단위</label>
+            <label for="newNutritionUnit" data-i18n="unit">단위</label>
             <input class="text-input" id="newNutritionUnit" maxlength="8" placeholder="mg">
           </div>
         </div>
-        <button class="quiet-button" type="button" id="addNutritionType">추가</button>
+        <button class="quiet-button" type="button" id="addNutritionType" data-i18n="add">추가</button>
       </section>
       <div class="modal-actions">
-        <button class="primary-button" type="button" id="closeNutritionManage">완료</button>
+        <button class="primary-button" type="button" id="closeNutritionManage" data-i18n="done">완료</button>
       </div>
     </form>
   </dialog>
 
   <dialog id="nutritionImportDialog">
     <form class="modal" method="dialog" id="nutritionImportForm">
-      <h2>영양소 가져오기</h2>
+      <h2 data-i18n="nutritionImportTitle">영양소 가져오기</h2>
       <div class="field">
-        <label for="nutritionImportText">복사한 영양소 텍스트</label>
+        <label for="nutritionImportText" data-i18n="nutritionTextLabel">복사한 영양소 텍스트</label>
         <textarea class="text-input textarea-input" id="nutritionImportText" placeholder="칼로리: 350&#10;탄수화물: 45&#10;지방: 12&#10;나트륨: 380"></textarea>
       </div>
       <p class="mini-note" id="nutritionImportResult"></p>
       <div class="modal-actions">
-        <button class="quiet-button" type="button" id="closeNutritionImport">취소</button>
-        <button class="primary-button" type="submit">가져오기</button>
+        <button class="quiet-button" type="button" id="closeNutritionImport" data-i18n="cancel">취소</button>
+        <button class="primary-button" type="submit" data-i18n="import">가져오기</button>
       </div>
     </form>
   </dialog>
 
   <dialog id="weightManageDialog">
     <form class="modal" method="dialog" id="weightManageForm">
-      <h2>체중 관리</h2>
+      <h2 data-i18n="weightManageTitle">체중 관리</h2>
       <div class="field">
-        <label for="weightGoalInput">목표 체중 kg</label>
+        <label for="weightGoalInput" data-i18n="weightGoalKg">목표 체중 kg</label>
         <input class="number-input" id="weightGoalInput" type="number" min="20" max="300" step="0.1" placeholder="70.0">
       </div>
       <div class="modal-actions">
-        <button class="quiet-button" type="button" id="closeWeightManage">취소</button>
-        <button class="primary-button" type="submit">저장</button>
+        <button class="quiet-button" type="button" id="closeWeightManage" data-i18n="cancel">취소</button>
+        <button class="primary-button" type="submit" data-i18n="save">저장</button>
       </div>
     </form>
   </dialog>
 
   <dialog id="waterManageDialog">
     <form class="modal" method="dialog" id="waterManageForm">
-      <h2>수분 섭취 관리</h2>
+      <h2 data-i18n="waterManageTitle">수분 섭취 관리</h2>
       <div class="field-grid">
         <div class="field">
-          <label for="waterGoalInput" id="waterGoalLabel">목표 섭취량</label>
+          <label for="waterGoalInput" id="waterGoalLabel" data-i18n="waterGoal">목표 섭취량</label>
           <div class="unit-input-row">
             <input class="number-input" id="waterGoalInput" type="number" min="0" step="0.1" placeholder="2.0">
             <span>L</span>
           </div>
         </div>
         <div class="field" id="waterCupField">
-          <label for="waterCupInput">한 모금 용량</label>
+          <label for="waterCupInput" data-i18n="waterSipMl">한 모금 용량</label>
           <div class="unit-input-row">
             <input class="number-input" id="waterCupInput" type="number" min="1" step="1" placeholder="20">
             <span>ml</span>
@@ -8064,19 +8887,59 @@
         </div>
       </div>
       <div class="modal-actions">
-        <button class="quiet-button" type="button" id="closeWaterManage">취소</button>
-        <button class="primary-button" type="submit">저장</button>
+        <button class="quiet-button" type="button" id="closeWaterManage" data-i18n="cancel">취소</button>
+        <button class="primary-button" type="submit" data-i18n="save">저장</button>
       </div>
     </form>
   </dialog>
 
   <dialog id="statsManageDialog">
     <form class="modal" method="dialog">
-      <h2>통계 관리</h2>
-      <p class="mini-note">월별 통계에 표시할 기록 섹션과 순서를 정합니다.</p>
+      <h2 data-i18n="statsManage">통계 관리</h2>
+      <p class="mini-note" data-i18n="statsManageHint">월별 통계에 표시할 기록 섹션과 순서를 정합니다.</p>
       <div class="widget-order-list stats-manage-list" id="statsManageList"></div>
       <div class="modal-actions">
-        <button class="primary-button" type="button" id="closeStatsManage">완료</button>
+        <button class="primary-button" type="button" id="closeStatsManage" data-i18n="done">완료</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="recordManageDialog">
+    <form class="modal" method="dialog">
+      <h2 data-i18n="recordManage">기록 관리</h2>
+      <p class="mini-note" data-i18n="recordManageHint">기록 페이지에 표시할 섹션과 순서를 정합니다.</p>
+      <div class="widget-order-list stats-manage-list" id="recordManageList"></div>
+      <div class="modal-actions">
+        <button class="primary-button" type="button" id="closeRecordManage" data-i18n="done">완료</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="scoreRuleDialog">
+    <form class="modal score-rule-modal" method="dialog">
+      <h2 data-i18n="scoreRuleTitle">건강 점수 규칙</h2>
+      <p class="score-rule-intro" data-i18n="scoreRuleIntro">오늘 입력한 기록을 기준으로 건강 점수를 계산합니다.</p>
+      <div class="score-rule-list">
+        <div class="score-rule-item">
+          <strong data-i18n="scoreRuleWeightTitle">체중</strong>
+          <span data-i18n="scoreRuleWeightText">오늘 체중을 기록하면 5점을 더합니다.</span>
+        </div>
+        <div class="score-rule-item">
+          <strong data-i18n="scoreRuleWaterTitle">수분</strong>
+          <span data-i18n="scoreRuleWaterText">목표 섭취량의 50% 달성 시 3점, 70% 달성 시 5점, 100% 달성 시 10점을 더합니다.</span>
+        </div>
+        <div class="score-rule-item">
+          <strong data-i18n="scoreRuleNutritionTitle">영양</strong>
+          <span data-i18n="scoreRuleNutritionText">영양소 항목을 기록하면 항목당 3점을 더합니다.</span>
+        </div>
+        <div class="score-rule-item">
+          <strong data-i18n="scoreRuleWorkoutTitle">운동</strong>
+          <span data-i18n="scoreRuleWorkoutText">운동은 횟수와 난이도로 계산합니다. 난이도 1-2는 0.5점, 3은 1점, 4는 1.5점, 5는 2점입니다.</span>
+        </div>
+      </div>
+      <p class="score-rule-note" data-i18n="scoreRuleNote">최종 점수는 오늘 기록의 합계를 반올림해 표시합니다.</p>
+      <div class="modal-actions">
+        <button class="primary-button" type="button" id="closeScoreRule" data-i18n="done">완료</button>
       </div>
     </form>
   </dialog>
@@ -8090,10 +8953,10 @@
         <input class="number-input" id="countValue" type="number" min="0" step="1" required>
       </div>
       <div class="field" id="countAddField">
-        <label for="countAddValue">추가 입력</label>
+        <label for="countAddValue" data-i18n="addInput">추가 입력</label>
         <div class="inline-add-row">
           <input class="number-input" id="countAddValue" type="number" min="0" step="0.1" placeholder="0">
-          <button class="quiet-button" type="button" id="addCountValue">추가</button>
+          <button class="quiet-button" type="button" id="addCountValue" data-i18n="add">추가</button>
         </div>
       </div>
       <div class="modal-actions">
@@ -8105,15 +8968,15 @@
 
   <dialog class="run-dialog" id="runDialog">
     <form class="modal run-modal" method="dialog" id="runForm">
-      <h2 id="runDialogTitle">실행</h2>
+      <h2 id="runDialogTitle" data-i18n="run">실행</h2>
       <input type="hidden" id="runWorkoutId">
       <div class="field-grid">
         <div class="field">
-          <label for="runReps">횟수</label>
+          <label for="runReps" data-i18n="reps">횟수</label>
           <input class="number-input" id="runReps" type="number" min="1" max="300" step="1" value="10">
         </div>
         <div class="field">
-          <label for="runTempo">1회 템포 초</label>
+          <label for="runTempo" data-i18n="tempoSec">1회 템포 초</label>
           <input class="number-input" id="runTempo" type="number" min="1" max="30" step="1" value="3">
         </div>
       </div>
@@ -8121,13 +8984,13 @@
         <div class="run-metric">
           <div>
             <div class="run-number" id="runCountNumber">0/10</div>
-            <div class="run-label">완료 횟수</div>
+            <div class="run-label" data-i18n="completedReps">완료 횟수</div>
           </div>
         </div>
         <div class="run-metric">
           <div>
             <div class="run-number" id="runSecondNumber">3</div>
-            <div class="run-label" id="runLabel">준비</div>
+            <div class="run-label" id="runLabel" data-i18n="ready">준비</div>
           </div>
         </div>
       </div>
@@ -8136,8 +8999,8 @@
         <span id="runTempoText">3초 템포</span>
       </div>
       <div class="modal-actions run-actions">
-        <button class="quiet-button" type="button" id="closeRun">닫기</button>
-        <button class="primary-button" type="button" id="startRun">시작</button>
+        <button class="quiet-button" type="button" id="closeRun" data-i18n="close">닫기</button>
+        <button class="primary-button" type="button" id="startRun" data-i18n="start">시작</button>
       </div>
     </form>
   </dialog>
@@ -8146,6 +9009,9 @@
 
   <script>
     const STORAGE_KEY = "daily-rep-counter-v1";
+    const SYNC_CONFIG_KEY = "daily-rep-counter-sheet-sync-v1";
+    const DEFAULT_SYNC_URL = "https://script.google.com/macros/s/AKfycbxj_lmQRkEhEu_ypXzm9nqMNAiAbRJI_ZnoNNc53lRtkI7IlFPk1EbJLHDLZ8QxPWkRZA/exec";
+    const RECORD_RESET_VERSION = "real-use-reset-2026-06-22";
 
     const i18n = {
       en: {
@@ -8158,7 +9024,20 @@
         myPage: "My",
         todayLine: "today is {date}",
         scoreLine: "Today's health score <span>{score} pts</span>",
-        scoreNote: "Score: weight 5 pts once, water 1 pt each, nutrition 3 pts per item, workouts by reps and difficulty.",
+        scoreNote: "Score: weight 5 pts once, water by goal completion, nutrition 3 pts per item, workouts by reps and difficulty.",
+        scoreRuleOpenLabel: "Open health score rules",
+        scoreRuleTitle: "Health score rules",
+        scoreRuleIntro: "Today's health score is calculated from the records you enter today.",
+        scoreRuleWeightTitle: "Weight",
+        scoreRuleWeightText: "Recording today's weight adds 5 pts.",
+        scoreRuleWaterTitle: "Water",
+        scoreRuleWaterText: "Reaching 50% of your goal adds 3 pts, 70% adds 5 pts, and 100% adds 10 pts.",
+        scoreRuleNutritionTitle: "Nutrition",
+        scoreRuleNutritionText: "Each nutrition item recorded today adds 3 pts.",
+        scoreRuleWorkoutTitle: "Workout",
+        scoreRuleWorkoutText: "Workout points use reps and difficulty. Difficulty 1-2 = 0.5 pt, 3 = 1 pt, 4 = 1.5 pts, 5 = 2 pts.",
+        scoreRuleNote: "The final score is rounded from the sum of today's records.",
+        waterRule: "50% goal +3 pts · 70% +5 pts · 100% +10 pts",
         scoreSame: "Same as yesterday",
         scoreDelta: "{delta} pts vs yesterday",
         scoreWorkout: "Workout {value}",
@@ -8193,9 +9072,131 @@
         dailyHistory: "Daily history",
         export: "Export",
         profile: "My page",
+        deviceUser: "Device user",
+        deviceUserHint: "Choose who uses this device first.",
         nickname: "Nickname",
         language: "Language",
+        languageHint: "Choose the display language.",
+        designTheme: "Design",
+        designThemeHint: "Choose the app design system.",
         profileHint: "Your data is saved in this browser.",
+        sheetSyncTitle: "Google Sheets storage",
+        sheetSyncHint: "Save the currently selected user's data separately in Google Sheets.",
+        sheetSyncUrlLabel: "Apps Script Web App URL",
+        saveUrl: "Save URL",
+        loadSheet: "Load",
+        saveSheet: "Save sheet",
+        sheetSyncReady: "Save the URL to enable sheet sync.",
+        syncOff: "Sync off",
+        syncUrlNeeded: "Save URL",
+        syncReady: "Sync ready",
+        syncSaving: "Syncing...",
+        syncDone: "Synced",
+        syncFailed: "Sync failed",
+        sheetSyncUrlSaved: "Google Sheets URL saved.",
+        sheetSyncMissingUrl: "Paste and save the Apps Script URL first.",
+        sheetSyncSaving: "Saving {name} to Google Sheets...",
+        sheetSyncSaved: "{name}'s data was sent to Google Sheets.",
+        sheetSyncAutoSaving: "Auto-saving {name}...",
+        sheetSyncAutoSaved: "{name} auto-saved.",
+        sheetSyncLoading: "Loading {name} from Google Sheets...",
+        sheetSyncLoaded: "{name}'s data was loaded from Google Sheets.",
+        sheetSyncEmpty: "No saved sheet data for {name} yet.",
+        sheetSyncFailed: "Google Sheets sync failed. Check the URL and deployment.",
+        sheetSyncUserStatus: "Current user: {name}",
+        statsManage: "Stats settings",
+        statsManageHint: "Choose and reorder sections shown in monthly stats.",
+        recordManage: "Widget settings",
+        recordManageHint: "Choose and reorder sections shown on the records page.",
+        recordSectionsEmpty: "No record sections are visible. Turn them on in record settings.",
+        imageNoSelection: "No image selected",
+        selectImage: "Select image",
+        closeImage: "Close images",
+        workoutDifficulty: "Workout difficulty score",
+        currentWidgets: "Current widgets",
+        hide: "Hide",
+        unhide: "Show",
+        hidden: "Hidden",
+        hiddenHome: "Hidden from home",
+        nutritionManageTitle: "Items",
+        nutritionImportTitle: "Import nutrition",
+        nutritionTextLabel: "Copied nutrition text",
+        addNewItem: "Add new item",
+        itemNameShort: "Item name",
+        unit: "Unit",
+        countUnit: "reps",
+        add: "Add",
+        done: "Done",
+        import: "Import",
+        weightManageTitle: "Weight settings",
+        weightGoalKg: "Goal weight kg",
+        waterManageTitle: "Water settings",
+        waterGoal: "Goal intake",
+        waterSipMl: "Sip volume",
+        addInput: "Add input",
+        run: "Run",
+        reps: "Reps",
+        tempoSec: "Tempo per rep sec",
+        completedReps: "Completed reps",
+        ready: "Ready",
+        close: "Close",
+        start: "Start",
+        exerciseRecordTitle: "Workout records",
+        exerciseRecordHint: "Workout widgets are grouped two per row for fast logging.",
+        exerciseManage: "Workout item settings",
+        recordWidget: "Record widget",
+        tempoLabel: "{seconds}s tempo",
+        firstRecord: "First record",
+        record: "Record",
+        goalButton: "Goal",
+        weightRecordPrompt: "Record today's weight",
+        previousRecord: "Previous record",
+        recentRecord: "Recent records",
+        manage: "Manage",
+        sipButton: "+1 sip",
+        oneTime: "+1 time",
+        twoTimes: "+2 times",
+        recordDone: "Today recorded",
+        recordMissing: "Not recorded today",
+        weightManage: "Weight settings",
+        waterManage: "Water settings",
+        goalMetric: "Goal {value}{unit}",
+        waterPrompt: "Record today's water intake",
+        nutritionRecordTitle: "Nutrition log",
+        nutritionRule: "3 pts per recorded item",
+        recordAction: "Record",
+        monthlyStatsLabel: "{month} record stats",
+        statsEmpty: "Add sections from stats settings.",
+        daysRecorded: "{days} days recorded",
+        latestRecord: "Latest record",
+        monthlyTotal: "Monthly total",
+        weightStatTitle: "Weight record",
+        waterStatTitle: "Water intake",
+        nutritionStatTitle: "{name} intake record",
+        workoutStatTitle: "{name} workout record",
+        weightStatSubtitle: "Monthly weight change",
+        waterStatSubtitle: "Monthly water intake",
+        nutritionStatSubtitle: "Monthly nutrition intake",
+        hiddenSaved: "Hidden from home.",
+        unhiddenSaved: "Shown on home again.",
+        deleteConfirm: "Permanently delete {name} and all records?",
+        deletedWithRecords: "{name} and its records were deleted.",
+        orderChanged: "Widget order changed.",
+        nutritionEmpty: "No nutrition items.",
+        dailyGoal: "Daily goal",
+        notSet: "Not set",
+        runWorkoutOnly: "You can run this from workout widgets.",
+        inProgress: "Running",
+        breathing: "Keep breathing",
+        complete: "Complete",
+        nextStart: "Next start",
+        completeReady: "Ready to finish",
+        oneRepDone: "1 rep done",
+        addedReps: "{name} +{reps} reps.",
+        nutritionImportEmpty: "No nutrition values found.",
+        nutritionImportDone: "{items} recorded",
+        nutritionImported: "Nutrition imported.",
+        profileUserSaved: "{name} selected.",
         cancel: "Cancel",
         save: "Save",
         itemName: "Item name",
@@ -8221,7 +9222,15 @@
         squat: "Squats",
         pushup: "Push-ups",
         plank: "Plank",
-        situp: "Sit-up"
+        situp: "Sit-up",
+        comboSquatPushupName: "Squats + Push-ups",
+        proteinName: "Protein",
+        caloriesName: "Calories",
+        carbsName: "Carbs",
+        fatName: "Fat",
+        bodyWeightName: "Weight",
+        waterIntakeName: "Water intake",
+        comboNoSelection: "Choose workouts to combine."
       },
       zh: {
         appTitle: "每日运动计数",
@@ -8233,7 +9242,20 @@
         myPage: "我的",
         todayLine: "today is {date}",
         scoreLine: "今日健康分数 <span>{score} 分</span>",
-        scoreNote: "分数：体重记录5分，饮水每次1分，营养每项3分，运动按次数和难度计算。",
+        scoreNote: "分数：体重记录一次5分，饮水按目标完成度计算，营养每项3分，运动按次数和难度计算。",
+        scoreRuleOpenLabel: "查看健康分数规则",
+        scoreRuleTitle: "健康分数规则",
+        scoreRuleIntro: "今日健康分数会根据你今天输入的记录计算。",
+        scoreRuleWeightTitle: "体重",
+        scoreRuleWeightText: "记录今日体重可获得5分。",
+        scoreRuleWaterTitle: "饮水",
+        scoreRuleWaterText: "达到目标50%加3分，70%加5分，100%加10分。",
+        scoreRuleNutritionTitle: "营养",
+        scoreRuleNutritionText: "今天每记录一个营养项目加3分。",
+        scoreRuleWorkoutTitle: "运动",
+        scoreRuleWorkoutText: "运动按次数和难度计算。难度1-2为0.5分，3为1分，4为1.5分，5为2分。",
+        scoreRuleNote: "最终分数会把今日记录合计后四舍五入显示。",
+        waterRule: "目标50% +3分 · 70% +5分 · 100% +10分",
         scoreSame: "与昨天相同",
         scoreDelta: "比昨天 {delta} 分",
         scoreWorkout: "运动 {value}",
@@ -8268,9 +9290,131 @@
         dailyHistory: "每日记录",
         export: "导出",
         profile: "我的页面",
+        deviceUser: "设备用户",
+        deviceUserHint: "先选择这台设备的使用者。",
         nickname: "昵称",
         language: "语言",
+        languageHint: "选择显示语言。",
+        designTheme: "设计",
+        designThemeHint: "选择应用设计系统。",
         profileHint: "数据会保存在当前浏览器中。",
+        sheetSyncTitle: "Google Sheets 保存",
+        sheetSyncHint: "将当前选择用户的数据分别保存到 Google Sheets。",
+        sheetSyncUrlLabel: "Apps Script Web App URL",
+        saveUrl: "保存 URL",
+        loadSheet: "读取",
+        saveSheet: "保存到表格",
+        sheetSyncReady: "保存 URL 后即可使用表格同步。",
+        syncOff: "同步关闭",
+        syncUrlNeeded: "保存 URL",
+        syncReady: "同步就绪",
+        syncSaving: "同步中...",
+        syncDone: "同步完成",
+        syncFailed: "同步失败",
+        sheetSyncUrlSaved: "Google Sheets URL 已保存。",
+        sheetSyncMissingUrl: "请先粘贴并保存 Apps Script URL。",
+        sheetSyncSaving: "正在将 {name} 保存到 Google Sheets...",
+        sheetSyncSaved: "{name} 的数据已发送到 Google Sheets。",
+        sheetSyncAutoSaving: "正在自动保存 {name}...",
+        sheetSyncAutoSaved: "{name} 已自动保存。",
+        sheetSyncLoading: "正在从 Google Sheets 读取 {name}...",
+        sheetSyncLoaded: "已从 Google Sheets 读取 {name} 的数据。",
+        sheetSyncEmpty: "{name} 还没有保存的表格数据。",
+        sheetSyncFailed: "Google Sheets 同步失败。请检查 URL 和部署设置。",
+        sheetSyncUserStatus: "当前用户：{name}",
+        statsManage: "统计设置",
+        statsManageHint: "选择并排序月统计中显示的记录区块。",
+        recordManage: "组件管理",
+        recordManageHint: "选择并排序记录页中显示的区块。",
+        recordSectionsEmpty: "当前没有显示的记录区块。请在记录设置中开启。",
+        imageNoSelection: "未选择图片",
+        selectImage: "选择图片",
+        closeImage: "关闭图片",
+        workoutDifficulty: "运动难度分",
+        currentWidgets: "当前组件",
+        hide: "隐藏",
+        unhide: "显示",
+        hidden: "隐藏",
+        hiddenHome: "首页隐藏",
+        nutritionManageTitle: "项目管理",
+        nutritionImportTitle: "导入营养",
+        nutritionTextLabel: "复制的营养文本",
+        addNewItem: "新增项目",
+        itemNameShort: "项目名",
+        unit: "单位",
+        countUnit: "次",
+        add: "添加",
+        done: "完成",
+        import: "导入",
+        weightManageTitle: "体重设置",
+        weightGoalKg: "目标体重 kg",
+        waterManageTitle: "饮水设置",
+        waterGoal: "目标摄入量",
+        waterSipMl: "每口容量",
+        addInput: "追加输入",
+        run: "执行",
+        reps: "次数",
+        tempoSec: "每次节奏秒",
+        completedReps: "完成次数",
+        ready: "准备",
+        close: "关闭",
+        start: "开始",
+        exerciseRecordTitle: "运动记录",
+        exerciseRecordHint: "运动组件每行两个，便于快速记录。",
+        exerciseManage: "运动项目设置",
+        recordWidget: "记录组件",
+        tempoLabel: "{seconds}秒节奏",
+        firstRecord: "首次记录",
+        record: "记录",
+        goalButton: "目标",
+        weightRecordPrompt: "记录今天体重",
+        previousRecord: "比上次记录",
+        recentRecord: "最近记录",
+        manage: "管理",
+        sipButton: "+1口",
+        oneTime: "+1次",
+        twoTimes: "+2次",
+        recordDone: "今日已记录",
+        recordMissing: "今日未记录",
+        weightManage: "体重设置",
+        waterManage: "饮水设置",
+        goalMetric: "目标 {value}{unit}",
+        waterPrompt: "记录今天饮水",
+        nutritionRecordTitle: "营养记录",
+        nutritionRule: "每项记录3分",
+        recordAction: "记录",
+        monthlyStatsLabel: "{month} 记录统计",
+        statsEmpty: "请在统计设置中添加区块。",
+        daysRecorded: "记录 {days} 天",
+        latestRecord: "最近记录",
+        monthlyTotal: "月累计",
+        weightStatTitle: "体重记录",
+        waterStatTitle: "饮水",
+        nutritionStatTitle: "{name} 摄入记录",
+        workoutStatTitle: "{name} 运动记录",
+        weightStatSubtitle: "月体重变化",
+        waterStatSubtitle: "月饮水量",
+        nutritionStatSubtitle: "月营养摄入量",
+        hiddenSaved: "已从首页隐藏。",
+        unhiddenSaved: "已重新显示在首页。",
+        deleteConfirm: "永久删除 {name} 和所有记录吗？",
+        deletedWithRecords: "{name} 和记录已删除。",
+        orderChanged: "组件顺序已更改。",
+        nutritionEmpty: "没有营养项目。",
+        dailyGoal: "每日目标",
+        notSet: "未设置",
+        runWorkoutOnly: "可在运动组件中执行。",
+        inProgress: "进行中",
+        breathing: "调整呼吸",
+        complete: "完成",
+        nextStart: "下一组开始",
+        completeReady: "准备完成",
+        oneRepDone: "完成1次",
+        addedReps: "{name} 增加 {reps} 次。",
+        nutritionImportEmpty: "未找到可导入的营养值。",
+        nutritionImportDone: "{items} 已记录",
+        nutritionImported: "营养已导入。",
+        profileUserSaved: "已选择 {name}。",
         cancel: "取消",
         save: "保存",
         itemName: "项目名称",
@@ -8296,7 +9440,15 @@
         squat: "深蹲",
         pushup: "俯卧撑",
         plank: "平板支撑",
-        situp: "仰卧起坐"
+        situp: "仰卧起坐",
+        comboSquatPushupName: "深蹲 + 俯卧撑",
+        proteinName: "蛋白质",
+        caloriesName: "卡路里",
+        carbsName: "碳水",
+        fatName: "脂肪",
+        bodyWeightName: "体重",
+        waterIntakeName: "饮水",
+        comboNoSelection: "请选择要组合的运动。"
       },
       ko: {
         appTitle: "운동 카운트",
@@ -8308,7 +9460,20 @@
         myPage: "나",
         todayLine: "today is {date}",
         scoreLine: "오늘 건강 점수 <span>{score}점</span>",
-        scoreNote: "점수: 체중 기록 5점, 수분 1회당 1점, 영양소 항목당 3점, 운동은 횟수와 난이도 기준으로 계산합니다.",
+        scoreNote: "점수: 체중 기록 5점, 수분은 목표 달성률 기준, 영양소 항목당 3점, 운동은 횟수와 난이도 기준으로 계산합니다.",
+        scoreRuleOpenLabel: "건강 점수 규칙 보기",
+        scoreRuleTitle: "건강 점수 규칙",
+        scoreRuleIntro: "오늘 입력한 기록을 기준으로 건강 점수를 계산합니다.",
+        scoreRuleWeightTitle: "체중",
+        scoreRuleWeightText: "오늘 체중을 기록하면 5점을 더합니다.",
+        scoreRuleWaterTitle: "수분",
+        scoreRuleWaterText: "목표 섭취량의 50% 달성 시 3점, 70% 달성 시 5점, 100% 달성 시 10점을 더합니다.",
+        scoreRuleNutritionTitle: "영양",
+        scoreRuleNutritionText: "영양소 항목을 기록하면 항목당 3점을 더합니다.",
+        scoreRuleWorkoutTitle: "운동",
+        scoreRuleWorkoutText: "운동은 횟수와 난이도로 계산합니다. 난이도 1-2는 0.5점, 3은 1점, 4는 1.5점, 5는 2점입니다.",
+        scoreRuleNote: "최종 점수는 오늘 기록의 합계를 반올림해 표시합니다.",
+        waterRule: "목표 50% +3점 · 70% +5점 · 100% +10점",
         scoreSame: "어제와 같아요",
         scoreDelta: "어제보다 {delta}점",
         scoreWorkout: "운동 {value}",
@@ -8343,9 +9508,131 @@
         dailyHistory: "일자별 기록",
         export: "내보내기",
         profile: "나의 페이지",
+        deviceUser: "사용자 선택",
+        deviceUserHint: "이 기기에서 사용할 사람을 먼저 선택하세요.",
         nickname: "닉네임",
         language: "언어",
+        languageHint: "표시 언어를 선택하세요.",
+        designTheme: "디자인",
+        designThemeHint: "앱의 디자인 시스템을 선택하세요.",
         profileHint: "데이터는 이 브라우저에 저장됩니다.",
+        sheetSyncTitle: "Google Sheets 저장",
+        sheetSyncHint: "현재 선택된 사용자 데이터를 구글 시트에 따로 저장합니다.",
+        sheetSyncUrlLabel: "Apps Script Web App URL",
+        saveUrl: "URL 저장",
+        loadSheet: "불러오기",
+        saveSheet: "시트 저장",
+        sheetSyncReady: "URL을 저장하면 시트 동기화를 사용할 수 있습니다.",
+        syncOff: "동기화 꺼짐",
+        syncUrlNeeded: "URL 저장 필요",
+        syncReady: "동기화 준비됨",
+        syncSaving: "동기화 중...",
+        syncDone: "동기화 완료",
+        syncFailed: "동기화 실패",
+        sheetSyncUrlSaved: "Google Sheets URL을 저장했습니다.",
+        sheetSyncMissingUrl: "Apps Script URL을 먼저 붙여넣고 저장하세요.",
+        sheetSyncSaving: "{name} 데이터를 Google Sheets에 저장하는 중...",
+        sheetSyncSaved: "{name} 데이터를 Google Sheets로 보냈습니다.",
+        sheetSyncAutoSaving: "{name} 자동 저장 중...",
+        sheetSyncAutoSaved: "{name} 자동 저장 완료",
+        sheetSyncLoading: "{name} 데이터를 Google Sheets에서 불러오는 중...",
+        sheetSyncLoaded: "{name} 데이터를 Google Sheets에서 불러왔습니다.",
+        sheetSyncEmpty: "아직 {name} 이름으로 저장된 시트 데이터가 없습니다.",
+        sheetSyncFailed: "Google Sheets 동기화에 실패했습니다. URL과 배포 설정을 확인하세요.",
+        sheetSyncUserStatus: "현재 사용자: {name}",
+        statsManage: "통계 관리",
+        statsManageHint: "월별 통계에 표시할 기록 섹션과 순서를 정합니다.",
+        recordManage: "위젯관리",
+        recordManageHint: "기록 페이지에 표시할 섹션과 순서를 정합니다.",
+        recordSectionsEmpty: "표시 중인 기록 섹션이 없습니다. 기록 관리에서 켜주세요.",
+        imageNoSelection: "선택된 이미지 없음",
+        selectImage: "이미지 선택",
+        closeImage: "이미지 닫기",
+        workoutDifficulty: "운동 난이도 점수",
+        currentWidgets: "현재 위젯",
+        hide: "숨김",
+        unhide: "숨김 해제",
+        hidden: "숨김",
+        hiddenHome: "홈 화면 미노출",
+        nutritionManageTitle: "항목관리",
+        nutritionImportTitle: "영양소 가져오기",
+        nutritionTextLabel: "복사한 영양소 텍스트",
+        addNewItem: "새 항목 추가",
+        itemNameShort: "항목명",
+        unit: "단위",
+        countUnit: "회",
+        add: "추가",
+        done: "완료",
+        import: "가져오기",
+        weightManageTitle: "체중 관리",
+        weightGoalKg: "목표 체중 kg",
+        waterManageTitle: "수분 섭취 관리",
+        waterGoal: "목표 섭취량",
+        waterSipMl: "한 모금 용량",
+        addInput: "추가 입력",
+        run: "실행",
+        reps: "횟수",
+        tempoSec: "1회 템포 초",
+        completedReps: "완료 횟수",
+        ready: "준비",
+        close: "닫기",
+        start: "시작",
+        exerciseRecordTitle: "운동 기록",
+        exerciseRecordHint: "운동 위젯은 두 항목씩 묶어서 빠르게 기록합니다.",
+        exerciseManage: "운동 항목관리",
+        recordWidget: "기록 위젯",
+        tempoLabel: "템포 {seconds}초",
+        firstRecord: "첫 기록",
+        record: "기록",
+        goalButton: "목표",
+        weightRecordPrompt: "오늘 체중을 기록하세요",
+        previousRecord: "지난 기록보다",
+        recentRecord: "최근 기록",
+        manage: "관리",
+        sipButton: "+1 모금",
+        oneTime: "+1회",
+        twoTimes: "+2회",
+        recordDone: "오늘 기록 완료",
+        recordMissing: "오늘 기록 미완료",
+        weightManage: "체중 관리",
+        waterManage: "수분 관리",
+        goalMetric: "목표 {value}{unit}",
+        waterPrompt: "오늘 수분 섭취를 기록하세요",
+        nutritionRecordTitle: "영양소 기록",
+        nutritionRule: "항목별 기록 1회 완료 시 3점",
+        recordAction: "기록하기",
+        monthlyStatsLabel: "{month} 기록 통계",
+        statsEmpty: "통계 관리에서 표시할 섹션을 추가하세요.",
+        daysRecorded: "{days}일 기록",
+        latestRecord: "최근 기록",
+        monthlyTotal: "월 누적",
+        weightStatTitle: "체중 기록",
+        waterStatTitle: "수분 섭취",
+        nutritionStatTitle: "{name} 섭취 기록",
+        workoutStatTitle: "{name} 운동 기록",
+        weightStatSubtitle: "월별 체중 변화",
+        waterStatSubtitle: "월별 수분 섭취량",
+        nutritionStatSubtitle: "월별 영양소 섭취량",
+        hiddenSaved: "홈 화면에서 숨겼습니다.",
+        unhiddenSaved: "홈 화면에 다시 표시합니다.",
+        deleteConfirm: "{name} 항목과 모든 기록을 영구 삭제할까요?",
+        deletedWithRecords: "{name} 항목과 기록을 삭제했습니다.",
+        orderChanged: "위젯 순서를 바꿨습니다.",
+        nutritionEmpty: "영양소 항목이 없습니다.",
+        dailyGoal: "일일 목표",
+        notSet: "미설정",
+        runWorkoutOnly: "운동 위젯에서 실행할 수 있어요.",
+        inProgress: "진행중",
+        breathing: "호흡 맞추기",
+        complete: "완료",
+        nextStart: "다음 시작",
+        completeReady: "완료 준비",
+        oneRepDone: "1회 완료",
+        addedReps: "{name} {reps}회 추가했습니다.",
+        nutritionImportEmpty: "가져올 수 있는 영양소를 찾지 못했습니다.",
+        nutritionImportDone: "{items} 기록 완료",
+        nutritionImported: "영양소를 가져왔습니다.",
+        profileUserSaved: "{name} 사용자로 설정했습니다.",
         cancel: "취소",
         save: "저장",
         itemName: "항목 이름",
@@ -8371,17 +9658,35 @@
         squat: "스쿼트",
         pushup: "푸시업",
         plank: "플랭크",
-        situp: "싯업"
+        situp: "싯업",
+        comboSquatPushupName: "스쿼트+푸시업",
+        proteinName: "단백질",
+        caloriesName: "칼로리",
+        carbsName: "탄수화물",
+        fatName: "지방",
+        bodyWeightName: "체중",
+        waterIntakeName: "수분 섭취",
+        comboNoSelection: "조합할 운동을 선택하세요."
       }
     };
 
     const defaultState = {
-      profile: { nickname: "", language: "ko", age: "", sex: "", heightCm: "", weightKg: "" },
+      profile: {
+        userId: "jed",
+        userNames: { jed: "Jed", yona: "Yona" },
+        nickname: "Jed",
+        language: "ko",
+        designTheme: "apple",
+        age: "",
+        sex: "",
+        heightCm: "",
+        weightKg: ""
+      },
       workouts: [
-        { id: "squat", kind: "exercise", nameKey: "squat", target: 50, met: 5, secondsPerRep: 3 },
-        { id: "pushup", kind: "exercise", nameKey: "pushup", target: 30, met: 8, secondsPerRep: 2 },
-        { id: "plank", kind: "exercise", nameKey: "plank", target: 120, met: 3.3, secondsPerRep: 1 },
-        { id: "situp", kind: "exercise", nameKey: "situp", target: 100, met: 4, secondsPerRep: 3 },
+        { id: "squat", kind: "exercise", nameKey: "squat", target: 50, met: 5, secondsPerRep: 3, bodyPart: "lower", image: "assets/exercises/lower-squat.png" },
+        { id: "pushup", kind: "exercise", nameKey: "pushup", target: 30, met: 5, secondsPerRep: 2, bodyPart: "chest", image: "assets/exercises/chest-pushup.png" },
+        { id: "plank", kind: "exercise", nameKey: "plank", target: 120, met: 3.3, secondsPerRep: 1, bodyPart: "abs", image: "assets/exercises/abs-plank.png" },
+        { id: "situp", kind: "exercise", nameKey: "situp", target: 100, met: 4, secondsPerRep: 3, bodyPart: "abs", image: "assets/exercises/abs-crunch.png" },
         { id: "combo-squat-pushup", kind: "combo", name: "스쿼트+푸시업", target: 30, components: ["squat", "pushup"] },
         { id: "protein", kind: "nutrition", name: "단백질", target: 120, unit: "g" },
         { id: "nutrition-calories", kind: "nutrition", name: "칼로리", target: 2200, unit: "kcal" },
@@ -8393,10 +9698,124 @@
       records: {},
       waterLogs: {},
       statsSections: [],
+      recordSections: [],
       lastActions: []
     };
 
+    const EXERCISE_LIBRARY = [
+      {
+        id: "chest",
+        label: "가슴",
+        items: [
+          ["푸쉬업", "chest-pushup"],
+          ["무릎 푸쉬업", "chest-knee-pushup"],
+          ["덤벨 프레스", "chest-dumbbell-press"],
+          ["덤벨 플라이", "chest-dumbbell-fly"],
+          ["밴드 체스트 프레스", "chest-band-chest-press"],
+          ["밴드 플라이", "chest-band-fly"],
+          ["디클라인 푸쉬업", "chest-decline-pushup"],
+          ["다이아몬드 푸쉬업", "chest-diamond-pushup"]
+        ]
+      },
+      {
+        id: "back",
+        label: "등",
+        items: [
+          ["덤벨 로우", "back-dumbbell-row"],
+          ["원암 덤벨 로우", "back-one-arm-dumbbell-row"],
+          ["밴드 로우", "back-band-row"],
+          ["밴드 랫풀다운", "back-band-lat-pulldown"],
+          ["슈퍼맨", "back-superman"],
+          ["밴드 페이스풀", "back-band-face-pull"],
+          ["테이블 로우", "back-table-row"],
+          ["밴드 스트레이트암 풀다운", "back-band-straight-arm-pulldown"]
+        ]
+      },
+      {
+        id: "shoulder",
+        label: "어깨",
+        items: [
+          ["숄더 프레스", "shoulder-shoulder-press"],
+          ["사이드 레터럴 레이즈", "shoulder-side-lateral-raise"],
+          ["프론트 레이즈", "shoulder-front-raise"],
+          ["리어 델트 플라이", "shoulder-rear-delt-fly"],
+          ["밴드 프레스", "shoulder-band-press"],
+          ["밴드 레터럴 레이즈", "shoulder-band-lateral-raise"],
+          ["밴드 페이스풀", "shoulder-band-face-pull"],
+          ["파이크 푸쉬업", "shoulder-pike-pushup"]
+        ]
+      },
+      {
+        id: "arms",
+        label: "팔",
+        items: [
+          ["덤벨 컬", "arms-dumbbell-curl"],
+          ["해머 컬", "arms-hammer-curl"],
+          ["컨센트레이션 컬", "arms-concentration-curl"],
+          ["밴드 컬", "arms-band-curl"],
+          ["오버헤드 익스텐션", "arms-overhead-extension"],
+          ["킥백", "arms-kickback"],
+          ["밴드 푸쉬다운", "arms-band-pushdown"],
+          ["벤치 딥스", "arms-bench-dips"]
+        ]
+      },
+      {
+        id: "abs",
+        label: "복근",
+        items: [
+          ["크런치", "abs-crunch"],
+          ["레그레이즈", "abs-leg-raise"],
+          ["바이시클 크런치", "abs-bicycle-crunch"],
+          ["플랭크", "abs-plank"],
+          ["사이드 플랭크", "abs-side-plank"],
+          ["러시안 트위스트", "abs-russian-twist"],
+          ["마운틴 클라이머", "abs-mountain-climber"],
+          ["벤치 몸조직", "abs-band-core-twist"]
+        ]
+      },
+      {
+        id: "lower",
+        label: "하체",
+        items: [
+          ["스쿼트", "lower-squat"],
+          ["런지", "lower-lunge"],
+          ["불가리안 스플릿 스쿼트", "lower-bulgarian-split-squat"],
+          ["루마니안 데드리프트", "lower-romanian-deadlift"],
+          ["힙쓰러스트", "lower-hip-thrust"],
+          ["밴드 글루트 브릿지", "lower-band-glute-bridge"],
+          ["카프 레이즈", "lower-calf-raise"],
+          ["밴드 몬스터 워크", "lower-band-monster-walk"]
+        ]
+      },
+      {
+        id: "full",
+        label: "전신 운동",
+        items: [
+          ["버피", "full-burpee"],
+          ["점핑잭", "full-jumping-jack"],
+          ["덤벨 쓰러스터", "full-dumbbell-thruster"],
+          ["마운틴 클라이머", "full-mountain-climber"],
+          ["덤벨 클린 앤 프레스", "full-dumbbell-clean-press"],
+          ["밴드 스쿼트 프레스", "full-band-squat-press"],
+          ["베어 크롤", "full-bear-crawl"],
+          ["밴드 로우 투 프레스", "full-band-row-press"]
+        ]
+      }
+    ].map((group) => ({
+      ...group,
+      items: group.items.map(([name, file]) => ({
+        name,
+        file,
+        bodyPart: group.id,
+        image: `assets/exercises/${file}.png`
+      }))
+    }));
+
     let state = loadState();
+    let syncConfig = loadSyncConfig();
+    let sheetAutoSaveTimer = null;
+    let sheetSaveInFlight = false;
+    let suppressAutoSave = false;
 
     const els = {
       subtitle: document.querySelector("#subtitle"),
@@ -8413,6 +9832,10 @@
       addWorkoutButtonWorkout: document.querySelector("#addWorkoutButtonWorkout"),
       recordGrid: document.querySelector("#recordGrid"),
       workoutGrid: document.querySelector("#workoutGrid"),
+      openRecordManage: document.querySelector("#openRecordManage"),
+      recordManageDialog: document.querySelector("#recordManageDialog"),
+      recordManageList: document.querySelector("#recordManageList"),
+      closeRecordManage: document.querySelector("#closeRecordManage"),
       statsModeButtons: document.querySelectorAll("[data-stats-mode]"),
       statsRangeLabel: document.querySelector("#statsRangeLabel"),
       monthSwitcher: document.querySelector("#monthSwitcher"),
@@ -8424,11 +9847,23 @@
       statsManageDialog: document.querySelector("#statsManageDialog"),
       statsManageList: document.querySelector("#statsManageList"),
       closeStatsManage: document.querySelector("#closeStatsManage"),
+      scoreRuleDialog: document.querySelector("#scoreRuleDialog"),
+      closeScoreRule: document.querySelector("#closeScoreRule"),
       exportButton: document.querySelector("#exportButton"),
       toast: document.querySelector("#toast"),
       profileForm: document.querySelector("#profileForm"),
+      userChoiceButtons: document.querySelectorAll("[data-user-id]"),
+      languageChoiceButtons: document.querySelectorAll("[data-language-value]"),
+      designThemeChoiceButtons: document.querySelectorAll("[data-design-theme-value]"),
+      sheetSyncUrl: document.querySelector("#sheetSyncUrl"),
+      saveSheetSyncUrl: document.querySelector("#saveSheetSyncUrl"),
+      loadSheetState: document.querySelector("#loadSheetState"),
+      saveSheetState: document.querySelector("#saveSheetState"),
+      sheetSyncStatus: document.querySelector("#sheetSyncStatus"),
+      syncTopStatus: document.querySelector("#syncTopStatus"),
       nickname: document.querySelector("#nickname"),
       language: document.querySelector("#language"),
+      designTheme: document.querySelector("#designTheme"),
       age: document.querySelector("#age"),
       sex: document.querySelector("#sex"),
       heightCm: document.querySelector("#heightCm"),
@@ -8437,6 +9872,11 @@
       workoutForm: document.querySelector("#workoutForm"),
       workoutDialogTitle: document.querySelector("#workoutDialogTitle"),
       editingWorkoutId: document.querySelector("#editingWorkoutId"),
+      exerciseBodyPart: document.querySelector("#exerciseBodyPart"),
+      workoutImage: document.querySelector("#workoutImage"),
+      toggleExerciseImages: document.querySelector("#toggleExerciseImages"),
+      exerciseImagePreview: document.querySelector("#exerciseImagePreview"),
+      exerciseImageGrid: document.querySelector("#exerciseImageGrid"),
       widgetKind: document.querySelector("#widgetKind"),
       workoutName: document.querySelector("#workoutName"),
       workoutTarget: document.querySelector("#workoutTarget"),
@@ -8445,6 +9885,7 @@
       comboField: document.querySelector("#comboField"),
       comboList: document.querySelector("#comboList"),
       widgetOrderList: document.querySelector("#widgetOrderList"),
+      hideWorkoutButton: document.querySelector("#hideWorkoutButton"),
       deleteWorkoutButton: document.querySelector("#deleteWorkoutButton"),
       closeWorkout: document.querySelector("#closeWorkout"),
       nutritionManageDialog: document.querySelector("#nutritionManageDialog"),
@@ -8511,6 +9952,21 @@
 
     let statsMode = "calendarMonth";
     let statsMonthKey = todayKey().slice(0, 7);
+
+    function exerciseLibraryItems(bodyPart = "") {
+      if (!bodyPart || bodyPart === "all") return EXERCISE_LIBRARY.flatMap((group) => group.items);
+      const group = EXERCISE_LIBRARY.find((item) => item.id === bodyPart);
+      return group ? group.items : EXERCISE_LIBRARY.flatMap((item) => item.items);
+    }
+
+    function findExerciseAsset(image) {
+      if (!image) return null;
+      return EXERCISE_LIBRARY.flatMap((group) => group.items).find((item) => item.image === image) || null;
+    }
+
+    function bodyPartForImage(image) {
+      return findExerciseAsset(image)?.bodyPart || "";
+    }
 
     function nutritionKey(workout) {
       const label = String(workout.name || i18n.ko[workout.nameKey] || workout.id || "").trim().toLowerCase();
@@ -8588,7 +10044,7 @@
         workouts.forEach((workout) => {
           const defaults = defaultState.workouts.find((item) => item.id === workout.id);
           workout.kind ||= defaults?.kind || "exercise";
-          workout.met = Number(workout.met || defaults?.met || 4);
+          workout.met = Math.max(1, Math.min(5, Number(workout.met || defaults?.met || 4)));
           workout.secondsPerRep = Number(workout.secondsPerRep || defaults?.secondsPerRep || 3);
           workout.unit ||= defaults?.unit || "";
           if (workout.kind === "water") {
@@ -8607,16 +10063,31 @@
               workout.unit = inferredUnit;
             }
           }
+          if (!workout.kind || workout.kind === "exercise" || workout.kind === "combo") {
+            workout.bodyPart ||= defaults?.bodyPart || bodyPartForImage(workout.image) || "chest";
+            workout.image ||= defaults?.image || "";
+          }
           if (workout.kind === "combo") workout.components ||= defaults?.components || [];
         });
+        const savedProfile = { ...(saved.profile || {}) };
+        if (savedProfile.userId === "dae") savedProfile.userId = "jed";
+        if (savedProfile.userId === "partner") savedProfile.userId = "yona";
+        if (!savedProfile.userId) savedProfile.userId = "jed";
+        savedProfile.userNames = { jed: "Jed", yona: "Yona" };
+        savedProfile.nickname = savedProfile.userNames[savedProfile.userId] || "Jed";
+        savedProfile.designTheme = savedProfile.designTheme === "figma" ? "figma" : "apple";
         return {
           ...structuredClone(defaultState),
           ...saved,
-          profile: { ...defaultState.profile, ...saved.profile },
+          profile: {
+            ...defaultState.profile,
+            ...savedProfile
+          },
           workouts,
           records: saved.records || {},
           waterLogs: saved.waterLogs || {},
           statsSections: Array.isArray(saved.statsSections) ? saved.statsSections : [],
+          recordSections: Array.isArray(saved.recordSections) ? saved.recordSections : [],
           lastActions: Array.isArray(saved.lastActions) ? saved.lastActions : []
         };
       } catch {
@@ -8626,6 +10097,238 @@
 
     function saveState() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      scheduleSheetAutoSave();
+    }
+
+    function loadSyncConfig() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(SYNC_CONFIG_KEY)) || {};
+        return { ...saved, sheetUrl: saved.sheetUrl || DEFAULT_SYNC_URL };
+      } catch {
+        return { sheetUrl: DEFAULT_SYNC_URL };
+      }
+    }
+
+    function saveSyncConfig() {
+      localStorage.setItem(SYNC_CONFIG_KEY, JSON.stringify(syncConfig));
+    }
+
+    function currentSyncUserId() {
+      ensureProfileUsers();
+      return state.profile.userId || "jed";
+    }
+
+    function setTopSyncStatus(kind, message) {
+      if (!els.syncTopStatus) return;
+      els.syncTopStatus.className = `sync-top-pill is-${kind}`;
+      els.syncTopStatus.textContent = message;
+    }
+
+    function syncStatus(message, kind = "") {
+      if (els.sheetSyncStatus) els.sheetSyncStatus.textContent = message;
+      if (kind) setTopSyncStatus(kind, message);
+    }
+
+    function setSyncBusy(isBusy) {
+      [els.saveSheetSyncUrl, els.loadSheetState, els.saveSheetState].forEach((button) => {
+        if (button) button.disabled = isBusy;
+      });
+    }
+
+    function updateSyncUI() {
+      if (els.sheetSyncUrl && syncConfig.sheetUrl) els.sheetSyncUrl.value = syncConfig.sheetUrl;
+      const name = profileDisplayName();
+      if (syncConfig.sheetUrl) {
+        syncStatus(t("sheetSyncUserStatus", { name }), "synced");
+        setTopSyncStatus("synced", t("syncReady"));
+        return;
+      }
+      const hasInputUrl = Boolean(String(els.sheetSyncUrl?.value || "").trim());
+      syncStatus(hasInputUrl ? t("syncUrlNeeded") : t("sheetSyncReady"), hasInputUrl ? "warning" : "off");
+      setTopSyncStatus(hasInputUrl ? "warning" : "off", hasInputUrl ? t("syncUrlNeeded") : t("syncOff"));
+    }
+
+    function syncUrlFromInput() {
+      const url = String(els.sheetSyncUrl?.value || syncConfig.sheetUrl || "").trim();
+      if (!url) return "";
+      try {
+        return new URL(url).toString();
+      } catch {
+        return "";
+      }
+    }
+
+    function saveSheetSyncUrl(options = {}) {
+      const url = syncUrlFromInput();
+      if (!url) {
+        syncStatus(t("sheetSyncMissingUrl"), "warning");
+        showToast(t("sheetSyncMissingUrl"));
+        return false;
+      }
+      syncConfig.sheetUrl = url;
+      syncConfig.updatedAt = new Date().toISOString();
+      saveSyncConfig();
+      updateSyncUI();
+      setTopSyncStatus("synced", t("syncReady"));
+      if (!options.quiet) showToast(t("sheetSyncUrlSaved"));
+      return true;
+    }
+
+    function scheduleSheetAutoSave() {
+      if (suppressAutoSave) return;
+      if (!syncConfig?.sheetUrl) {
+        updateSyncUI();
+        return;
+      }
+      window.clearTimeout(sheetAutoSaveTimer);
+      sheetAutoSaveTimer = window.setTimeout(() => {
+        saveStateToSheet({ auto: true, quiet: true });
+      }, 1600);
+    }
+
+    function sheetPayload() {
+      const userId = currentSyncUserId();
+      const nextState = structuredClone(state);
+      nextState.profile = {
+        ...nextState.profile,
+        userId,
+        userNames: { jed: "Jed", yona: "Yona" },
+        nickname: profileDisplayName()
+      };
+      return {
+        app: "health-routine-counter",
+        schemaVersion: 1,
+        userId,
+        userName: profileDisplayName(),
+        savedAt: new Date().toISOString(),
+        state: nextState
+      };
+    }
+
+    async function saveStateToSheet(options = {}) {
+      const auto = Boolean(options.auto);
+      const quiet = Boolean(options.quiet || auto);
+      if (auto) {
+        if (!syncConfig?.sheetUrl || sheetSaveInFlight) return;
+      } else if (!saveSheetSyncUrl({ quiet: true })) {
+        return;
+      }
+      const userId = currentSyncUserId();
+      const name = profileDisplayName();
+      sheetSaveInFlight = true;
+      if (!quiet) setSyncBusy(true);
+      syncStatus(t(auto ? "sheetSyncAutoSaving" : "sheetSyncSaving", { name }), "syncing");
+      setTopSyncStatus("syncing", t("syncSaving"));
+      try {
+        const body = new URLSearchParams();
+        body.set("action", "saveState");
+        body.set("userId", userId);
+        body.set("payload", JSON.stringify(sheetPayload()));
+        await fetch(syncConfig.sheetUrl, {
+          method: "POST",
+          mode: "no-cors",
+          body
+        });
+        syncConfig.lastSavedAt = new Date().toISOString();
+        saveSyncConfig();
+        syncStatus(t(auto ? "sheetSyncAutoSaved" : "sheetSyncSaved", { name }), "synced");
+        setTopSyncStatus("synced", t("syncDone"));
+        if (!quiet) showToast(t("sheetSyncSaved", { name }));
+      } catch {
+        syncStatus(t("sheetSyncFailed"), "warning");
+        setTopSyncStatus("warning", t("syncFailed"));
+        if (!quiet) showToast(t("sheetSyncFailed"));
+      } finally {
+        sheetSaveInFlight = false;
+        if (!quiet) setSyncBusy(false);
+      }
+    }
+
+    function jsonpRequest(url, params) {
+      return new Promise((resolve, reject) => {
+        const callbackName = `__sheetSync_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+        const script = document.createElement("script");
+        const timeout = window.setTimeout(() => {
+          cleanup();
+          reject(new Error("timeout"));
+        }, 15000);
+        function cleanup() {
+          window.clearTimeout(timeout);
+          delete window[callbackName];
+          script.remove();
+        }
+        window[callbackName] = (result) => {
+          cleanup();
+          resolve(result);
+        };
+        script.onerror = () => {
+          cleanup();
+          reject(new Error("load failed"));
+        };
+        const endpoint = new URL(url);
+        Object.entries(params).forEach(([key, value]) => endpoint.searchParams.set(key, value));
+        endpoint.searchParams.set("callback", callbackName);
+        endpoint.searchParams.set("t", Date.now().toString());
+        script.src = endpoint.toString();
+        document.head.appendChild(script);
+      });
+    }
+
+    function parseRemoteState(result) {
+      const rawPayload = result?.payload ?? result?.state ?? result?.data;
+      if (!rawPayload) return null;
+      const payload = typeof rawPayload === "string" ? JSON.parse(rawPayload) : rawPayload;
+      return payload?.state || payload;
+    }
+
+    function applyRemoteState(remoteState, userId) {
+      const language = state.profile.language || "ko";
+      const nextState = structuredClone(remoteState);
+      nextState.profile = {
+        ...(nextState.profile || {}),
+        userId,
+        userNames: { jed: "Jed", yona: "Yona" },
+        nickname: userDefaultName(userId),
+        language: nextState.profile?.language || language
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState));
+      state = loadState();
+      clearPreviewRecordsForRealUse();
+      render();
+    }
+
+    async function loadStateFromSheet() {
+      if (!saveSheetSyncUrl({ quiet: true })) return;
+      const userId = currentSyncUserId();
+      const name = profileDisplayName();
+      setSyncBusy(true);
+      syncStatus(t("sheetSyncLoading", { name }), "syncing");
+      setTopSyncStatus("syncing", t("syncSaving"));
+      try {
+        const result = await jsonpRequest(syncConfig.sheetUrl, {
+          action: "loadState",
+          userId
+        });
+        const remoteState = parseRemoteState(result);
+        if (!result?.ok || !remoteState) {
+          syncStatus(t("sheetSyncEmpty", { name }), "warning");
+          setTopSyncStatus("warning", t("syncFailed"));
+          showToast(t("sheetSyncEmpty", { name }));
+          return;
+        }
+        applyRemoteState(remoteState, userId);
+        syncConfig.lastLoadedAt = new Date().toISOString();
+        saveSyncConfig();
+        syncStatus(t("sheetSyncLoaded", { name }), "synced");
+        setTopSyncStatus("synced", t("syncDone"));
+        showToast(t("sheetSyncLoaded", { name }));
+      } catch {
+        syncStatus(t("sheetSyncFailed"), "warning");
+        setTopSyncStatus("warning", t("syncFailed"));
+        showToast(t("sheetSyncFailed"));
+      } finally {
+        setSyncBusy(false);
+      }
     }
 
     function t(key, params = {}) {
@@ -8670,16 +10373,25 @@
       if ((state.profile.language || "ko") === "en") {
         return new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(new Date(Date.UTC(year, month - 1, 1)));
       }
+      if ((state.profile.language || "ko") === "zh") {
+        return `${year}年${month}月`;
+      }
       return `${year}년 ${month}월`;
     }
 
     function formatThaiDate(dateKey) {
       const [year, month, day] = dateKey.split("-").map(Number);
       const date = new Date(Date.UTC(year, month - 1, day, 12));
-      const weekday = new Intl.DateTimeFormat("ko-KR", {
+      const lang = state.profile.language || "ko";
+      const locale = lang === "en" ? "en-US" : lang === "zh" ? "zh-CN" : "ko-KR";
+      const weekday = new Intl.DateTimeFormat(locale, {
         timeZone: "Asia/Bangkok",
         weekday: "short"
       }).format(date);
+      if (lang === "en") {
+        return `${new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Bangkok", month: "short", day: "numeric", year: "numeric" }).format(date)} (${weekday})`;
+      }
+      if (lang === "zh") return `${year}年${month}月${day}日(${weekday})`;
       return `${year}년${month}월${day}일(${weekday})`;
     }
 
@@ -8705,15 +10417,33 @@
     }
 
     function workoutName(workout) {
-      return workout.nameKey ? t(workout.nameKey) : workout.name;
+      const builtinNameKeys = {
+        "combo-squat-pushup": "comboSquatPushupName",
+        protein: "proteinName",
+        "nutrition-calories": "caloriesName",
+        carbs: "carbsName",
+        fat: "fatName",
+        "body-weight": "bodyWeightName",
+        "water-intake": "waterIntakeName"
+      };
+      const key = workout.nameKey || builtinNameKeys[workout.id];
+      return key ? t(key) : workout.name;
     }
 
     function getWorkout(workoutId) {
       return state.workouts.find((workout) => workout.id === workoutId);
     }
 
+    function isExerciseWidget(workout) {
+      return !workout.kind || workout.kind === "exercise" || workout.kind === "combo";
+    }
+
+    function isVisibleExerciseWidget(workout) {
+      return isExerciseWidget(workout) && workout.hidden !== true;
+    }
+
     function baseExercises() {
-      return state.workouts.filter((workout) => !workout.kind || workout.kind === "exercise");
+      return state.workouts.filter((workout) => (!workout.kind || workout.kind === "exercise") && workout.hidden !== true);
     }
 
     function weightKg() {
@@ -8753,8 +10483,8 @@
 
     function difficultyPoint(workout) {
       const met = Number(workout.met || 4);
-      if (met >= 8) return 2;
-      if (met >= 5) return 1.5;
+      if (met >= 5) return 2;
+      if (met >= 4) return 1.5;
       if (met >= 3) return 1;
       return 0.5;
     }
@@ -8806,19 +10536,23 @@
     }
 
     function displayKind(workout) {
-      if (workout.kind === "combo") return "조합 운동";
-      if (workout.kind === "nutrition") return "영양소 섭취 기록";
-      if (workout.kind === "body") return "체중 기록";
-      if (workout.kind === "water") return "수분 섭취 횟수";
-      return "개별 운동";
+      if (workout.kind === "nutrition") return t("nutritionRecordTitle");
+      if (workout.kind === "body") return t("weightStatTitle");
+      if (workout.kind === "water") return t("waterStatTitle");
+      return t("workoutPage");
     }
 
     function scoreRuleLabel(workout) {
-      if (workout.kind === "body") return "기록 1회 완료 시 5점";
-      if (workout.kind === "water") return "기록 1회 완료 시 1점";
-      if (workout.kind === "nutrition") return "항목별 기록 1회 완료 시 3점";
-      if (workout.kind === "combo") return "횟수와 난이도 기준 점수";
-      return "횟수와 난이도 기준 점수";
+      if (workout.kind === "body") return t("scoreRecord", { value: "+5" }).trim();
+      if (workout.kind === "water") return t("waterRule");
+      if (workout.kind === "nutrition") return t("nutritionRule");
+      return t("scoreNote");
+    }
+
+    function openScoreRuleDialog() {
+      if (!els.scoreRuleDialog) return;
+      if (els.scoreRuleDialog.open) return;
+      els.scoreRuleDialog.showModal();
     }
 
     function linkedNames(workout) {
@@ -8830,11 +10564,11 @@
     }
 
     function unitForWorkout(workout) {
-      if (workout.unit) return workout.unit;
-      if (workout.kind === "nutrition") return inferNutritionUnit(workoutName(workout));
+      if (workout.kind === "nutrition") return workout.unit || inferNutritionUnit(workoutName(workout));
       if (workout.kind === "body") return "kg";
-      if (workout.kind === "water") return "회";
-      return "회";
+      if (workout.kind === "water") return t("countUnit");
+      if (workout.unit) return workout.unit;
+      return t("countUnit");
     }
 
     function inferNutritionUnit(name = "") {
@@ -8936,6 +10670,22 @@
           </svg>`
       };
       return icons[type] || icons.squat;
+    }
+
+    function escapeAttribute(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    function workoutVisual(workout, fallbackIcon) {
+      if (workout?.image) {
+        const label = escapeAttribute(workoutName(workout));
+        return `<img class="exercise-thumb" src="${escapeAttribute(workout.image)}" alt="${label}">`;
+      }
+      return workoutIcon(fallbackIcon);
     }
 
     function totalForDate(dateKey) {
@@ -9154,94 +10904,15 @@
       }).join("");
     }
 
-    function demoRandom(seed) {
-      let value = seed;
-      return () => {
-        value = (value * 1664525 + 1013904223) % 4294967296;
-        return value / 4294967296;
-      };
-    }
-
-    function seedPreviewData() {
-      const version = "preview-30-days-v2";
-      if (state.previewDataVersion === version) return;
-      const random = demoRandom(20260616);
-      const endDate = todayKey();
-      const exerciseWorkouts = state.workouts.filter((workout) => !workout.kind || workout.kind === "exercise");
-      const comboWorkouts = state.workouts.filter((workout) => workout.kind === "combo");
-      const nutritionWorkouts = state.workouts.filter((workout) => workout.kind === "nutrition");
-      const bodyWorkout = state.workouts.find((workout) => workout.kind === "body");
-      const waterWorkout = state.workouts.find((workout) => workout.kind === "water");
-      const waterBuckets = waterBucketDefinitions().map((bucket) => bucket.key);
-      state.records ||= {};
-      state.waterLogs ||= {};
-      for (let offset = 29; offset >= 0; offset -= 1) {
-        const dateKey = addDays(endDate, -offset);
-        const age = 29 - offset;
-        const weekday = new Date(`${dateKey}T12:00:00Z`).getUTCDay();
-        const effortWave = 0.58 + Math.sin(age / 3.2) * 0.22 + (random() - 0.5) * 0.26;
-        const restDay = weekday === 0 || random() < 0.11;
-        state.records[dateKey] = state.records[dateKey] || {};
-        exerciseWorkouts.forEach((workout, index) => {
-          const target = Math.max(10, Number(workout.target) || 30);
-          const consistency = index === 0 ? 0.88 : index === 1 ? 0.78 : 0.64;
-          const shouldRecord = !restDay && random() < consistency;
-          const value = shouldRecord ? Math.max(1, Math.round(target * Math.max(0.12, Math.min(1.18, effortWave + (random() - 0.45) * 0.28)))) : 0;
-          if (value > 0) state.records[dateKey][workout.id] = value;
-          else delete state.records[dateKey][workout.id];
-        });
-        comboWorkouts.forEach((workout) => {
-          const target = Math.max(8, Number(workout.target) || 20);
-          const value = !restDay && random() < 0.38 ? Math.round(target * (0.35 + random() * 0.55)) : 0;
-          if (value > 0) state.records[dateKey][workout.id] = value;
-          else delete state.records[dateKey][workout.id];
-        });
-        nutritionWorkouts.forEach((workout) => {
-          const target = Math.max(1, Number(workout.target) || 100);
-          const key = nutritionKey(workout);
-          const base = key === "calories" ? 0.74 : key === "protein" ? 0.68 : key === "carbs" ? 0.7 : 0.62;
-          const shouldRecord = random() < 0.82;
-          const ratio = Math.max(0.28, Math.min(1.08, base + Math.sin((age + target) / 4.7) * 0.14 + (random() - 0.5) * 0.24));
-          const value = shouldRecord ? Math.round(target * ratio) : 0;
-          if (value > 0) state.records[dateKey][workout.id] = value;
-          else delete state.records[dateKey][workout.id];
-        });
-        if (bodyWorkout) {
-          const trend = 74.2 - age * 0.055;
-          const value = Math.max(60, trend + (random() - 0.5) * 0.45);
-          if (age % 3 !== 1 || offset < 7) state.records[dateKey][bodyWorkout.id] = Number(value.toFixed(1));
-          else delete state.records[dateKey][bodyWorkout.id];
-        }
-        if (waterWorkout) {
-          const targetMl = waterGoalMl(waterWorkout);
-          const sipMl = waterSipMl(waterWorkout);
-          const ratio = Math.max(0.35, Math.min(1.08, 0.68 + Math.sin(age / 4) * 0.18 + (random() - 0.5) * 0.22));
-          const totalMl = Math.round(targetMl * ratio / sipMl) * sipMl;
-          const sipCount = Math.max(0, Math.round(totalMl / sipMl));
-          if (sipCount > 0) state.records[dateKey][waterWorkout.id] = sipCount;
-          else delete state.records[dateKey][waterWorkout.id];
-          state.waterLogs[dateKey] ||= {};
-          state.waterLogs[dateKey][waterWorkout.id] = {};
-          let remaining = totalMl;
-          waterBuckets.forEach((bucket, index) => {
-            if (remaining <= 0) return;
-            const leftBuckets = waterBuckets.length - index;
-            const baseMl = Math.max(0, Math.round((remaining / leftBuckets) / sipMl) * sipMl);
-            const variation = Math.round(((random() - 0.42) * sipMl * 3) / sipMl) * sipMl;
-            const ml = Math.max(0, Math.min(remaining, baseMl + variation));
-            if (ml > 0) state.waterLogs[dateKey][waterWorkout.id][bucket] = ml;
-            remaining -= ml;
-          });
-          if (remaining > 0) {
-            const lastBucket = waterBuckets[waterBuckets.length - 1];
-            state.waterLogs[dateKey][waterWorkout.id][lastBucket] = Number(state.waterLogs[dateKey][waterWorkout.id][lastBucket] || 0) + remaining;
-          }
-        }
-        if (Object.keys(state.records[dateKey]).length === 0) delete state.records[dateKey];
-      }
-      state.previewDataVersion = version;
+    function clearPreviewRecordsForRealUse() {
+      if (state.recordsResetVersion === RECORD_RESET_VERSION) return false;
+      state.records = {};
+      state.waterLogs = {};
       state.lastActions = [];
+      delete state.previewDataVersion;
+      state.recordsResetVersion = RECORD_RESET_VERSION;
       saveState();
+      return true;
     }
 
     function buildSparkline(values) {
@@ -9391,7 +11062,7 @@
       const markers = points.map((point) => `<circle cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="3.2"></circle>`).join("");
       return `
         <div class="nutrition-trend">
-          <p>최근 7일 추이</p>
+          <p>${t("last7Days")}</p>
           <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">
             <path class="nutrition-trend-area" d="${area}"></path>
             <path class="nutrition-trend-line" d="${line}"></path>
@@ -9458,23 +11129,107 @@
       return count;
     }
 
+    function userDefaultName(userId) {
+      if (userId === "yona") return "Yona";
+      return "Jed";
+    }
+
+    function ensureProfileUsers() {
+      state.profile.userNames = { jed: "Jed", yona: "Yona" };
+      if (state.profile.userId === "dae") state.profile.userId = "jed";
+      if (state.profile.userId === "partner") state.profile.userId = "yona";
+      if (!state.profile.userId || !state.profile.userNames[state.profile.userId]) state.profile.userId = "jed";
+      return state.profile.userNames;
+    }
+
+    function profileDisplayName() {
+      const names = ensureProfileUsers();
+      const userId = state.profile.userId || "";
+      if (userId) {
+        return String(names[userId] || userDefaultName(userId)).trim() || userDefaultName(userId);
+      }
+      return "Jed";
+    }
+
+    function updateUserChoiceUI() {
+      const names = ensureProfileUsers();
+      els.userChoiceButtons.forEach((button) => {
+        const userId = button.dataset.userId;
+        const selected = state.profile.userId === userId;
+        button.classList.toggle("is-selected", selected);
+        const label = names[userId] || button.dataset.defaultName || userDefaultName(userId);
+        button.textContent = label;
+        button.setAttribute("aria-pressed", selected ? "true" : "false");
+      });
+    }
+
+    function updateLanguageChoiceUI() {
+      els.languageChoiceButtons.forEach((button) => {
+        const selected = (state.profile.language || "ko") === button.dataset.languageValue;
+        button.classList.toggle("is-selected", selected);
+        button.setAttribute("aria-pressed", selected ? "true" : "false");
+      });
+    }
+
+    function updateDesignThemeChoiceUI() {
+      els.designThemeChoiceButtons.forEach((button) => {
+        const selected = (state.profile.designTheme || "apple") === button.dataset.designThemeValue;
+        button.classList.toggle("is-selected", selected);
+        button.setAttribute("aria-pressed", selected ? "true" : "false");
+      });
+    }
+
+    async function selectProfileUser(userId) {
+      const names = ensureProfileUsers();
+      state.profile.userId = userId;
+      state.profile.nickname = String(names[userId] || userDefaultName(userId)).trim() || userDefaultName(userId);
+      suppressAutoSave = true;
+      saveState();
+      suppressAutoSave = false;
+      render();
+      showToast(t("profileUserSaved", { name: state.profile.nickname }));
+      if (syncConfig.sheetUrl) await loadStateFromSheet();
+    }
+
+    function selectLanguage(language) {
+      state.profile.language = language || "ko";
+      saveState();
+      render();
+      showToast(t("saved"));
+    }
+
+    function selectDesignTheme(theme) {
+      state.profile.designTheme = theme === "figma" ? "figma" : "apple";
+      saveState();
+      render();
+      showToast(t("saved"));
+    }
+
     function applyLanguage() {
       document.documentElement.lang = state.profile.language || "ko";
+      const designTheme = state.profile.designTheme === "figma" ? "figma" : "apple";
+      document.body.classList.toggle("theme-figma", designTheme === "figma");
+      document.body.classList.toggle("theme-apple", designTheme !== "figma");
       document.querySelectorAll("[data-i18n]").forEach((node) => {
         node.textContent = t(node.dataset.i18n);
       });
-      const nickname = state.profile.nickname.trim() || t("defaultName");
+      const nickname = profileDisplayName();
       els.subtitle.textContent = t("hello", { name: nickname });
       if (els.headerDateLine) els.headerDateLine.textContent = formatThaiDate(todayKey());
       els.todayLine.textContent = t("todayLine", { date: formatThaiDate(todayKey()) });
       els.profileButton.textContent = nickname.slice(0, 2).toUpperCase();
       els.profileButton.title = t("profile");
-      els.nickname.value = state.profile.nickname;
+      els.nickname.value = nickname;
       els.language.value = state.profile.language;
+      els.designTheme.value = designTheme;
       els.age.value = state.profile.age || "";
       els.sex.value = state.profile.sex || "";
       els.heightCm.value = state.profile.heightCm || "";
       els.weightKg.value = state.profile.weightKg || "";
+      updateUserChoiceUI();
+      updateLanguageChoiceUI();
+      updateDesignThemeChoiceUI();
+      updateSyncUI();
     }
 
     function renderTodayScore() {
@@ -9492,12 +11247,13 @@
       const deltaText = diff === 0
         ? t("scoreSame")
         : t("scoreDelta", { delta: `${diff > 0 ? "+" : ""}${Math.round(diff)}` });
+      const ruleButton = `<button class="score-rule-button" type="button" data-score-rule aria-label="${t("scoreRuleOpenLabel")}" title="${t("scoreRuleOpenLabel")}">!</button>`;
       els.scoreMiniStrips.forEach((strip) => {
         strip.innerHTML = `
-          <div class="score-mini-title">오늘의 건강 점수 : <strong>${score}</strong><span class="score-mini-unit">${t("scoreUnit")}</span></div>
+          <div class="score-mini-title">${t("scoreTitle")} : <strong>${score}</strong><span class="score-mini-unit">${t("scoreUnit")}</span>${ruleButton}</div>
         `;
       });
-      els.todayLine.innerHTML = `${t("scoreTitle")} <span class="score-info">i</span>`;
+      els.todayLine.innerHTML = `${t("scoreTitle")} <button class="score-info score-rule-button" type="button" data-score-rule aria-label="${t("scoreRuleOpenLabel")}" title="${t("scoreRuleOpenLabel")}">!</button>`;
       els.todayScoreLine.innerHTML = `
         <div class="score-number"><strong>${score}</strong><span>${t("scoreUnit")}</span></div>
         <div class="score-delta${diff < 0 ? " down" : ""}">${deltaText}</div>
@@ -9535,6 +11291,11 @@
       const dateKey = todayKey();
       els.recordGrid.innerHTML = "";
       els.workoutGrid.innerHTML = "";
+      ensureRecordSections();
+      const recordCards = {
+        weight: [],
+        water: []
+      };
 
       if (state.workouts.length === 0) {
         const empty = document.createElement("div");
@@ -9547,21 +11308,21 @@
       const orderedWorkouts = [
         ...state.workouts.filter((workout) => workout.kind === "body"),
         ...state.workouts.filter((workout) => workout.kind === "water"),
-        ...state.workouts.filter((workout) => !workout.kind || workout.kind === "exercise" || workout.kind === "combo")
+        ...state.workouts.filter(isVisibleExerciseWidget)
       ];
       const exerciseSection = document.createElement("section");
       exerciseSection.className = "exercise-group-card";
       exerciseSection.innerHTML = `
         <div class="exercise-group-head">
           <div>
-            <h3>운동 기록</h3>
-            <p>운동 위젯은 두 항목씩 묶어서 빠르게 기록합니다.</p>
-          </div>
-          <div class="section-actions">
-            <button class="text-btn" type="button" id="openExerciseManage">운동 항목관리</button>
+            <h3>${t("exerciseRecordTitle")}</h3>
+            <p>${t("exerciseRecordHint")}</p>
           </div>
         </div>
         <div class="exercise-group-grid"></div>
+        <div class="exercise-manage-footer">
+          <button class="text-btn stats-manage-button" type="button" id="openExerciseManage">${t("exerciseManage")}</button>
+        </div>
       `;
       const exerciseGrid = exerciseSection.querySelector(".exercise-group-grid");
       exerciseSection.querySelector("#openExerciseManage").addEventListener("click", () => openWorkoutDialog());
@@ -9576,8 +11337,8 @@
         const extraMeta = workout.kind === "combo"
           ? linkedNames(workout)
           : workout.kind === "nutrition" || workout.kind === "body" || workout.kind === "water"
-            ? "기록 위젯"
-            : `템포 ${Number(workout.secondsPerRep || 3)}초`;
+            ? t("recordWidget")
+            : t("tempoLabel", { seconds: Number(workout.secondsPerRep || 3) });
         const theme = workoutTheme(index);
         const card = document.createElement("article");
         if (workout.kind === "body" || workout.kind === "water") {
@@ -9591,7 +11352,7 @@
             const currentDateKey = latest ? latest.dateKey : dateKey;
             const previous = latest ? previousWorkoutEntry(workout.id, latest.dateKey) : null;
             const diff = previous ? currentValue - previous.value : 0;
-            const diffText = previous ? `${diff > 0 ? "+" : ""}${diff.toFixed(1)} kg` : "첫 기록";
+            const diffText = previous ? `${diff > 0 ? "+" : ""}${diff.toFixed(1)} kg` : t("firstRecord");
             const historyValues = weeklyWorkoutValues(dateKey, workout.id);
             const trendValues = fillForwardWorkoutValues(historyValues, workout.id);
             const trendHasData = trendValues.some((item) => item.value > 0);
@@ -9605,14 +11366,14 @@
                   <h3></h3>
                 </div>
                 <div class="weight-record-actions">
-                  <button class="weight-record-button" type="button" data-action="set">+ 기록</button>
-                  <button class="weight-manage-button" type="button" data-action="weight-manage">목표</button>
+                  <button class="weight-record-button" type="button" data-action="set">+ ${t("record")}</button>
+                  <button class="weight-manage-button" type="button" data-action="weight-manage">${t("goalButton")}</button>
                 </div>
               </div>
               <div class="weight-record-main">
                 <div>
                   <div class="weight-record-value">${formatWeightValue(currentValue)} <small>${unit}</small></div>
-                  <div class="weight-record-time">${currentValue ? formatWeightTimestamp(currentDateKey) : "오늘 체중을 기록하세요"}</div>
+                  <div class="weight-record-time">${currentValue ? formatWeightTimestamp(currentDateKey) : t("weightRecordPrompt")}</div>
                 </div>
                 <div class="weight-record-trend">
                   ${buildMiniLine(trendData, {
@@ -9624,18 +11385,18 @@
                     pad: 7,
                     preserveAspectRatio: "none"
                   })}
-                  <div class="weight-record-delta${diff > 0 ? " up" : ""}"><span>지난 기록보다</span><strong>${diffText}</strong></div>
+                  <div class="weight-record-delta${diff > 0 ? " up" : ""}"><span>${t("previousRecord")}</span><strong>${diffText}</strong></div>
                 </div>
               </div>
               <div class="weight-record-history">
-                <h4>최근 기록</h4>
+                <h4>${t("recentRecord")}</h4>
                 <div class="weight-history-grid">${buildWeightHistory(historyValues, currentDateKey)}</div>
               </div>
             `;
             card.querySelector("h3").textContent = displayKind(workout);
             card.querySelector("[data-action='set']").addEventListener("click", () => handleCounterAction(workout, "set"));
             card.querySelector("[data-action='weight-manage']").addEventListener("click", openWeightManage);
-            els.recordGrid.append(card);
+            recordCards.weight.push(card);
             return;
           }
           if (workout.kind === "water") {
@@ -9651,7 +11412,7 @@
                   <div class="water-record-icon">${logIcon("water")}</div>
                   <h3></h3>
                 </div>
-                <button class="water-manage-button" type="button" data-action="water-manage">관리</button>
+                <button class="water-manage-button" type="button" data-action="water-manage">${t("manage")}</button>
               </div>
               <div class="water-record-main">
                 <div class="water-cup-row">${buildWaterCups(bucketValues, targetMl)}</div>
@@ -9661,8 +11422,8 @@
                 </div>
               </div>
               <div class="water-action-row">
-                <button class="water-sip-button" type="button" data-action="inc" data-value="1">+1 모금 <span>${waterSipMl(workout)}ml</span></button>
-                <button class="water-undo-button" type="button" data-action="undo" aria-label="되돌리기">
+                <button class="water-sip-button" type="button" data-action="inc" data-value="1">${t("sipButton")} <span>${waterSipMl(workout)}ml</span></button>
+                <button class="water-undo-button" type="button" data-action="undo" aria-label="${t("undo")}">
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M9 14 4 9l5-5"/>
                     <path d="M5 9h8a6 6 0 1 1 0 12H8"/>
@@ -9673,11 +11434,11 @@
                 <div class="water-week-grid">${buildWaterWeekHistory(dateKey, workout)}</div>
               </div>
             `;
-            card.querySelector("h3").textContent = "수분 섭취";
+            card.querySelector("h3").textContent = t("waterStatTitle");
             card.querySelector("[data-action='water-manage']").addEventListener("click", openWaterManage);
             card.querySelector("[data-action='inc']").addEventListener("click", () => addWaterSip(workout, 1));
             card.querySelector("[data-action='undo']").addEventListener("click", () => handleCounterAction(workout, "undo"));
-            els.recordGrid.append(card);
+            recordCards.water.push(card);
             return;
           }
           card.className = `log-card ${workout.kind}-card`;
@@ -9687,7 +11448,7 @@
           const valueUnit = displayUnit(workout, count);
           const targetUnit = displayUnit(workout, target);
           const quickButtons = workout.kind === "water"
-            ? `<div class="quick-row log-quick-row"><button type="button" data-action="inc" data-value="1">+1회</button><button type="button" data-action="inc" data-value="2">+2회</button><button type="button" data-action="set">기록</button></div>`
+            ? `<div class="quick-row log-quick-row"><button type="button" data-action="inc" data-value="1">${t("oneTime")}</button><button type="button" data-action="inc" data-value="2">${t("twoTimes")}</button><button type="button" data-action="set">${t("record")}</button></div>`
             : "";
           card.innerHTML = `
             <div class="log-head">
@@ -9696,20 +11457,20 @@
                 <div>
                   <h3></h3>
                   <p>${scoreRuleLabel(workout)}</p>
-                  ${workout.kind === "body" ? `<div class="record-status ${done ? "done" : "missing"}">${done ? "✓ 오늘 기록 완료" : "✕ 오늘 기록 미완료"}</div>` : ""}
+                  ${workout.kind === "body" ? `<div class="record-status ${done ? "done" : "missing"}">${done ? `✓ ${t("recordDone")}` : `✕ ${t("recordMissing")}`}</div>` : ""}
                 </div>
               </div>
               <div class="section-actions">
-                ${workout.kind === "body" ? `<button class="log-record" type="button" data-action="set">기록</button>` : ""}
-                <button class="text-btn" type="button" data-action="${workout.kind === "body" ? "weight-manage" : "water-manage"}">${workout.kind === "body" ? "체중 관리" : "수분 관리"}</button>
+                ${workout.kind === "body" ? `<button class="log-record" type="button" data-action="set">${t("record")}</button>` : ""}
+                <button class="text-btn" type="button" data-action="${workout.kind === "body" ? "weight-manage" : "water-manage"}">${workout.kind === "body" ? t("weightManage") : t("waterManage")}</button>
               </div>
             </div>
             <div>
               <div class="log-value">${formatMetric(count, workout)} <small>${valueUnit}</small></div>
               <div class="log-sub">
                 ${workout.kind === "body"
-                  ? (target > 0 ? `목표 ${formatMetric(target, workout)}${unit}` : "오늘 체중을 기록하세요")
-                  : (target > 0 ? `목표 ${formatMetric(target, workout)}${targetUnit} · ${count}점` : "오늘 수분 섭취를 기록하세요")}
+                  ? (target > 0 ? t("goalMetric", { value: formatMetric(target, workout), unit }) : t("weightRecordPrompt"))
+                  : (target > 0 ? `${t("goalMetric", { value: formatMetric(target, workout), unit: targetUnit })} · ${count}${t("scoreUnit")}` : t("waterPrompt"))}
               </div>
             </div>
             ${buildLogLinePanel(weeklyValues, workout)}
@@ -9725,7 +11486,7 @@
               button.addEventListener("click", () => handleCounterAction(workout, button.dataset.action, button.dataset.value));
             }
           });
-          els.recordGrid.append(card);
+          recordCards[workout.kind === "body" ? "weight" : "water"].push(card);
           return;
         }
         card.className = "counter-card";
@@ -9736,7 +11497,7 @@
         card.innerHTML = `
           <div class="card-head">
             <div class="card-title">
-              <div class="icon-bubble">${workoutIcon(theme.icon)}</div>
+              <div class="icon-bubble">${workoutVisual(workout, theme.icon)}</div>
               <div>
                 <div class="exercise-title-line">
                   <h3></h3>
@@ -9750,7 +11511,7 @@
           <div class="widget-meta">
             <span class="meta-pill">${displayKind(workout)}</span>
             <span class="meta-pill">${extraMeta}</span>
-            ${workout.kind === "nutrition" || workout.kind === "body" || workout.kind === "water" ? "" : `<span class="meta-pill">${points}점</span><span class="meta-pill">~${kcal} kcal</span>`}
+            ${workout.kind === "nutrition" || workout.kind === "body" || workout.kind === "water" ? "" : `<span class="meta-pill">${points}${t("scoreUnit")}</span><span class="meta-pill">~${kcal} kcal</span>`}
           </div>
           <div class="sparkline-panel">
             ${buildWorkoutTrend(weeklyValues, target)}
@@ -9763,7 +11524,7 @@
             <button type="button" data-action="inc" data-value="1">+1</button>
             <button type="button" data-action="inc" data-value="5">+5</button>
             <button type="button" data-action="inc" data-value="10">+10</button>
-            <button class="workout-undo-button" type="button" data-action="undo" aria-label="되돌리기">
+            <button class="workout-undo-button" type="button" data-action="undo" aria-label="${t("undo")}">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M9 14 4 9l5-5"/>
                 <path d="M5 9h8a6 6 0 1 1 0 12H8"/>
@@ -9781,7 +11542,7 @@
       if (exerciseGrid.children.length) {
         els.workoutGrid.append(exerciseSection);
       }
-      renderNutritionGroup(els.recordGrid);
+      appendRecordSections(recordCards);
     }
 
     function renderNutritionGroup(targetGrid = els.recordGrid) {
@@ -9799,10 +11560,11 @@
           const rank = (workout) => /단백질|protein/i.test(workoutName(workout)) ? -1 : 0;
           return rank(a) - rank(b);
         });
-      if (!nutritionItems.length) return;
+      if (!nutritionItems.length) return null;
+      const visibleNutritionItems = nutritionItems.filter((workout) => workout.hidden !== true);
       const card = document.createElement("article");
       card.className = "nutrition-group-card";
-      const rows = nutritionItems.map((workout, index) => {
+      const rows = visibleNutritionItems.map((workout, index) => {
         const count = getCount(dateKey, workout.id);
         const target = Number(workout.target || 0);
         const unit = unitForWorkout(workout);
@@ -9822,23 +11584,23 @@
             ${buildNutritionTrend(weeklyValues, accent)}
             <button class="nutrition-record-button" type="button" data-action="set" data-workout-id="${workout.id}">
               <span>+</span>
-              <strong>기록하기</strong>
+              <strong>${t("recordAction")}</strong>
             </button>
           </div>
         `;
-      }).join("");
+      }).join("") || `<p class="empty">${t("nutritionEmpty")}</p>`;
       card.innerHTML = `
         <div class="nutrition-group-head">
           <div class="nutrition-head-title">
             <div class="nutrition-head-icon">${logIcon("nutrition")}</div>
             <div>
-              <h3>영양소 섭취 기록</h3>
-              <p>항목별 기록 1회 완료 시 3점</p>
+              <h3>${t("nutritionRecordTitle")}</h3>
+              <p>${t("nutritionRule")}</p>
             </div>
           </div>
           <div class="section-actions">
-            <button class="text-btn" type="button" id="openNutritionImport">가져오기</button>
-            <button class="text-btn" type="button" id="openNutritionManage">항목 관리</button>
+            <button class="text-btn" type="button" id="openNutritionImport">${t("import")}</button>
+            <button class="text-btn" type="button" id="openNutritionManage">${t("nutritionManageTitle")}</button>
           </div>
         </div>
         <div class="nutrition-group-list">${rows}</div>
@@ -9849,7 +11611,127 @@
         const workout = getWorkout(button.dataset.workoutId);
         button.addEventListener("click", () => handleCounterAction(workout, "set"));
       });
-      targetGrid.append(card);
+      if (targetGrid) targetGrid.append(card);
+      return card;
+    }
+
+    function recordSectionCatalog() {
+      const catalog = [];
+      if (state.workouts.some((workout) => workout.kind === "body")) {
+        catalog.push({
+          id: "weight",
+          title: t("weightStatTitle"),
+          subtitle: t("weightStatSubtitle")
+        });
+      }
+      if (state.workouts.some((workout) => workout.kind === "water")) {
+        catalog.push({
+          id: "water",
+          title: t("waterStatTitle"),
+          subtitle: t("waterStatSubtitle")
+        });
+      }
+      if (state.workouts.some((workout) => workout.kind === "nutrition")) {
+        catalog.push({
+          id: "nutrition",
+          title: t("nutritionRecordTitle"),
+          subtitle: t("nutritionRule")
+        });
+      }
+      return catalog;
+    }
+
+    function ensureRecordSections() {
+      const catalog = recordSectionCatalog();
+      const ids = new Set(catalog.map((item) => item.id));
+      const existing = Array.isArray(state.recordSections) ? state.recordSections : [];
+      state.recordSections = existing
+        .filter((section) => ids.has(section.id))
+        .map((section) => ({ id: section.id, enabled: section.enabled !== false }));
+      catalog.forEach((item) => {
+        if (!state.recordSections.some((section) => section.id === item.id)) {
+          state.recordSections.push({ id: item.id, enabled: true });
+        }
+      });
+    }
+
+    function appendRecordSections(recordCards) {
+      ensureRecordSections();
+      let appended = 0;
+      state.recordSections.forEach((section) => {
+        if (section.enabled === false) return;
+        if (section.id === "weight") {
+          recordCards.weight.forEach((card) => {
+            els.recordGrid.append(card);
+            appended += 1;
+          });
+        }
+        if (section.id === "water") {
+          recordCards.water.forEach((card) => {
+            els.recordGrid.append(card);
+            appended += 1;
+          });
+        }
+        if (section.id === "nutrition") {
+          const nutritionCard = renderNutritionGroup(null);
+          if (nutritionCard) {
+            els.recordGrid.append(nutritionCard);
+            appended += 1;
+          }
+        }
+      });
+      if (!appended) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = t("recordSectionsEmpty");
+        els.recordGrid.append(empty);
+      }
+    }
+
+    function openRecordManage() {
+      renderRecordManageList();
+      els.recordManageDialog.showModal();
+    }
+
+    function renderRecordManageList() {
+      ensureRecordSections();
+      const catalog = new Map(recordSectionCatalog().map((item) => [item.id, item]));
+      els.recordManageList.innerHTML = state.recordSections.map((section, index) => {
+        const definition = catalog.get(section.id);
+        if (!definition) return "";
+        return `
+          <div class="widget-order-item stats-manage-item ${section.enabled === false ? "is-hidden" : ""}" data-record-section-id="${section.id}">
+            <div class="widget-order-name">
+              <strong>${definition.title}</strong>
+              <span>${definition.subtitle}</span>
+            </div>
+            <div class="widget-order-actions">
+              <button class="order-button" type="button" data-record-action="up" data-record-id="${section.id}" ${index === 0 ? "disabled" : ""}>↑</button>
+              <button class="order-button" type="button" data-record-action="down" data-record-id="${section.id}" ${index === state.recordSections.length - 1 ? "disabled" : ""}>↓</button>
+              <button class="order-button stats-toggle-button" type="button" data-record-action="toggle" data-record-id="${section.id}">${section.enabled === false ? "+" : "−"}</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+      els.recordManageList.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => handleRecordManageAction(button.dataset.recordId, button.dataset.recordAction));
+      });
+    }
+
+    function handleRecordManageAction(sectionId, action) {
+      const index = state.recordSections.findIndex((section) => section.id === sectionId);
+      if (index === -1) return;
+      if (action === "toggle") {
+        state.recordSections[index].enabled = state.recordSections[index].enabled === false;
+      } else {
+        const targetIndex = index + (action === "up" ? -1 : 1);
+        if (targetIndex < 0 || targetIndex >= state.recordSections.length) return;
+        const [item] = state.recordSections.splice(index, 1);
+        state.recordSections.splice(targetIndex, 0, item);
+      }
+      saveState();
+      renderCounters();
+      renderRecordManageList();
     }
 
     function handleCounterAction(workout, action, value) {
@@ -9914,12 +11796,12 @@
     function statsCatalog() {
       return state.workouts
         .filter((workout) => {
+          if (isExerciseWidget(workout)) return isVisibleExerciseWidget(workout);
+          if (workout.kind === "nutrition") return workout.hidden !== true;
           return workout.kind === "body"
             || workout.kind === "water"
             || workout.kind === "nutrition"
-            || workout.kind === "combo"
-            || !workout.kind
-            || workout.kind === "exercise";
+            || isVisibleExerciseWidget(workout);
         })
         .map((workout) => {
           const type = workout.kind === "body" ? "weight"
@@ -9930,17 +11812,17 @@
             id: `${type}:${workout.id}`,
             workoutId: workout.id,
             type,
-            title: type === "weight" ? "체중 기록"
-              : type === "water" ? "수분 섭취"
-                : type === "nutrition" ? `${workoutName(workout)} 섭취 기록`
-                  : `${workoutName(workout)} 운동 기록`,
-            subtitle: type === "weight" ? "월별 체중 변화"
-              : type === "water" ? "월별 수분 섭취량"
-                : type === "nutrition" ? "월별 영양소 섭취량"
+            title: type === "weight" ? t("weightStatTitle")
+              : type === "water" ? t("waterStatTitle")
+                : type === "nutrition" ? t("nutritionStatTitle", { name: workoutName(workout) })
+                  : t("workoutStatTitle", { name: workoutName(workout) }),
+            subtitle: type === "weight" ? t("weightStatSubtitle")
+              : type === "water" ? t("waterStatSubtitle")
+                : type === "nutrition" ? t("nutritionStatSubtitle")
                   : displayKind(workout),
             unit: type === "weight" ? "kg"
               : type === "water" ? "L"
-                : type === "workout" ? "회"
+                : type === "workout" ? t("countUnit")
                   : unitForWorkout(workout),
             workout
           };
@@ -9992,13 +11874,13 @@
       const monthLabel = formatMonthLabel(statsMonthKey);
       els.monthSwitcher.classList.add("show");
       els.statsMonthLabel.textContent = monthLabel;
-      els.statsRangeLabel.textContent = `${monthLabel} 기록 통계`;
+      els.statsRangeLabel.textContent = t("monthlyStatsLabel", { month: monthLabel });
 
       els.statsWorkoutList.innerHTML = "";
       if (activeSections.length === 0) {
         const empty = document.createElement("div");
         empty.className = "empty";
-        empty.textContent = "통계 관리에서 표시할 섹션을 추가하세요.";
+        empty.textContent = t("statsEmpty");
         els.statsWorkoutList.append(empty);
         return;
       }
@@ -10031,8 +11913,8 @@
           ${buildStatBars(values)}
           <div class="stat-card-meta">
             <span class="meta-pill">${t("monthlyMode")}</span>
-            <span class="meta-pill">${recordedDays}일 기록</span>
-            <span class="meta-pill">${definition.type === "weight" ? "최근 기록" : "월 누적"}</span>
+            <span class="meta-pill">${t("daysRecorded", { days: recordedDays })}</span>
+            <span class="meta-pill">${definition.type === "weight" ? t("latestRecord") : t("monthlyTotal")}</span>
           </div>
         `;
         els.statsWorkoutList.append(card);
@@ -10167,31 +12049,121 @@
     function openWorkoutDialog(workout = null) {
       els.editingWorkoutId.value = workout ? workout.id : "";
       els.workoutDialogTitle.textContent = workout ? t("edit") : t("addWorkout");
-      els.widgetKind.value = workout ? workout.kind || "exercise" : "exercise";
+      els.widgetKind.value = "exercise";
+      els.exerciseBodyPart.value = workout?.bodyPart || bodyPartForImage(workout?.image) || "chest";
+      els.workoutImage.value = workout?.image || "";
       els.workoutName.value = workout ? workoutName(workout) : "";
       els.workoutTarget.value = workout ? workout.target || 0 : 50;
-      els.workoutMet.value = workout ? Number(workout.met || 4) : 5;
+      els.workoutMet.value = workout ? Math.max(1, Math.min(5, Number(workout.met || 4))) : 5;
       els.secondsPerRep.value = workout ? Number(workout.secondsPerRep || 3) : 3;
+      renderExerciseImagePicker({ expanded: false });
       renderComboList(workout);
       renderWidgetOrderList();
       updateWidgetKindFields();
+      els.hideWorkoutButton.style.display = workout ? "inline-flex" : "none";
+      els.hideWorkoutButton.textContent = workout?.hidden === true ? t("unhide") : t("hide");
       els.deleteWorkoutButton.style.display = workout ? "inline-flex" : "none";
       if (!els.workoutDialog.open) els.workoutDialog.showModal();
-      setTimeout(() => els.workoutName.focus(), 50);
+      if (!window.matchMedia("(max-width: 760px)").matches) {
+        setTimeout(() => els.workoutName.focus(), 50);
+      }
+    }
+
+    function renderExerciseImagePicker({ expanded = !els.exerciseImageGrid.hidden } = {}) {
+      const selectedImage = els.workoutImage.value;
+      const selectedAsset = findExerciseAsset(selectedImage);
+      els.exerciseBodyPart.value = selectedAsset?.bodyPart || "";
+      const items = exerciseLibraryItems("all");
+      els.exerciseImageGrid.hidden = !expanded;
+      els.toggleExerciseImages.textContent = expanded ? t("closeImage") : t("selectImage");
+      els.exerciseImagePreview.innerHTML = selectedAsset
+        ? `<img src="${escapeAttribute(selectedAsset.image)}" alt="${escapeAttribute(selectedAsset.name)}"><span>${selectedAsset.name}</span>`
+        : `<span>${t("imageNoSelection")}</span>`;
+      els.exerciseImageGrid.innerHTML = items.map((item) => `
+        <button class="exercise-image-option ${item.image === selectedImage ? "is-selected" : ""}" type="button" data-image="${escapeAttribute(item.image)}" data-name="${escapeAttribute(item.name)}">
+          <img src="${escapeAttribute(item.image)}" alt="${escapeAttribute(item.name)}">
+          <span>${item.name}</span>
+        </button>
+      `).join("");
+      els.exerciseImageGrid.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => {
+          els.workoutImage.value = button.dataset.image || "";
+          if (!els.workoutName.value.trim()) els.workoutName.value = button.dataset.name || "";
+          renderExerciseImagePicker({ expanded: true });
+        });
+      });
+    }
+
+    function toggleWorkoutHidden(workoutId, options = {}) {
+      const workout = getWorkout(workoutId);
+      if (!workout || !isExerciseWidget(workout)) return;
+      workout.hidden = workout.hidden !== true;
+      saveState();
+      if (options.closeDialog && els.workoutDialog.open) {
+        els.workoutDialog.close();
+      }
+      render();
+      if (els.workoutDialog.open) {
+        renderWidgetOrderList();
+        if (els.editingWorkoutId.value === workoutId) {
+          els.hideWorkoutButton.textContent = workout.hidden === true ? t("unhide") : t("hide");
+        }
+      }
+      showToast(workout.hidden === true ? t("hiddenSaved") : t("unhiddenSaved"));
+    }
+
+    function permanentlyDeleteWorkout(workoutId, options = {}) {
+      const workout = getWorkout(workoutId);
+      if (!workout || !isExerciseWidget(workout)) return;
+      const label = workoutName(workout);
+      const confirmed = options.skipConfirm || window.confirm(t("deleteConfirm", { name: label }));
+      if (!confirmed) return;
+      state.workouts = state.workouts.filter((item) => item.id !== workoutId);
+      state.workouts.forEach((item) => {
+        if (Array.isArray(item.components)) {
+          item.components = item.components.filter((componentId) => componentId !== workoutId);
+        }
+      });
+      Object.keys(state.records || {}).forEach((dateKey) => {
+        delete state.records[dateKey][workoutId];
+        if (Object.keys(state.records[dateKey]).length === 0) delete state.records[dateKey];
+      });
+      Object.keys(state.waterLogs || {}).forEach((dateKey) => {
+        if (state.waterLogs[dateKey]) {
+          delete state.waterLogs[dateKey][workoutId];
+          if (Object.keys(state.waterLogs[dateKey]).length === 0) delete state.waterLogs[dateKey];
+        }
+      });
+      state.lastActions = state.lastActions
+        .filter((item) => item.workoutId !== workoutId)
+        .map((item) => ({
+          ...item,
+          linked: (item.linked || []).filter((componentId) => componentId !== workoutId)
+        }));
+      state.statsSections = (state.statsSections || []).filter((section) => !section.id.endsWith(`:${workoutId}`));
+      saveState();
+      if (els.workoutDialog.open && els.editingWorkoutId.value === workoutId) {
+        els.workoutDialog.close();
+      }
+      render();
+      if (els.workoutDialog.open) renderWidgetOrderList();
+      showToast(t("deletedWithRecords", { name: label }));
     }
 
     function renderWidgetOrderList() {
-      const manageable = state.workouts.filter((workout) => !workout.kind || workout.kind === "exercise" || workout.kind === "combo");
+      const manageable = state.workouts.filter(isExerciseWidget);
       els.widgetOrderList.innerHTML = manageable.map((workout, index) => `
-        <div class="widget-order-item" data-order-id="${workout.id}">
+        <div class="widget-order-item${workout.hidden === true ? " is-hidden" : ""}" data-order-id="${workout.id}">
           <div class="widget-order-name">
-            <strong>${workoutName(workout)}</strong>
-            <span>${displayKind(workout)}</span>
+            <strong>${workoutName(workout)}${workout.hidden === true ? `<em class="hidden-badge">${t("hidden")}</em>` : ""}</strong>
+            <span>${displayKind(workout)}${workout.hidden === true ? ` · ${t("hiddenHome")}` : ""}</span>
           </div>
           <div class="widget-order-actions">
             <button class="order-button" type="button" data-order-action="up" data-order-id="${workout.id}" ${index === 0 ? "disabled" : ""}>↑</button>
             <button class="order-button" type="button" data-order-action="down" data-order-id="${workout.id}" ${index === manageable.length - 1 ? "disabled" : ""}>↓</button>
-            <button class="order-button" type="button" data-order-action="edit" data-order-id="${workout.id}">편</button>
+            <button class="order-button is-hidden-toggle" type="button" data-order-action="hide" data-order-id="${workout.id}">${workout.hidden === true ? t("unhide") : t("hide")}</button>
+            <button class="order-button" type="button" data-order-action="edit" data-order-id="${workout.id}">${t("edit")}</button>
+            <button class="order-button is-danger" type="button" data-order-action="delete" data-order-id="${workout.id}">${t("delete")}</button>
           </div>
         </div>
       `).join("");
@@ -10204,16 +12176,24 @@
       const index = state.workouts.findIndex((workout) => workout.id === workoutId);
       if (index === -1) return;
       const workout = state.workouts[index];
-      if (workout.kind && workout.kind !== "exercise" && workout.kind !== "combo") return;
+      if (!isExerciseWidget(workout)) return;
       if (action === "edit") {
         openWorkoutDialog(workout);
+        return;
+      }
+      if (action === "hide") {
+        toggleWorkoutHidden(workoutId);
+        return;
+      }
+      if (action === "delete") {
+        permanentlyDeleteWorkout(workoutId);
         return;
       }
       const direction = action === "up" ? -1 : 1;
       let targetIndex = index + direction;
       while (targetIndex >= 0 && targetIndex < state.workouts.length) {
         const target = state.workouts[targetIndex];
-        if (!target.kind || target.kind === "exercise" || target.kind === "combo") break;
+        if (isExerciseWidget(target)) break;
         targetIndex += direction;
       }
       if (targetIndex < 0 || targetIndex >= state.workouts.length) return;
@@ -10222,7 +12202,7 @@
       saveState();
       render();
       renderWidgetOrderList();
-      showToast("위젯 순서를 바꿨습니다.");
+      showToast(t("orderChanged"));
     }
 
     function renderComboList(workout = null) {
@@ -10239,11 +12219,9 @@
     }
 
     function updateWidgetKindFields() {
-      const isCombo = els.widgetKind.value === "combo";
-      els.comboField.style.display = isCombo ? "grid" : "none";
-      document.querySelectorAll(".exercise-settings").forEach((field) => {
-        field.style.display = "none";
-      });
+      els.widgetKind.value = "exercise";
+      els.comboField.hidden = true;
+      els.comboField.style.display = "none";
     }
 
     function openNutritionManage() {
@@ -10258,21 +12236,22 @@
       els.nutritionManageList.innerHTML = items.length ? items.map((workout, index) => {
         const theme = workoutTheme(index + 1);
         return `
-          <div class="manage-item" data-workout-id="${workout.id}" style="--card-accent:${theme.accent}">
+          <div class="manage-item${workout.hidden === true ? " is-hidden" : ""}" data-workout-id="${workout.id}" style="--card-accent:${theme.accent}">
             <div class="manage-row">
               <span class="manage-dot"></span>
-              <span class="manage-name">${workoutName(workout)}</span>
+              <span class="manage-name">${workoutName(workout)}${workout.hidden === true ? `<em class="hidden-badge">${t("hidden")}</em>` : ""}</span>
               <span class="manage-unit">${unitForWorkout(workout)}</span>
+              <button class="manage-toggle" type="button" data-action="hide" data-workout-id="${workout.id}">${workout.hidden === true ? t("unhide") : t("hide")}</button>
               <button class="manage-delete" type="button" data-action="delete" data-workout-id="${workout.id}">×</button>
             </div>
             <div class="goal-row">
-              <span>일일 목표</span>
-              <input class="number-input" type="number" min="0" step="0.1" value="${workout.target || ""}" placeholder="미설정" data-action="goal" data-workout-id="${workout.id}">
+              <span>${t("dailyGoal")}</span>
+              <input class="number-input" type="number" min="0" step="0.1" value="${workout.target || ""}" placeholder="${t("notSet")}" data-action="goal" data-workout-id="${workout.id}">
               <span>${unitForWorkout(workout)}</span>
             </div>
           </div>
         `;
-      }).join("") : `<p class="empty">영양소 항목이 없습니다.</p>`;
+      }).join("") : `<p class="empty">${t("nutritionEmpty")}</p>`;
       els.nutritionManageList.querySelectorAll("[data-action='goal']").forEach((input) => {
         input.addEventListener("change", () => {
           const workout = getWorkout(input.dataset.workoutId);
@@ -10284,6 +12263,9 @@
       });
       els.nutritionManageList.querySelectorAll("[data-action='delete']").forEach((button) => {
         button.addEventListener("click", () => deleteNutritionType(button.dataset.workoutId));
+      });
+      els.nutritionManageList.querySelectorAll("[data-action='hide']").forEach((button) => {
+        button.addEventListener("click", () => toggleNutritionHidden(button.dataset.workoutId));
       });
     }
 
@@ -10298,7 +12280,8 @@
         kind: "nutrition",
         name,
         target: 0,
-        unit: els.newNutritionUnit.value.trim() || inferNutritionUnit(name)
+        unit: els.newNutritionUnit.value.trim() || inferNutritionUnit(name),
+        hidden: false
       });
       saveState();
       els.newNutritionName.value = "";
@@ -10308,22 +12291,41 @@
     }
 
     function deleteNutritionType(workoutId) {
+      const workout = getWorkout(workoutId);
+      if (!workout || workout.kind !== "nutrition") return;
+      const label = workoutName(workout);
+      const confirmed = window.confirm(t("deleteConfirm", { name: label }));
+      if (!confirmed) return;
       state.workouts = state.workouts.filter((workout) => workout.id !== workoutId);
       Object.keys(state.records).forEach((dateKey) => {
         delete state.records[dateKey][workoutId];
         if (Object.keys(state.records[dateKey]).length === 0) delete state.records[dateKey];
       });
       state.lastActions = state.lastActions.filter((item) => item.workoutId !== workoutId);
+      state.statsSections = (state.statsSections || []).filter((section) => !section.id.endsWith(`:${workoutId}`));
       saveState();
       renderNutritionManageList();
       render();
+      showToast(t("deletedWithRecords", { name: label }));
+    }
+
+    function toggleNutritionHidden(workoutId) {
+      const workout = getWorkout(workoutId);
+      if (!workout || workout.kind !== "nutrition") return;
+      workout.hidden = workout.hidden !== true;
+      saveState();
+      renderNutritionManageList();
+      render();
+      showToast(workout.hidden === true ? t("hiddenSaved") : t("unhiddenSaved"));
     }
 
     function openNutritionImport() {
       els.nutritionImportText.value = "";
       els.nutritionImportResult.textContent = "";
       els.nutritionImportDialog.showModal();
-      setTimeout(() => els.nutritionImportText.focus(), 50);
+      if (!window.matchMedia("(max-width: 760px)").matches) {
+        setTimeout(() => els.nutritionImportText.focus(), 50);
+      }
     }
 
     function importNutritionText(text) {
@@ -10369,7 +12371,7 @@
     function updateWaterManageFields() {
       if (els.waterUnitField) els.waterUnitField.style.display = "none";
       if (els.waterCupField) els.waterCupField.style.display = "grid";
-      els.waterGoalLabel.textContent = "목표 섭취량";
+      els.waterGoalLabel.textContent = t("waterGoal");
       els.waterGoalInput.placeholder = "2.0";
       els.waterGoalInput.step = "0.1";
       if (els.waterManageNote) els.waterManageNote.textContent = "";
@@ -10384,7 +12386,7 @@
 
     function openRunDialog(workout) {
       if (workout.kind === "nutrition" || workout.kind === "body") {
-        showToast("운동 위젯에서 실행할 수 있어요.");
+        showToast(t("runWorkoutOnly"));
         return;
       }
       stopRun(false);
@@ -10398,8 +12400,8 @@
       els.runDialogTitle.textContent = workoutName(workout);
       els.runReps.value = runSession.reps;
       els.runTempo.value = runSession.tempo;
-      updateRunDisplay("준비", runSession.tempo);
-      els.startRun.textContent = "시작";
+      updateRunDisplay(t("ready"), runSession.tempo);
+      els.startRun.textContent = t("start");
       els.startRun.disabled = false;
       els.runReps.disabled = false;
       els.runTempo.disabled = false;
@@ -10413,7 +12415,7 @@
       els.runSecondNumber.textContent = number;
       els.runLabel.textContent = label;
       els.runProgressText.textContent = `${runSession.completed} / ${reps}`;
-      els.runTempoText.textContent = `${tempo}초 템포`;
+      els.runTempoText.textContent = t("tempoLabel", { seconds: tempo });
     }
 
     function ensureAudio() {
@@ -10453,11 +12455,11 @@
       runSession.tick = runSession.tempo;
       runSession.phase = "work";
       runSession.running = true;
-      els.startRun.textContent = "진행중";
+      els.startRun.textContent = t("inProgress");
       els.startRun.disabled = true;
       els.runReps.disabled = true;
       els.runTempo.disabled = true;
-      updateRunDisplay("호흡 맞추기", runSession.tick);
+      updateRunDisplay(t("breathing"), runSession.tick);
       playTone("tick");
       runSession.timer = setInterval(stepRunCountdown, 1000);
     }
@@ -10466,27 +12468,27 @@
       if (!runSession.running) return;
       if (runSession.phase === "rest") {
         if (runSession.completed >= runSession.reps) {
-          updateRunDisplay("완료", "OK");
+          updateRunDisplay(t("complete"), "OK");
           playTone("done");
           finishRunCountdown();
           return;
         }
         runSession.phase = "work";
         runSession.tick = runSession.tempo;
-        updateRunDisplay("다음 시작", runSession.tick);
+        updateRunDisplay(t("nextStart"), runSession.tick);
         playTone("tick");
         return;
       }
       runSession.tick -= 1;
       if (runSession.tick > 0) {
-        updateRunDisplay("호흡 맞추기", runSession.tick);
+        updateRunDisplay(t("breathing"), runSession.tick);
         playTone("tick");
         return;
       }
       runSession.completed += 1;
       runSession.phase = "rest";
       runSession.tick = 1;
-      updateRunDisplay(runSession.completed >= runSession.reps ? "완료 준비" : "1회 완료", 1);
+      updateRunDisplay(runSession.completed >= runSession.reps ? t("completeReady") : t("oneRepDone"), 1);
       playTone("rep");
     }
 
@@ -10496,10 +12498,10 @@
       stopRun(false);
       if (workout && reps > 0) {
         handleCounterAction(workout, "inc", reps);
-        showToast(`${workoutName(workout)} ${reps}회 추가했습니다.`);
+        showToast(t("addedReps", { name: workoutName(workout), reps }));
       }
       els.startRun.disabled = false;
-      els.startRun.textContent = "시작";
+      els.startRun.textContent = t("start");
       els.runReps.disabled = false;
       els.runTempo.disabled = false;
       setTimeout(() => {
@@ -10514,7 +12516,7 @@
       runSession.phase = "ready";
       if (resetButtons && els.startRun) {
         els.startRun.disabled = false;
-        els.startRun.textContent = "시작";
+        els.startRun.textContent = t("start");
         els.runReps.disabled = false;
         els.runTempo.disabled = false;
       }
@@ -10534,6 +12536,15 @@
     });
     if (els.openStatsManage) els.openStatsManage.addEventListener("click", openStatsManage);
     if (els.closeStatsManage) els.closeStatsManage.addEventListener("click", () => els.statsManageDialog.close());
+    if (els.openRecordManage) els.openRecordManage.addEventListener("click", openRecordManage);
+    if (els.closeRecordManage) els.closeRecordManage.addEventListener("click", () => els.recordManageDialog.close());
+    if (els.closeScoreRule) els.closeScoreRule.addEventListener("click", () => els.scoreRuleDialog.close());
+    document.addEventListener("click", (event) => {
+      const trigger = event.target.closest("[data-score-rule]");
+      if (!trigger) return;
+      event.preventDefault();
+      openScoreRuleDialog();
+    });
     els.prevStatsMonth.addEventListener("click", () => {
       statsMonthKey = addMonths(statsMonthKey, -1);
       renderStats();
@@ -10543,14 +12554,44 @@
       renderStats();
     });
 
+    els.userChoiceButtons.forEach((button) => {
+      button.addEventListener("click", () => selectProfileUser(button.dataset.userId));
+    });
+
+    els.languageChoiceButtons.forEach((button) => {
+      button.addEventListener("click", () => selectLanguage(button.dataset.languageValue));
+    });
+
+    els.designThemeChoiceButtons.forEach((button) => {
+      button.addEventListener("click", () => selectDesignTheme(button.dataset.designThemeValue));
+    });
+
+    if (els.saveSheetSyncUrl) {
+      els.saveSheetSyncUrl.addEventListener("click", saveSheetSyncUrl);
+    }
+    if (els.sheetSyncUrl) {
+      els.sheetSyncUrl.addEventListener("input", () => {
+        if (syncUrlFromInput() === syncConfig.sheetUrl) {
+          updateSyncUI();
+          return;
+        }
+        syncStatus(t("syncUrlNeeded"), "warning");
+        setTopSyncStatus("warning", t("syncUrlNeeded"));
+      });
+    }
+    if (els.loadSheetState) {
+      els.loadSheetState.addEventListener("click", loadStateFromSheet);
+    }
+    if (els.saveSheetState) {
+      els.saveSheetState.addEventListener("click", saveStateToSheet);
+    }
+
     els.profileForm.addEventListener("submit", (event) => {
       event.preventDefault();
-      state.profile.nickname = els.nickname.value.trim();
+      const names = ensureProfileUsers();
+      state.profile.nickname = names[state.profile.userId] || userDefaultName(state.profile.userId);
       state.profile.language = els.language.value;
-      state.profile.age = els.age.value;
-      state.profile.sex = els.sex.value;
-      state.profile.heightCm = els.heightCm.value;
-      state.profile.weightKg = els.weightKg.value;
+      state.profile.designTheme = els.designTheme.value || "apple";
       saveState();
       render();
       showToast(t("saved"));
@@ -10559,6 +12600,13 @@
     els.addWorkoutButton.addEventListener("click", () => openWorkoutDialog());
     els.addWorkoutButtonWorkout.addEventListener("click", () => openWorkoutDialog());
     els.closeWorkout.addEventListener("click", () => els.workoutDialog.close());
+    els.exerciseBodyPart.addEventListener("change", () => {
+      els.workoutImage.value = "";
+      renderExerciseImagePicker({ expanded: true });
+    });
+    els.toggleExerciseImages.addEventListener("click", () => {
+      renderExerciseImagePicker({ expanded: els.exerciseImageGrid.hidden });
+    });
     els.widgetKind.addEventListener("change", updateWidgetKindFields);
     els.closeNutritionManage.addEventListener("click", () => els.nutritionManageDialog.close());
     els.addNutritionType.addEventListener("click", () => {
@@ -10570,11 +12618,11 @@
       event.preventDefault();
       const matched = importNutritionText(els.nutritionImportText.value);
       if (!matched.length) {
-        els.nutritionImportResult.textContent = "가져올 수 있는 영양소를 찾지 못했습니다.";
+        els.nutritionImportResult.textContent = t("nutritionImportEmpty");
         return;
       }
-      els.nutritionImportResult.textContent = `${matched.join(", ")} 기록 완료`;
-      showToast("영양소를 가져왔습니다.");
+      els.nutritionImportResult.textContent = t("nutritionImportDone", { items: matched.join(", ") });
+      showToast(t("nutritionImported"));
       setTimeout(() => {
         if (els.nutritionImportDialog.open) els.nutritionImportDialog.close();
       }, 650);
@@ -10622,7 +12670,7 @@
         runSession.tempo = Math.max(1, Number(els.runTempo.value) || 3);
         runSession.tick = runSession.tempo;
         runSession.phase = "ready";
-        updateRunDisplay("준비", runSession.tempo);
+        updateRunDisplay(t("ready"), runSession.tempo);
       });
     });
 
@@ -10633,11 +12681,14 @@
       const target = Math.max(0, Number(els.workoutTarget.value) || 0);
       const kind = els.widgetKind.value;
       const components = [...els.comboList.querySelectorAll("input:checked")].map((input) => input.value);
+      const bodyPart = els.exerciseBodyPart.value || bodyPartForImage(els.workoutImage.value) || "chest";
+      const image = els.workoutImage.value || "";
       if (!name) return;
       if (kind === "combo" && components.length === 0) {
-        showToast("조합할 운동을 선택하세요.");
+        showToast(t("comboNoSelection"));
         return;
       }
+      const difficulty = Math.max(1, Math.min(5, Number(els.workoutMet.value) || 4));
       if (id) {
         const workout = state.workouts.find((item) => item.id === id);
         if (workout) {
@@ -10645,9 +12696,11 @@
           workout.name = name;
           workout.target = target;
           workout.kind = kind;
-          workout.met = Math.max(1, Number(els.workoutMet.value) || 4);
+          workout.met = difficulty;
           workout.secondsPerRep = Math.max(1, Number(els.secondsPerRep.value) || 3);
           workout.components = kind === "combo" ? components : [];
+          workout.bodyPart = bodyPart;
+          workout.image = image;
         }
       } else {
         state.workouts.push({
@@ -10655,9 +12708,12 @@
           kind,
           name,
           target,
-          met: Math.max(1, Number(els.workoutMet.value) || 4),
+          met: difficulty,
           secondsPerRep: Math.max(1, Number(els.secondsPerRep.value) || 3),
-          components: kind === "combo" ? components : []
+          components: kind === "combo" ? components : [],
+          bodyPart,
+          image,
+          hidden: false
         });
       }
       saveState();
@@ -10666,18 +12722,14 @@
       showToast(t("saved"));
     });
 
+    els.hideWorkoutButton.addEventListener("click", () => {
+      const id = els.editingWorkoutId.value;
+      toggleWorkoutHidden(id, { closeDialog: true });
+    });
+
     els.deleteWorkoutButton.addEventListener("click", () => {
       const id = els.editingWorkoutId.value;
-      state.workouts = state.workouts.filter((workout) => workout.id !== id);
-      Object.keys(state.records).forEach((dateKey) => {
-        delete state.records[dateKey][id];
-        if (Object.keys(state.records[dateKey]).length === 0) delete state.records[dateKey];
-      });
-      state.lastActions = state.lastActions.filter((item) => item.workoutId !== id);
-      saveState();
-      els.workoutDialog.close();
-      render();
-      showToast(t("deleted"));
+      permanentlyDeleteWorkout(id);
     });
 
     els.closeCount.addEventListener("click", () => els.countDialog.close());
@@ -10717,7 +12769,7 @@
       });
     }
 
-    seedPreviewData();
+    clearPreviewRecordsForRealUse();
     render();
   </script>
 </body>
