@@ -8039,7 +8039,6 @@
     .exercise-image-option {
       min-width: 0;
       display: grid;
-      gap: 5px;
       padding: 6px;
       border-radius: 16px;
       background: #fff;
@@ -8063,16 +8062,6 @@
       background: #fff;
     }
 
-    .exercise-image-option span {
-      min-width: 0;
-      color: #111;
-      font-size: 11px;
-      font-weight: 850;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
     @media (max-width: 430px) {
       .exercise-image-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -8088,9 +8077,6 @@
         border-radius: 10px;
       }
 
-      .exercise-image-option span {
-        font-size: 9px;
-      }
     }
 
     .icon-bubble .exercise-thumb {
@@ -8570,11 +8556,15 @@
     }
 
     body.theme-figma .target-pill {
-      background: conic-gradient(#000000 calc(var(--progress, 0) * 1%), #ffffff 0) !important;
+      background: conic-gradient(#000000 calc(var(--progress, 0) * 1%), transparent 0) !important;
+    }
+
+    body.theme-figma .target-pill::before {
+      background: transparent !important;
     }
 
     body.theme-figma .target-pill span {
-      background: #ffffff !important;
+      background: transparent !important;
       color: #000000 !important;
     }
 
@@ -9012,6 +9002,7 @@
     const SYNC_CONFIG_KEY = "daily-rep-counter-sheet-sync-v1";
     const DEFAULT_SYNC_URL = "https://script.google.com/macros/s/AKfycbxj_lmQRkEhEu_ypXzm9nqMNAiAbRJI_ZnoNNc53lRtkI7IlFPk1EbJLHDLZ8QxPWkRZA/exec";
     const RECORD_RESET_VERSION = "real-use-reset-2026-06-22";
+    const DEFAULT_WORKOUT_TRIM_VERSION = "default-workouts-pushup-squat-2026-06-25";
 
     const i18n = {
       en: {
@@ -9112,6 +9103,8 @@
         imageNoSelection: "No image selected",
         selectImage: "Select image",
         closeImage: "Close images",
+        itemNameRequired: "Enter an item name.",
+        imageRequired: "Select an image.",
         workoutDifficulty: "Workout difficulty score",
         currentWidgets: "Current widgets",
         hide: "Hide",
@@ -9330,6 +9323,8 @@
         imageNoSelection: "未选择图片",
         selectImage: "选择图片",
         closeImage: "关闭图片",
+        itemNameRequired: "请输入项目名称。",
+        imageRequired: "请选择图片。",
         workoutDifficulty: "运动难度分",
         currentWidgets: "当前组件",
         hide: "隐藏",
@@ -9548,6 +9543,8 @@
         imageNoSelection: "선택된 이미지 없음",
         selectImage: "이미지 선택",
         closeImage: "이미지 닫기",
+        itemNameRequired: "항목 이름을 입력하세요.",
+        imageRequired: "이미지를 선택하세요.",
         workoutDifficulty: "운동 난이도 점수",
         currentWidgets: "현재 위젯",
         hide: "숨김",
@@ -9683,11 +9680,8 @@
         weightKg: ""
       },
       workouts: [
-        { id: "squat", kind: "exercise", nameKey: "squat", target: 50, met: 5, secondsPerRep: 3, bodyPart: "lower", image: "assets/exercises/lower-squat.png" },
         { id: "pushup", kind: "exercise", nameKey: "pushup", target: 30, met: 5, secondsPerRep: 2, bodyPart: "chest", image: "assets/exercises/chest-pushup.png" },
-        { id: "plank", kind: "exercise", nameKey: "plank", target: 120, met: 3.3, secondsPerRep: 1, bodyPart: "abs", image: "assets/exercises/abs-plank.png" },
-        { id: "situp", kind: "exercise", nameKey: "situp", target: 100, met: 4, secondsPerRep: 3, bodyPart: "abs", image: "assets/exercises/abs-crunch.png" },
-        { id: "combo-squat-pushup", kind: "combo", name: "스쿼트+푸시업", target: 30, components: ["squat", "pushup"] },
+        { id: "squat", kind: "exercise", nameKey: "squat", target: 50, met: 5, secondsPerRep: 3, bodyPart: "lower", image: "assets/exercises/lower-squat.png" },
         { id: "protein", kind: "nutrition", name: "단백질", target: 120, unit: "g" },
         { id: "nutrition-calories", kind: "nutrition", name: "칼로리", target: 2200, unit: "kcal" },
         { id: "carbs", kind: "nutrition", name: "탄수화물", target: 260, unit: "g" },
@@ -9707,56 +9701,64 @@
         id: "chest",
         label: "가슴",
         items: [
-          ["푸쉬업", "chest-pushup"],
-          ["무릎 푸쉬업", "chest-knee-pushup"],
+          ["벤치 프레스", "chest-bench-press"],
+          ["인클라인 벤치 프레스", "chest-incline-bench-press"],
           ["덤벨 프레스", "chest-dumbbell-press"],
-          ["덤벨 플라이", "chest-dumbbell-fly"],
-          ["밴드 체스트 프레스", "chest-band-chest-press"],
-          ["밴드 플라이", "chest-band-fly"],
-          ["디클라인 푸쉬업", "chest-decline-pushup"],
-          ["다이아몬드 푸쉬업", "chest-diamond-pushup"]
+          ["인클라인 덤벨 프레스", "chest-incline-dumbbell-press"],
+          ["디클라인 벤치 프레스", "chest-decline-bench-press"],
+          ["푸쉬업", "chest-pushup"],
+          ["딥스", "chest-dips"],
+          ["케이블 플라이", "chest-cable-fly"],
+          ["머신 체스트 프레스", "chest-machine-press"],
+          ["밴드 체스트 프레스", "chest-band-chest-press"]
         ]
       },
       {
         id: "back",
         label: "등",
         items: [
-          ["덤벨 로우", "back-dumbbell-row"],
+          ["풀업", "back-pullup"],
+          ["랫풀다운", "back-lat-pulldown"],
+          ["바벨 로우", "back-barbell-row"],
+          ["시티드 로우", "back-seated-row"],
           ["원암 덤벨 로우", "back-one-arm-dumbbell-row"],
-          ["밴드 로우", "back-band-row"],
-          ["밴드 랫풀다운", "back-band-lat-pulldown"],
-          ["슈퍼맨", "back-superman"],
-          ["밴드 페이스풀", "back-band-face-pull"],
-          ["테이블 로우", "back-table-row"],
-          ["밴드 스트레이트암 풀다운", "back-band-straight-arm-pulldown"]
+          ["랜드마인 로우", "back-landmine-row"],
+          ["인클라인 로우", "back-incline-row"],
+          ["데드리프트", "back-deadlift"],
+          ["케이블 풀오버", "back-cable-pullover"],
+          ["페이스풀", "back-face-pull"]
         ]
       },
       {
         id: "shoulder",
         label: "어깨",
         items: [
-          ["숄더 프레스", "shoulder-shoulder-press"],
+          ["오버헤드 프레스", "shoulder-overhead-press"],
+          ["덤벨 숄더 프레스", "shoulder-dumbbell-press"],
           ["사이드 레터럴 레이즈", "shoulder-side-lateral-raise"],
           ["프론트 레이즈", "shoulder-front-raise"],
+          ["시티드 숄더 프레스", "shoulder-seated-press"],
           ["리어 델트 플라이", "shoulder-rear-delt-fly"],
-          ["밴드 프레스", "shoulder-band-press"],
-          ["밴드 레터럴 레이즈", "shoulder-band-lateral-raise"],
-          ["밴드 페이스풀", "shoulder-band-face-pull"],
-          ["파이크 푸쉬업", "shoulder-pike-pushup"]
+          ["업라이트 로우", "shoulder-upright-row"],
+          ["케이블 페이스풀", "shoulder-cable-face-pull"],
+          ["원암 레이즈", "shoulder-one-arm-raise"],
+          ["바벨 슈러그", "shoulder-barbell-shrug"]
         ]
       },
       {
         id: "arms",
         label: "팔",
         items: [
+          ["바벨 컬", "arms-barbell-curl"],
           ["덤벨 컬", "arms-dumbbell-curl"],
-          ["해머 컬", "arms-hammer-curl"],
           ["컨센트레이션 컬", "arms-concentration-curl"],
-          ["밴드 컬", "arms-band-curl"],
           ["오버헤드 익스텐션", "arms-overhead-extension"],
           ["킥백", "arms-kickback"],
-          ["밴드 푸쉬다운", "arms-band-pushdown"],
-          ["벤치 딥스", "arms-bench-dips"]
+          ["딥스", "arms-dips"],
+          ["스컬 크러셔", "arms-skull-crusher"],
+          ["케이블 푸쉬다운", "arms-cable-pushdown"],
+          ["이지바 컬", "arms-ezbar-curl"],
+          ["클로즈그립 푸쉬업", "arms-close-grip-pushup"]
         ]
       },
       {
@@ -9764,13 +9766,15 @@
         label: "복근",
         items: [
           ["크런치", "abs-crunch"],
-          ["레그레이즈", "abs-leg-raise"],
           ["바이시클 크런치", "abs-bicycle-crunch"],
-          ["플랭크", "abs-plank"],
-          ["사이드 플랭크", "abs-side-plank"],
+          ["레그레이즈", "abs-leg-raise"],
           ["러시안 트위스트", "abs-russian-twist"],
+          ["플랭크", "abs-plank"],
+          ["리버스 크런치", "abs-reverse-crunch"],
           ["마운틴 클라이머", "abs-mountain-climber"],
-          ["벤치 몸조직", "abs-band-core-twist"]
+          ["V업", "abs-v-up"],
+          ["사이드 플랭크", "abs-side-plank"],
+          ["행잉 니레이즈", "abs-hanging-knee-raise"]
         ]
       },
       {
@@ -9779,26 +9783,14 @@
         items: [
           ["스쿼트", "lower-squat"],
           ["런지", "lower-lunge"],
+          ["바벨 스쿼트", "lower-barbell-squat"],
+          ["레그 프레스", "lower-leg-press"],
           ["불가리안 스플릿 스쿼트", "lower-bulgarian-split-squat"],
-          ["루마니안 데드리프트", "lower-romanian-deadlift"],
+          ["데드리프트", "lower-deadlift"],
+          ["스텝업", "lower-step-up"],
           ["힙쓰러스트", "lower-hip-thrust"],
-          ["밴드 글루트 브릿지", "lower-band-glute-bridge"],
-          ["카프 레이즈", "lower-calf-raise"],
-          ["밴드 몬스터 워크", "lower-band-monster-walk"]
-        ]
-      },
-      {
-        id: "full",
-        label: "전신 운동",
-        items: [
-          ["버피", "full-burpee"],
-          ["점핑잭", "full-jumping-jack"],
-          ["덤벨 쓰러스터", "full-dumbbell-thruster"],
-          ["마운틴 클라이머", "full-mountain-climber"],
-          ["덤벨 클린 앤 프레스", "full-dumbbell-clean-press"],
-          ["밴드 스쿼트 프레스", "full-band-squat-press"],
-          ["베어 크롤", "full-bear-crawl"],
-          ["밴드 로우 투 프레스", "full-band-row-press"]
+          ["싱글 레그 데드리프트", "lower-single-leg-deadlift"],
+          ["카프 레이즈", "lower-calf-raise"]
         ]
       }
     ].map((group) => ({
@@ -10294,6 +10286,7 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState));
       state = loadState();
       clearPreviewRecordsForRealUse();
+      trimLegacyDefaultWorkouts();
       render();
     }
 
@@ -10911,6 +10904,32 @@
       state.lastActions = [];
       delete state.previewDataVersion;
       state.recordsResetVersion = RECORD_RESET_VERSION;
+      saveState();
+      return true;
+    }
+
+    function trimLegacyDefaultWorkouts() {
+      if (state.defaultWorkoutTrimVersion === DEFAULT_WORKOUT_TRIM_VERSION) return false;
+      const legacyIds = new Set(["plank", "situp", "combo-squat-pushup"]);
+      const hasRecords = (workoutId) => Object.values(state.records || {}).some((record) => Number(record?.[workoutId] || 0) > 0);
+      state.workouts = (state.workouts || []).filter((workout) => {
+        if (!legacyIds.has(workout.id)) return true;
+        if (hasRecords(workout.id)) {
+          workout.hidden = true;
+          return true;
+        }
+        return false;
+      });
+      const desiredExerciseOrder = new Map([["pushup", 0], ["squat", 1]]);
+      state.workouts.sort((a, b) => {
+        const aRank = desiredExerciseOrder.has(a.id) ? desiredExerciseOrder.get(a.id) : 100;
+        const bRank = desiredExerciseOrder.has(b.id) ? desiredExerciseOrder.get(b.id) : 100;
+        return aRank - bRank;
+      });
+      state.statsSections = (state.statsSections || []).filter((section) => {
+        return ![...legacyIds].some((id) => section.id.endsWith(`:${id}`));
+      });
+      state.defaultWorkoutTrimVersion = DEFAULT_WORKOUT_TRIM_VERSION;
       saveState();
       return true;
     }
@@ -11860,7 +11879,7 @@
       if (definition.type === "weight") return logIcon("body");
       if (definition.type === "water") return logIcon("water");
       if (definition.type === "nutrition") return logIcon("nutrition");
-      return workoutIcon(workoutTheme(index).icon);
+      return workoutVisual(definition.workout, workoutTheme(index).icon);
     }
 
     function renderStats() {
@@ -12072,17 +12091,16 @@
     function renderExerciseImagePicker({ expanded = !els.exerciseImageGrid.hidden } = {}) {
       const selectedImage = els.workoutImage.value;
       const selectedAsset = findExerciseAsset(selectedImage);
-      els.exerciseBodyPart.value = selectedAsset?.bodyPart || "";
+      els.exerciseBodyPart.value = selectedAsset?.bodyPart || els.exerciseBodyPart.value || "";
       const items = exerciseLibraryItems("all");
       els.exerciseImageGrid.hidden = !expanded;
       els.toggleExerciseImages.textContent = expanded ? t("closeImage") : t("selectImage");
       els.exerciseImagePreview.innerHTML = selectedAsset
-        ? `<img src="${escapeAttribute(selectedAsset.image)}" alt="${escapeAttribute(selectedAsset.name)}"><span>${selectedAsset.name}</span>`
+        ? `<img src="${escapeAttribute(selectedAsset.image)}" alt="${escapeAttribute(selectedAsset.name)}">`
         : `<span>${t("imageNoSelection")}</span>`;
       els.exerciseImageGrid.innerHTML = items.map((item) => `
-        <button class="exercise-image-option ${item.image === selectedImage ? "is-selected" : ""}" type="button" data-image="${escapeAttribute(item.image)}" data-name="${escapeAttribute(item.name)}">
-          <img src="${escapeAttribute(item.image)}" alt="${escapeAttribute(item.name)}">
-          <span>${item.name}</span>
+        <button class="exercise-image-option ${item.image === selectedImage ? "is-selected" : ""}" type="button" data-image="${escapeAttribute(item.image)}" data-name="${escapeAttribute(item.name)}" title="${escapeAttribute(item.name)}" aria-label="${escapeAttribute(item.name)}">
+          <img src="${escapeAttribute(item.image)}" alt="">
         </button>
       `).join("");
       els.exerciseImageGrid.querySelectorAll("button").forEach((button) => {
@@ -12683,7 +12701,23 @@
       const components = [...els.comboList.querySelectorAll("input:checked")].map((input) => input.value);
       const bodyPart = els.exerciseBodyPart.value || bodyPartForImage(els.workoutImage.value) || "chest";
       const image = els.workoutImage.value || "";
-      if (!name) return;
+      const hasWorkoutDraft = Boolean(id || name || image);
+      if (!hasWorkoutDraft) {
+        els.workoutDialog.close();
+        render();
+        showToast(t("saved"));
+        return;
+      }
+      if (!name) {
+        els.workoutName.focus();
+        showToast(t("itemNameRequired"));
+        return;
+      }
+      if (kind !== "combo" && !image) {
+        showToast(t("imageRequired"));
+        renderExerciseImagePicker({ expanded: true });
+        return;
+      }
       if (kind === "combo" && components.length === 0) {
         showToast(t("comboNoSelection"));
         return;
@@ -12770,6 +12804,7 @@
     }
 
     clearPreviewRecordsForRealUse();
+    trimLegacyDefaultWorkouts();
     render();
   </script>
 </body>
